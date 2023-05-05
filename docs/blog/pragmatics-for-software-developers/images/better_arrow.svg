@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- Created with PPL (https://www.ppl-lang.dev) -->		
+
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200">
+<rect x="0" y="0" width="200" height="200" style="stroke-width:0; fill:white" />
+<g transform="rotate(45, 160, 40)" style="stroke:black;">
+<path d="M160 40 l20 60 h-40 Z" style="stroke-width:10; stroke-linejoin:round" />
+<line x1="160" y1="100" x2="160" y2="210" style="stroke-width:10; stroke-linecap:round" />
+</g>
+</svg>

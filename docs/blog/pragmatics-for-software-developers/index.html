@@ -1,0 +1,1259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.10">
+<meta name="author" content="Christian Neumanns">
+<title>Fundamental Pragmatics for Successful Software Developers</title>
+<link rel="stylesheet" href="./asciidoctor-default.css">
+</head>
+<body class="article">
+<div id="header">
+<h1>Fundamental Pragmatics for Successful Software Developers</h1>
+<div class="details">
+<span id="author" class="author">Christian Neumanns</span><br>
+<span id="revdate">2018-04-24</span>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div id="toc" class="toc">
+<div id="toctitle" class="title">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_introduction">Introduction</a></li>
+<li><a href="#_general_guidelines">General Guidelines</a></li>
+<li><a href="#_data_design">Data Design</a></li>
+<li><a href="#_writing_code">Writing Code</a></li>
+<li><a href="#_summary">Summary</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_introduction">Introduction</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Creating good, successful software is hard - very hard.</p>
+</div>
+<div class="paragraph">
+<p>For every programmer, it is therefore important to know, understand and apply fundamental software development pragmatics - practical advice and rules that have proved their usefulness and help us to create the best possible software in the shortest possible time.</p>
+</div>
+<div class="paragraph">
+<p>In this article I have tried to assemble a set of basic pragmatics which I consider to be the most relevant ones. If you are an experienced programmer then you might be familiar with most/all of them. If you miss some advice then please share it with us by leaving a comment.</p>
+</div>
+<div class="paragraph">
+<p>Please note:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The pragmatics in this article are about <em>designing and writing code</em>. There are other important aspects for software development projects to be successful (such as good user interfaces, dealing with people, etc.), but they are out of the scope of this document.</p>
+</li>
+<li>
+<p>The following pragmatics only cover <em>basic</em> principles that are meant to be <em>generally applicable</em>. There is no advice for specific programming environments (programming languages, libraries, tools, and architectures).</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The tips are divided into three categories:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>General Guidelines</p>
+</li>
+<li>
+<p>Data Design</p>
+</li>
+<li>
+<p>Writing Code</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s get started.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_general_guidelines">General Guidelines</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_everything_should_be_as_simple_as_possible_but_not_simpler_albert_einstein"><em>Everything should be as simple as possible, but not simpler!</em> - Albert Einstein</h3>
+<div class="paragraph">
+<p>Simple tools and concepts can be understood quickly, are easy to use, less error-prone and make us more productive.</p>
+</div>
+<div class="paragraph">
+<p>We all like simplicity. Simplicity makes work and life more enjoyable.</p>
+</div>
+<div class="paragraph">
+<p>However, we must be aware of oversimplification, as indicated at the end of Einstein&#8217;s beautiful quote.</p>
+</div>
+<div class="paragraph">
+<p>Therefore: Keep it simple, but not simplistic!</p>
+</div>
+<div class="paragraph">
+<p>Many famous people advocate simplicity. Here are a few examples:</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Simplicity is prerequisite for reliability.</p>
+</div>
+<div class="paragraph">
+<p>Simplicity and clarity &#8230;&#8203; decide between success and failure.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Edsger W. Dijkstra<br>
+<cite>Dutch computer scientist; author of 'Go To Statement Considered Harmful'</cite>
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Controlling complexity is the essence of computer programming.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Brian W. Kernighan<br>
+<cite>Computer scientist and writer; co-developer of Unix</cite>
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Simplicity is the ultimate sophistication.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Unknown
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Simplicity transforms ordinary into amazing.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Scott Adams<br>
+<cite>creator of Dilbert</cite>
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>If you can&#8217;t explain it simply, you don&#8217;t understand it well enough.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Albert Einstein<br>
+<cite>Physicist; genius</cite>
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Truth is ever to be found in simplicity, and not in the multiplicity and confusion of things.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Isaac Newton<br>
+<cite>Mathematician; astronomer; theologian; author and physicist</cite>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_if_its_doomed_to_fail_then_fail_fast"><em>If it&#8217;s doomed to fail, then 'Fail fast!'</em></h3>
+<div class="paragraph">
+<p>Most software projects fail. This is a sad and undeniable fact.</p>
+</div>
+<div class="paragraph">
+<p>If a project is deemed to fail, then it should fail as fast as possible, in order to limit the damages and free up time and resources for other projects that will (hopefully) not fail.</p>
+</div>
+<div class="paragraph">
+<p><em>Failing fast</em> in this context means that problems should be <em>detected and dealt with as soon as possible</em>. The longer we wait to address the problem, the more time, energy and resources will be wasted. The cumulative loss increases exponentially with time.</p>
+</div>
+<div class="paragraph">
+<p>For example, correcting a design flaw in the design phase is easy and cheap. But once the software is in production and used by many people, it is often very expensive and frustrating to fix the error.</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>The sooner we 'fail' and the faster we learn, the greater the chances for success. Failing early saves you time and money.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Demian Borba<br>
+<cite>product manager at Adobe</cite>
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Test fast, fail fast, adjust fast.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Tom Peters<br>
+<cite>author of the bestseller book 'In Search of Excellence'</cite>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_strive_for_good_enough_not_for_perfect_then_release"><em>Strive for 'good enough', not for 'perfect'. Then release!</em></h3>
+<div class="paragraph">
+<p>Creating <em>perfect</em> software (no bugs, all features fully implemented, optimal user interface, excellent documentation, etc.) is extremely time-consuming and expensive, unless we are working on a very small project. In most cases it is impossible to achieve perfection because of practical limitations.</p>
+</div>
+<div class="paragraph">
+<p>Even the major players in the software industry with the best developers and dream-budgets don&#8217;t write perfect software. That&#8217;s why they constantly provide patches and new versions.</p>
+</div>
+<div class="paragraph">
+<p>Therefore, proceed like this:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Set goals and priorities</p>
+</li>
+<li>
+<p>Create a prototype</p>
+</li>
+<li>
+<p>Deliver 'good enough' software</p>
+</li>
+<li>
+<p>Improve continuously (see next item)</p>
+</li>
+</ul>
+</div>
+<table class="tableblock frame-all grid-all fit-content">
+<colgroup>
+<col>
+<col>
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-center valign-top"><div class="content"><div class="imageblock">
+<div class="content">
+<img src="images/prototype_arrow.png" alt="Prototype arrow" width="100" height="100">
+</div>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div class="content"><div class="imageblock">
+<div class="content">
+<img src="images/good_enough_arrow.png" alt="Good enough arrow" width="100" height="100">
+</div>
+</div></div></td>
+<td class="tableblock halign-center valign-top"><div class="content"><div class="imageblock">
+<div class="content">
+<img src="images/better_arrow.png" alt="Better arrow" width="100" height="100">
+</div>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Prototype</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Good enough</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Better</p></td>
+</tr>
+</tbody>
+</table>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>You cannot write 100% perfect code. Even if you do, in 6 months time it will not be perfect.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Chris Maunder<br>
+<cite>Co-founder of CodeProject</cite>
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>No one in the brief history of computing has ever written a piece of perfect software.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Andy Hunt<br>
+<cite>Writer; co-author of 'The Pragmatic Programmer'</cite>
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>90% of the functionality delivered now is better than 100% of it delivered never.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Brian W. Kernighan<br>
+<cite>Computer scientist and writer; co-developer of Unix</cite>
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Searching for perfect solutions often will lead to stagnation and frustration.
+Perseverance, tolerance for less than perfection, the pursuit of improvement, and commitment to doing the very best you can, all are healthy, and most likely to yield the best results.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Albert Ellis<br>
+<cite>Psychotherapist</cite>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_listen_to_the_users"><em>Listen to the users!</em></h3>
+<div class="paragraph">
+<p>Practice shows:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Software developers can&#8217;t anticipate everything the users really want.</p>
+</li>
+<li>
+<p>Users often don&#8217;t know <em>exactly</em> what they want, unless they have used the software for some time.</p>
+</li>
+<li>
+<p>The users' satisfaction is a determinant factor for the software&#8217;s success.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>We want happy users. Therefore the best approach is an iterative one that goes like this:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/iterative_process.png" alt="Iterative software development">
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>After spending a lot of time with trying out some marketing tricks he [Joel Spolsky, co-founder of Stack Exchange] concludes (after 5 years): Nothing works better than just improving your product. Make great software that people want and improve it constantly. Talk to your customers (users) and listen. Find out what they need.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; book 'Coders at work'
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>... we build prototypes for every major product feature. We test with pre-release users and key customers very early on and definitely before we get to implementation. And yes, we do 'fail' a lot, which is great! It’s great because we learn a ton in the process and minimize the risk of failure in the long run. In the end, we tackle real customer needs, with empathy, in an innovative way.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Demian Borba<br>
+<cite>product manager at Adobe</cite>
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p><a href="https://en.wikipedia.org/wiki/Release_early,_release_often">Release early, release often.</a></p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Wikipedia
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>The most important property of a program is whether it accomplishes the intention of its user.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Tony Hoare<br>
+<cite>Computer scientist; ACM Turing Award 1980</cite>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_data_design">Data Design</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_before_writing_code_design_your_data_carefully"><em>Before writing code, design your data carefully!</em></h3>
+<div class="paragraph">
+<p>Whenever you create an application, start by carefully designing the data structures and their relationships. Do this before writing code.</p>
+</div>
+<div class="paragraph">
+<p>Well designed data structures lead to simpler and more maintainable code, less bugs, better performance and less memory consumption.</p>
+</div>
+<div class="paragraph">
+<p>The difference can be striking.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/data_1_code_2.png" alt="Design data first" width="then write code">
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Study after study shows that the very best designers produce [data] structures that are faster, smaller, simpler, clearer, and produced with less effort. The differences between the great and the average approach an order of magnitude.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Fred Brooks<br>
+<cite>book 'No Silver Bullet'</cite>
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Show me your flowcharts (code) and conceal your tables (data structures), and I shall continue to be mystified. Show me your tables (data structures), and I won’t usually need your flowcharts (code); they’ll be obvious.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Fred Brooks<br>
+<cite>book 'The Mythical Man-Month'</cite>
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Rule of Representation: Fold knowledge into data so program logic can be stupid and robust.</p>
+</div>
+<div class="paragraph">
+<p>Data dominates. If you&#8217;ve chosen the right data structures and organized things well, the algorithms will almost always be self-evident. Data structures, not algorithms, are central to programming</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; The Art of Unix Programming
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>I&#8217;m a huge proponent of designing your code around the data, rather than the other way around.</p>
+</div>
+<div class="paragraph">
+<p>Bad programmers worry about the code. Good programmers worry about data structures and their relationships.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Linus Torvalds<br>
+<cite>creator of Linux</cite>
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>If you get the data structures and their invariants right, most of the code will just write itself.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Peter Deutsch<br>
+<cite>book 'Coders at work</cite>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_make_all_data_structures_immutable_unless_there_is_a_good_reason_to_make_them_mutable"><em>Make all data structures immutable, unless there is a good reason to make them mutable!</em></h3>
+<div class="paragraph">
+<p>Immutable data structures are simpler to understand, simpler to use and less error-prone because:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Once created, the state doesn&#8217;t change anymore. There are no state transitions, no temporary invalid states and there is no need for synchronization or locking or defensive copying.</p>
+</li>
+<li>
+<p>Immutable data can be freely shared in concurrent/parallel computing environments - there is no risk of corrupted data, deadlocks or other nasty problems that can be very difficult to tackle down and fix.</p>
+</li>
+<li>
+<p>Computed results based on immutable data can easily be cached for better performance.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>However, immutable data structures are not always the best choice. For example, cloning a whole structure for every single change can be very costly (in time and space). In some cases (e.g. game or GUI applications) mutable data structures are better suited.</p>
+</div>
+<div class="paragraph">
+<p>Moreover, if two objects need to directly refer to each other, then the objects (at least one of them) must be mutable. Examples would be a parent and child node in a tree referring directly to each other, mutual friends (A points to B, and B points to A), etc. If immutability must be preserved in such a case, then a possible solution would be to have an additional data structure that describes the relationships, such as a set of tuples that represent a pair of objects related to each other.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_limit_the_set_of_allowed_values_to_the_smallest_possible_one"><em>Limit the set of allowed values to the smallest possible one!</em></h3>
+<div class="paragraph">
+<p>Limiting the set of allowed values for a data type:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>documents and helps to understand the data type</p>
+</li>
+<li>
+<p>eliminates the risk of misbehavior or severe failures due to wrong values</p>
+</li>
+<li>
+<p>simplifies the code that has to deal with the data</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>For example, consider the case of a <code>name</code> field for data type <code>employee</code>. By allowing any string to be stored in <code>name</code>
+, the following can happen:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A long string can lead to a buffer overflow (depending on the programming language), memory exhaustion, or other software failures.</p>
+</li>
+<li>
+<p>Characters that are invalid in a name, but used as valid symbols in Javascript and SQL (such as <code>&lt;</code>, <code>&gt;</code> and <code>"</code>) can open the door for attacks such as SQL and/or script injections.</p>
+</li>
+<li>
+<p>An empty or <code>null</code> string can lead to bugs if the code doesn&#8217;t explicitly handle these values correctly.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>To avoid these risks, the <code>name</code> field should be constrained. For example, the following simple regular expression eliminates all above mentioned problems:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>[a-zA-Z ]{1,70}</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This regex limits the name to a maximum of 70 characters, requires at least one character and allows only letters and spaces. Note, however, that the above regex would be over-simplified and not suitable in real-life applications that must allow names containing hyphens, apostrophes, and maybe other symbols.</p>
+</div>
+<div class="paragraph">
+<p>Protecting data against invalid values (especially in case of data read from external sources) is often cited as the most important rule for writing secure software. (for example, see <a href="https://www.owasp.org/index.php/Category:OWASP_Top_Ten_Project">OWASP Top 10 Critical Web App Vulnerabilities</a> and <a href="https://wiki.sei.cmu.edu/confluence/display/seccode/Top+10+Secure+Coding+Practices">Top 10 Secure Coding Practices</a>)</p>
+</div>
+<div class="paragraph">
+<p>Example of an attempt for <a href="https://www.w3schools.com/sql/sql_injection.asp">SQL injection</a> in a data entry form:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/SQL_injection_example.png" alt="SQL injection example">
+</div>
+</div>
+<div class="paragraph">
+<p>Example of a Javascript injection attempt:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/script_injection_example.png" alt="Javascript injection attempt">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_most_of_the_time_a_default_value_should_be_the_strictest_among_the_set_of_allowed_values"><em>Most of the time, a default value should be the strictest among the set of allowed values.</em></h3>
+<div class="paragraph">
+<p>By choosing the strictest possible value as default value, we are always on the safe side.</p>
+</div>
+<div class="paragraph">
+<p>More permissive values should need to be explicitly stated (in the code, in configuration files, etc).</p>
+</div>
+<div class="paragraph">
+<p>For example:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A function that writes to a file should, by default, not overwrite an existing file.</p>
+</li>
+<li>
+<p>All compiler warnings should be enabled by default.</p>
+</li>
+<li>
+<p>If a new user is added in a multi-user application then the lowest privileges should be granted by default.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The last example demonstrates that strict default values are not always the best choice. They can be annoying. If the multi-user application is only used by a single person on his/her PC, then the user obviously wants to have full rights by default. Hence, the best default value sometimes depends on several factors.</p>
+</div>
+<div class="paragraph">
+<p>Example of a strict default value in a GUI:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/strict_default_example.png" alt="Strict default value">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_avoid_data_redundancy"><em>Avoid data redundancy!</em></h3>
+<div class="paragraph">
+<p>Storing copies of mutable data at different locations is error-prone, laborious and expensive because:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>In case of data changes there is a risk of not updating all locations - due to forgetfulness, technical problems, security concerns, etc. This can lead to data inconsistencies and corruption, and can ultimately result in severe software malfunctions.</p>
+</li>
+<li>
+<p>Sometimes a locking/synchronization mechanism needs to be implemented and activated for every data modification (create, update, and delete operations), in order to avoid accessing invalid data during the data modification process. Implementing these mechanisms can be very tricky and error-prone.</p>
+</li>
+<li>
+<p>Additional memory is needed to store the copies.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Banal example: A salesman misses an important appointment. Reason: He entered the appointment into his agenda on his PC, but forgot to synchronize the data with another agenda on his mobile phone. If the data for both agendas were stored in one place (e.g. in the cloud), he wouldn&#8217;t have missed his appointment.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_consider_storing_data_in_simple_text_files_using_universal_standardized_formats"><em>Consider storing data in simple text files using universal, standardized formats!</em></h3>
+<div class="paragraph">
+<p>Using text files as storage media has many advantages:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Text files are fully supported by all operating systems. There is no need to install and configure additional software such as a database server.</p>
+</li>
+<li>
+<p>Text files can easily be read and manipulated by humans. This is very convenient for debugging purposes.</p>
+</li>
+<li>
+<p>They can also easily be read and manipulated by many third-party applications (written in any programming language) and tools. For example, Unix provides many useful tools for text manipulation, such as grep, awk, sed, etc.</p>
+</li>
+<li>
+<p>Using standard formats such as JSON, XML and CSV enables the data to be queried, sorted, filtered, searched, printed and converted by many existing applications. For example, a CSV file can easily be used in a spreadsheet application.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>However, text files also have severe limitations, especially in cases of big data. Complex queries (with filters and joins), update and delete operations, transactional processing, data encryption and other functionalities might need to be implemented manually and can be very inefficient. When it comes to big data then storing them in a database is often the only viable choice.</p>
+</div>
+<div class="paragraph">
+<p>Moreover, storing data as characters (instead of bits) can consume much more space and time. Therefore, binary data are sometime unavoidable.</p>
+</div>
+<div class="paragraph">
+<p>A nice example of using text to represent graphics is <code>SVG</code> (Scalar Vector Graphics).</p>
+</div>
+<div class="paragraph">
+<p>Here is a simple example of an SVG file (SVG_example.svg):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;svg xmlns="http://www.w3.org/2000/svg"
+    width="140"
+    height="140" &gt;
+
+    &lt;circle cx="70" cy="70" r="40" stroke="red" stroke-width="4" fill="yellow" /&gt;
+&lt;/svg&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Opening the file (for example with your web browser) displays the following image:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/SVG_example.png" alt="SVG circle example">
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Write programs to handle text streams, because that is a universal interface.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Doug McIlroy<br>
+<cite>Inventor of Unix pipes</cite>
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Unix tradition strongly encourages writing programs that read and write simple, textual, stream-oriented, device-independent formats.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Eric Steven Raymond<br>
+<cite>The Art of Unix Programming</cite>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_writing_code">Writing Code</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_write_beautiful_code"><em>Write beautiful code!</em></h3>
+<div class="paragraph">
+<p>Beautiful code is short, simple, quickly understandable, modular, extensible, reliable and maintainable.</p>
+</div>
+<div class="paragraph">
+<p>Beautiful code rarely needs comments and reads like prose.</p>
+</div>
+<div class="paragraph">
+<p>Developers love to look at and work with beautiful code. It makes them <em>feel good</em>.</p>
+</div>
+<div class="paragraph">
+<p>Writing beautiful code is an <em>art</em> that requires passion, deep commitment, and many years of practice.</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Great software requires a fanatical devotion to beauty. If you look inside good software, you find that parts no one is ever supposed to see are beautiful too.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Paul Graham, <a href="http://www.paulgraham.com/hp.html">Hackers and Painters</a>
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Current development speed is a function of past development quality.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Brian McCallister
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Programs should be written for people to read, and only incidentally for machines to execute.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Abelson and Sussman <a href="https://mitpress.mit.edu/sicp/full-text/book/book.html">Structure and Interpretation of Computer Programs</a>
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Because maintenance is so important and so expensive, write programs as if the most important communication they do is not to the computer that executes them but to the human beings who will read and maintain the source code in the future (including yourself).</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; The Art of Unix Programming
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Always code as if the guy who ends up maintaining your code will be a violent psychopath who knows where you live.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; John Woods
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>You can always recognize truth by its beauty and simplicity.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Richard P. Feynman; physicist
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_use_existing_software_whenever_possible"><em>Use existing software whenever possible!</em></h3>
+<div class="paragraph">
+<p>Don&#8217;t reinvent the wheel!</p>
+</div>
+<div class="paragraph">
+<p>Before writing new code, be sure the functionality you need doesn&#8217;t exist already.</p>
+</div>
+<div class="paragraph">
+<p>Look at existing libraries and frameworks (maybe written in different languages), tools, other applications and cloud services to find what you need, or to get ideas and become enlightened.</p>
+</div>
+<div class="paragraph">
+<p>For example, Unix provides many powerful, reliable and flexible out-of-the-box-tools (also available on Windows) for text manipulation. Use them in your application if they are appropriate.</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>... library code is likely to be better than code that you’d write yourself and is likely to improve over time. &#8230;&#8203; library code receives far more attention than most developers could afford to devote to the same functionality.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Joshua Bloch<br>
+<cite>book 'Effective Java'</cite>
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Thou shalt study thy libraries and strive not to re-invent them without cause, that thy code may be short and readable and thy days pleasant and productive.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Henry Spencer<br>
+<cite><a href="https://www.lysator.liu.se/c/ten-commandments.html">The Ten Commandments for C Programmers</a></cite>
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>The best code is no code at all.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Jeff Atwood
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>If I have seen further than others, it is by standing upon the shoulders of giants.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Isaac Newton<br>
+<cite>Mathematician; astronomer; theologian; author and physicist</cite>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_fail_fast_and_noisily"><em>Fail fast and noisily!</em></h3>
+<div class="paragraph">
+<p>Detect and fix problems as early as possible!</p>
+</div>
+<div class="paragraph">
+<p>This helps to minimize development time and costs, and reduces the risk for failures and damages in production mode.</p>
+</div>
+<div class="paragraph">
+<p>A maximum of bugs should be detected automatically. This can be achieved by smart IDEs, compilers, static code analyzers, fuzzy testers, etc. Automatically detected bugs are very cheap to be discovered, and they can&#8217;t go into production and cause malfunctions.</p>
+</div>
+<div class="paragraph">
+<p>Write good unit tests.</p>
+</div>
+<div class="paragraph">
+<p>Bugs that stay undetected before running the application, as well as all kind of runtime problems (e.g. file not found, invalid input data, etc.) should be detected <em>as early as possible at runtime</em>.</p>
+</div>
+<div class="paragraph">
+<p>Therefore, check all input for valid values (function arguments, user input, resource input, etc.). Check all return values for error conditions.</p>
+</div>
+<div class="paragraph">
+<p>If the runtime problem cannot be handled gracefully, then the application should consistently apply the <em>Fail-fast</em> principle by reporting the problem in an appropriate way (i.e. with a maximum of information that helps to solve the problem), and then aborting immediately. This is important because:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>in development mode, it helps in debugging, as the application crashes noisily as soon as something goes wrong</p>
+</li>
+<li>
+<p>in production mode, it leads to a crash of the application which is generally less awful than silently continuing and leading to outcomes that are worse, such as wrong data, wrong decision making, etc.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Here is an example of what can happen with wrong HTML code, because the <em>Fail-fast</em> principle is <em>not</em> applied:</p>
+</div>
+<div class="paragraph">
+<p>Instead of displaying the following <em>life-saving</em> warning &#8230;&#8203;</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/fail_fast_ok.png" alt="fail fast ok">
+</div>
+</div>
+<div class="paragraph">
+<p>... a <em>life-threatening</em> message is displayed:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/fail_fast_panic.png" alt="fail fast panic">
+</div>
+</div>
+<div class="paragraph">
+<p>For an explanation of the above outcome (and for more advice about how to fail fast) please read <a href="https://www.ppl-lang.dev/blog/fail-fast-principle-software-development/index.html">Introduction to the 'Fail Fast!' Principle in Software Development</a> (hint: it&#8217;s just a missing <code>&gt;</code> character in HTML code).</p>
+</div>
+<div class="paragraph">
+<p>Ultimately, <em>the Fail-fast principle helps to write more reliable and safe code in less time</em>.</p>
+</div>
+<div class="paragraph">
+<p>Therefore, prefer programming languages, libraries, frameworks, and tools that support the <em>Fail-fast</em> principle.</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Repair what you can - but when you must fail, fail noisily and as soon as possible.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Unix Philosophy<br>
+<cite><a href="http://www.faqs.org/docs/artu/ch01s06.html#id2878538">Rule of Repair</a></cite>
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>If a function be advertised to return an error code in the event of difficulties, thou shalt check for that code, yea, even though the checks triple the size of thy code and produce aches in thy typing fingers, for if thou thinkest "it cannot happen to me", the gods shall surely punish thee for thy arrogance.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Henry Spencer<br>
+<cite><a href="https://www.lysator.liu.se/c/ten-commandments.html">The Ten Commandments for C Programmers</a></cite>
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Do you fix bugs before writing new code?</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Joel Spolsky<br>
+<cite><a href="https://www.joelonsoftware.com/2000/08/09/the-joel-test-12-steps-to-better-code">The Joel Test: 12 Steps to Better Code</a></cite>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_every_software_component_should_be_small_and_have_a_single_responsibility"><em>Every software component should be small and have a single responsibility.</em></h3>
+<div class="paragraph">
+<p>Small, single-responsibility components have benefits for both the author and the user of the component.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Benefits for the author: They are easier to write, test and maintain. They are less error-prone and reduce dependability (coupling).</p>
+</li>
+<li>
+<p>Benefits for the user: They are easier to understand and use. They can be combined with other components in more flexible ways. It is easier to replace or extend them with another implementation if needed.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The power of the whole is the result of many simple components working seamlessly together.</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Write simple parts connected by clean interfaces.</p>
+</div>
+<div class="paragraph">
+<p>Make each program do one thing well.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; The Art of Unix Programming
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>I developed a habit of writing very small functions.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Martin Fowler<br>
+<cite><a href="https://martinfowler.com/bliki/FunctionLength.html">FunctionLength</a></cite>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_dont_overdesign"><em>Don&#8217;t overdesign!</em></h3>
+<div class="paragraph">
+<p>Resist the temptation to add features that <em>might</em> be used in the future.</p>
+</div>
+<div class="paragraph">
+<p>Every feature increases complexity as well as the risk for malfunctions. Every feature needs time to be created, tested and maintained.</p>
+</div>
+<div class="paragraph">
+<p>Moreover it is often difficult to foresee features that will actually be needed later, especially in projects with frequently changing requirements. Adding features that will never be used is pointless.</p>
+</div>
+<div class="paragraph">
+<p>Remember: Keep it small and simple!</p>
+</div>
+<div class="paragraph">
+<p>Before thinking "What else can we add?", ask yourself "Is there anything we can remove?"</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>When in doubt, leave it out. If there is a fundamental theorem of API design, this is it. It applies equally to functionality, classes, methods, and parameters. Every facet of an API should be as small as possible, but no smaller. You can always add things later, but you can&#8217;t take them away.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Joshua Bloch<br>
+<cite><a href="https://www.youtube.com/watch?v=aAb7hSCtvGw">How to design a good API and why it matters</a></cite>
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Perfection is achieved, not when there is nothing more to add, but when there is nothing left to take away.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Antoine de Saint-Exupéry
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>To attain knowledge, add things everyday. To attain wisdom, remove things every day.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Lao Tzu
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>YAGNI: You aren&#8217;t gonna need it.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; principle of extreme programming<br>
+<cite><a href="https://en.wikipedia.org/wiki/You_aren%27t_gonna_need_it">Wikipedia</a></cite>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_optimize_only_if_necessary"><em>Optimize only if necessary!</em></h3>
+<div class="paragraph">
+<p>Instead of writing 'clever code that runs <em>faster</em>' it is better to write simple, correct and maintainable code that runs <em>fast enough</em>.</p>
+</div>
+<div class="paragraph">
+<p>The approach should be:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Write simple code that does the job</p>
+</li>
+<li>
+<p><em>If</em> (and only <em>if</em>) there is a performance problem then:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><em>Measure</em> performance to reliably find the bottleneck (do not guess!)</p>
+</li>
+<li>
+<p>Optimize the code that needs to run faster</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Don&#8217;t forget: Bad performance is often just a consequence of bad data structures, bad code and/or bad architecture.</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Premature optimization is the root of all evil.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Donald Knuth<br>
+<cite>author of 'The Art of Computer Programming'</cite>
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Make it run, then make it right, then make it fast.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Kent Beck<br>
+<cite>Creator of extreme programming</cite>
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Rushing to optimize before the bottlenecks are known may be the only error to have ruined more designs than feature creep. From tortured code to incomprehensible data layouts, the results of obsessing about speed or memory or disk usage at the expense of transparency and simplicity are everywhere. They spawn innumerable bugs and cost millions of man-hours — often, just to get marginal gains in the use of some resource much less expensive than debugging time.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Eric Steven Raymond<br>
+<cite>The Art of Unix Programming</cite>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_automate_recurring_tasks"><em>Automate recurring tasks!</em></h3>
+<div class="paragraph">
+<p>Doing the same again and again is error-prone, counter-productive, boring and increases the risk of not doing things that are important, such as unit/integration tests, backups, etc.</p>
+</div>
+<div class="paragraph">
+<p>Use the best tools you can get for frequent tasks, such as writing/editing code, handling files, etc.</p>
+</div>
+<div class="paragraph">
+<p>Strive for single-click-execution or, even better, scheduled tasks that run automatically.</p>
+</div>
+<div class="paragraph">
+<p>It is often easy to automate tasks. Create small scripts (written in your preferred language or using OS scripting), use automation tools such as <a href="https://www.autoitscript.com">Autoit</a>, <a href="http://www.seleniumhq.org/">Selenium</a>, or use any other best suited tool to quickly automate your or your user&#8217;s recurring tasks.</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Use tools in preference to unskilled help to lighten a programming task, even if you have to detour to build the tools and expect to throw some of them out after you&#8217;ve finished using them.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Doug McIlroy<br>
+<cite>Inventor of Unix pipes</cite>
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Rule of Economy: Programmer time is expensive; conserve it in preference to machine time.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; The Art of Unix Programming
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Can you make a build in one step?</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Joel Spolsky<br>
+<cite><a href="https://www.joelonsoftware.com/2000/08/09/the-joel-test-12-steps-to-better-code">The Joel Test: 12 Steps to Better Code</a></cite>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_enjoy_being_in_the_flow"><em>Enjoy being in the flow!</em></h3>
+<div class="paragraph">
+<p>Flow (psychology) is described as follows in <a href="https://en.wikipedia.org/wiki/Flow_(psychology)">Wikipedia</a>:</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Flow &#8230;&#8203; is the mental state of operation in which a person performing an activity is fully immersed in a feeling of energized focus, full involvement, and enjoyment in the process of the activity. In essence, flow is characterized by complete absorption in what one does, and a resulting loss in one&#8217;s sense of space and time.</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>Being in the flow (also called being <em>in the zone</em> or <em>in hack mode</em>) can lead to a state of blissful feeling that needs to be experienced to be understood. Flow might be the reason a programmer once wrote in a forum: "I want to code, code, code - until I die."</p>
+</div>
+<div class="paragraph">
+<p>For programmers, flow can best be achieved under the following conditions:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>There are <em>no distractions</em>, such as incoming phone calls, emails, any other kind of notifications, noise, etc.</p>
+</li>
+<li>
+<p>The programming task at hand is <em>worthwhile and challenging, but not too difficult</em>.</p>
+</li>
+<li>
+<p>You must <em>see clearly</em>, before starting to code.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>What does it mean to 'see clearly'? Close your eyes. Can you see the overall picture, the data structures with their relationships, as well as the functions and their interactions? Doubts must be eliminated first - by using paper and pencil, searching the net, asking for help, writing small snippets of test code, or doing whatever else is appropriate to get rid of the doubts.</p>
+</div>
+<div class="paragraph">
+<p>Can you see clearly now? Then start coding and fully enjoy it!</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_summary">Summary</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Here is a summary of all pragmatics:</p>
+</div>
+<div class="sect2">
+<h3 id="_general_guidelines_2">General Guidelines</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><em>Everything should be as simple as possible, but not simpler!</em> - Albert Einstein</p>
+</li>
+<li>
+<p><em>If it’s doomed to fail, then 'Fail fast!'</em></p>
+</li>
+<li>
+<p><em>Strive for 'good enough', not for 'perfect'. Then release!</em></p>
+</li>
+<li>
+<p><em>Listen to the users!</em></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_data_design_2">Data Design</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><em>Before writing code, design your data carefully!</em></p>
+</li>
+<li>
+<p><em>Make all data structures immutable, unless there is a good reason to make them mutable!</em></p>
+</li>
+<li>
+<p><em>Limit the set of allowed values to the smallest possible one!</em></p>
+</li>
+<li>
+<p><em>Most of the time, a default value should be the strictest among the set of allowed values.</em></p>
+</li>
+<li>
+<p><em>Avoid data redundancy!</em></p>
+</li>
+<li>
+<p><em>Consider storing data in simple text files using universal, standardized formats!</em></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_writing_code_2">Writing Code</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><em>Write beautiful code!</em></p>
+</li>
+<li>
+<p><em>Use existing software whenever possible!</em></p>
+</li>
+<li>
+<p><em>Fail fast and noisily!</em></p>
+</li>
+<li>
+<p><em>Every software component should be small and have a single responsibility.</em></p>
+</li>
+<li>
+<p><em>Don’t overdesign!</em></p>
+</li>
+<li>
+<p><em>Optimize only if necessary!</em></p>
+</li>
+<li>
+<p><em>Automate recurring tasks!</em></p>
+</li>
+<li>
+<p><em>Enjoy being in the flow!</em></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

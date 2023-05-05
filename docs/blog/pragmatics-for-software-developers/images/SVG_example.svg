@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+    width="140"
+    height="140" >
+
+    <circle cx="70" cy="70" r="40" stroke="red" stroke-width="4" fill="yellow" />
+</svg>
+
