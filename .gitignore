@@ -1,0 +1,9 @@
+# Directories and files starting with ---
+**/---*
+
+# Directories and files starting with NOGIT_
+**/NOGIT_*
+
+bin/
+work/
+docs/blog/practical-type-system/

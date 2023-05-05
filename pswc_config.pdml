@@ -1,0 +1,9 @@
+[blog_posts work/blog]
+[output_dir docs]
+
+[-
+[statics work/static]
+[pages work/pages]
+[docs]
+[OS_scripts]
+-]
