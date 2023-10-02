@@ -1,0 +1,1568 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Null-Safety vs Maybe/Option - A Thorough Comparison</title>
+        <link rel="stylesheet" href="pml-default.css">
+        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.15.6/build/styles/default.min.css">
+    </head>
+    <body>
+        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.15.6/build/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+        <div class="pml-hsplit-panel">
+            <div class="pml-hsplit-left-panel" id="PMLHsplitLeftPanel">
+                <div class="pml-toc">
+                    <h2 class="pml-toc-title"></h2>
+                    <div class="pml-toc-content">
+                        <ul class="pml-toc-tree">
+                            <li>
+                                <div class="pml-toc-leaf-node">
+                                    <div class="pml-toc-leaf-prefix"></div>
+                                    <a class="pml-toc-leaf-link" href="#ch__1">Introduction</a>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="pml-toc-leaf-node">
+                                    <div class="pml-toc-leaf-prefix"></div>
+                                    <a class="pml-toc-leaf-link" href="#ch__2">Why Should We Care?</a>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="pml-toc-leaf-node">
+                                    <div class="pml-toc-leaf-prefix"></div>
+                                    <a class="pml-toc-leaf-link" href="#ch__3">Three Approaches</a>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="pml-toc-branch-node">
+                                    <div class="pml-toc-branch-prefix pml-toc-branch-hidden"></div>
+                                    <a class="pml-toc-branch-link" href="#ch__4">Source Code Examples</a>
+                                </div>
+                                <ul class="pml-toc-sub-chapters pml-hidden">
+                                    <li>
+                                        <div class="pml-toc-branch-node">
+                                            <div class="pml-toc-branch-prefix pml-toc-branch-hidden"></div>
+                                            <a class="pml-toc-branch-link" href="#ch__5">Null-Safety</a>
+                                        </div>
+                                        <ul class="pml-toc-sub-chapters pml-hidden">
+                                            <li>
+                                                <div class="pml-toc-branch-node">
+                                                    <div class="pml-toc-branch-prefix pml-toc-branch-hidden"></div>
+                                                    <a class="pml-toc-branch-link" href="#ch__6">Null Not Allowed</a>
+                                                </div>
+                                                <ul class="pml-toc-sub-chapters pml-hidden">
+                                                    <li>
+                                                        <div class="pml-toc-leaf-node">
+                                                            <div class="pml-toc-leaf-prefix"></div>
+                                                            <a class="pml-toc-leaf-link" href="#ch__7">Java</a>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="pml-toc-leaf-node">
+                                                            <div class="pml-toc-leaf-prefix"></div>
+                                                            <a class="pml-toc-leaf-link" href="#ch__8">Haskell</a>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="pml-toc-leaf-node">
+                                                            <div class="pml-toc-leaf-prefix"></div>
+                                                            <a class="pml-toc-leaf-link" href="#ch__9">PPL</a>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="pml-toc-leaf-node">
+                                                            <div class="pml-toc-leaf-prefix"></div>
+                                                            <a class="pml-toc-leaf-link" href="#ch__10">Discussion</a>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li>
+                                                <div class="pml-toc-branch-node">
+                                                    <div class="pml-toc-branch-prefix pml-toc-branch-hidden"></div>
+                                                    <a class="pml-toc-branch-link" href="#ch__11">Null Allowed</a>
+                                                </div>
+                                                <ul class="pml-toc-sub-chapters pml-hidden">
+                                                    <li>
+                                                        <div class="pml-toc-leaf-node">
+                                                            <div class="pml-toc-leaf-prefix"></div>
+                                                            <a class="pml-toc-leaf-link" href="#ch__12">Java</a>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="pml-toc-leaf-node">
+                                                            <div class="pml-toc-leaf-prefix"></div>
+                                                            <a class="pml-toc-leaf-link" href="#ch__13">Haskell</a>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="pml-toc-leaf-node">
+                                                            <div class="pml-toc-leaf-prefix"></div>
+                                                            <a class="pml-toc-leaf-link" href="#ch__14">PPL</a>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="pml-toc-leaf-node">
+                                                            <div class="pml-toc-leaf-prefix"></div>
+                                                            <a class="pml-toc-leaf-link" href="#ch__15">Discussion</a>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <div class="pml-toc-branch-node">
+                                            <div class="pml-toc-branch-prefix pml-toc-branch-hidden"></div>
+                                            <a class="pml-toc-branch-link" href="#ch__16">Useful Null-Handling Features</a>
+                                        </div>
+                                        <ul class="pml-toc-sub-chapters pml-hidden">
+                                            <li>
+                                                <div class="pml-toc-branch-node">
+                                                    <div class="pml-toc-branch-prefix pml-toc-branch-hidden"></div>
+                                                    <a class="pml-toc-branch-link" href="#ch__17">Searching the First Non-Null Value</a>
+                                                </div>
+                                                <ul class="pml-toc-sub-chapters pml-hidden">
+                                                    <li>
+                                                        <div class="pml-toc-leaf-node">
+                                                            <div class="pml-toc-leaf-prefix"></div>
+                                                            <a class="pml-toc-leaf-link" href="#ch__18">Java</a>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="pml-toc-leaf-node">
+                                                            <div class="pml-toc-leaf-prefix"></div>
+                                                            <a class="pml-toc-leaf-link" href="#ch__19">Haskell</a>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="pml-toc-leaf-node">
+                                                            <div class="pml-toc-leaf-prefix"></div>
+                                                            <a class="pml-toc-leaf-link" href="#ch__20">PPL</a>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li>
+                                                <div class="pml-toc-branch-node">
+                                                    <div class="pml-toc-branch-prefix pml-toc-branch-hidden"></div>
+                                                    <a class="pml-toc-branch-link" href="#ch__21">Getting a Value in a Path With Nulls</a>
+                                                </div>
+                                                <ul class="pml-toc-sub-chapters pml-hidden">
+                                                    <li>
+                                                        <div class="pml-toc-leaf-node">
+                                                            <div class="pml-toc-leaf-prefix"></div>
+                                                            <a class="pml-toc-leaf-link" href="#ch__22">Java</a>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="pml-toc-leaf-node">
+                                                            <div class="pml-toc-leaf-prefix"></div>
+                                                            <a class="pml-toc-leaf-link" href="#ch__23">Haskell</a>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="pml-toc-leaf-node">
+                                                            <div class="pml-toc-leaf-prefix"></div>
+                                                            <a class="pml-toc-leaf-link" href="#ch__24">PPL</a>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="pml-toc-leaf-node">
+                                                            <div class="pml-toc-leaf-prefix"></div>
+                                                            <a class="pml-toc-leaf-link" href="#ch__25">Comparison</a>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <div class="pml-toc-branch-node">
+                                    <div class="pml-toc-branch-prefix pml-toc-branch-hidden"></div>
+                                    <a class="pml-toc-branch-link" href="#ch__26">Comparisons</a>
+                                </div>
+                                <ul class="pml-toc-sub-chapters pml-hidden">
+                                    <li>
+                                        <div class="pml-toc-branch-node">
+                                            <div class="pml-toc-branch-prefix pml-toc-branch-hidden"></div>
+                                            <a class="pml-toc-branch-link" href="#ch__27">Source Code</a>
+                                        </div>
+                                        <ul class="pml-toc-sub-chapters pml-hidden">
+                                            <li>
+                                                <div class="pml-toc-leaf-node">
+                                                    <div class="pml-toc-leaf-prefix"></div>
+                                                    <a class="pml-toc-leaf-link" href="#ch__28">Declaring the type of a nullable reference</a>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="pml-toc-leaf-node">
+                                                    <div class="pml-toc-leaf-prefix"></div>
+                                                    <a class="pml-toc-leaf-link" href="#ch__29">A non-null value used for a nullable type</a>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="pml-toc-leaf-node">
+                                                    <div class="pml-toc-leaf-prefix"></div>
+                                                    <a class="pml-toc-leaf-link" href="#ch__30">'No value' symbol</a>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="pml-toc-leaf-node">
+                                                    <div class="pml-toc-leaf-prefix"></div>
+                                                    <a class="pml-toc-leaf-link" href="#ch__31">Checking for null</a>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="pml-toc-leaf-node">
+                                                    <div class="pml-toc-leaf-prefix"></div>
+                                                    <a class="pml-toc-leaf-link" href="#ch__32">Providing a default non-null value</a>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="pml-toc-leaf-node">
+                                                    <div class="pml-toc-leaf-prefix"></div>
+                                                    <a class="pml-toc-leaf-link" href="#ch__33">Getting the first non-null value in a chain, or else a default value</a>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="pml-toc-leaf-node">
+                                                    <div class="pml-toc-leaf-prefix"></div>
+                                                    <a class="pml-toc-leaf-link" href="#ch__34">Getting the last value in a chain, or else a default value</a>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <div class="pml-toc-leaf-node">
+                                            <div class="pml-toc-leaf-prefix"></div>
+                                            <a class="pml-toc-leaf-link" href="#ch__35">Implementation</a>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="pml-toc-leaf-node">
+                                            <div class="pml-toc-leaf-prefix"></div>
+                                            <a class="pml-toc-leaf-link" href="#ch__36">Space and Time</a>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <div class="pml-toc-leaf-node">
+                                    <div class="pml-toc-leaf-prefix"></div>
+                                    <a class="pml-toc-leaf-link" href="#ch__37">A Note On The &quot;Billion Dollar Mistake&quot;</a>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="pml-toc-leaf-node">
+                                    <div class="pml-toc-leaf-prefix"></div>
+                                    <a class="pml-toc-leaf-link" href="#ch__38">Summary</a>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="pml-toc-leaf-node">
+                                    <div class="pml-toc-leaf-prefix"></div>
+                                    <a class="pml-toc-leaf-link" href="#ch__39">Conclusion</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="pml-hsplit-panel-separator" id="PMLHsplitPanelSeparator" draggable="true" ondragstart="PMLHsplitPanelSeparatorDragStart(event)" ondrag="PMLHsplitPanelSeparatorDragging(event)" ondragend="PMLHsplitPanelSeparatorDragEnd(event)"></div>
+            <div class="pml-hsplit-right-panel" id="PMLHsplitRightPanel">
+                <div class="pml-hsplit-right-panel-content" id="PMLHsplitRightPanelContent">
+                    <div class="pml-document">
+                        <div class="pml-document-header">
+                            <h1 class="pml-document-title">Null-Safety vs Maybe/Option - A Thorough Comparison</h1>
+                            <div class="pml-document-authors">Christian Neumanns</div>
+                            <div class="pml-document-date-time">2019-09-17</div>
+                        </div>
+                        <p class="pml-paragraph">An in-depth and practical comparison between Null-safety and the Maybe/Option type, both used to discard the infamous null pointer error.</p>
+                        <p class="pml-paragraph"><br /></p>
+                        <div style="text-align: center">
+                            <img class="pml-image pml-bordered" src="images/elephant_fight.jpg" width="700">
+                        </div>
+                        <p style="font-size:80%" class="pml-paragraph">Image by <a href="https://pixabay.com/users/dailyprinciples-3836461/" class="pml-link">dailyprinciples</a> from <a href="https://pixabay.com/" class="pml-link">Pixabay</a>. </p>
+                        <div id="ch__1" class="pml-chapter">
+                            <h1 class="pml-chapter-title">Introduction</h1>
+                            <p class="pml-paragraph">There are two effective approaches to eliminate the daunting null pointer error:</p>
+                            <ul class="pml-list">
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">The Maybe/Option pattern - mostly used in functional programming languages.</p>
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">Compile-time null-safety - used in some modern programming languages.</p>
+                                </li>
+                            </ul>
+                            <p class="pml-paragraph">This article aims to answer the following questions:</p>
+                            <ul class="pml-list">
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">How does it work? How do these two approaches eliminate the null pointer error?</p>
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">How are they used in practice?</p>
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">How do they differ?</p>
+                                </li>
+                            </ul>
+                            <div class="pml-admonition">
+                                <div class="pml-admonition-label">Note</div>
+                                <div class="pml-admonition-content">
+                                    <p class="pml-paragraph">Readers not familiar with the concept of <code class="pml-inline-code">null</code> might want to read first: <a href="https://www.ppl-lang.dev/blog/meaning-of-null/index.html" class="pml-link">A quick and thorough guide to 'null'</a>.</p>
+                                    <p class="pml-paragraph">For an introduction to <code class="pml-inline-code">Maybe / Option</code> I recommend: <a href="https://fsharpforfunandprofit.com/posts/the-option-type/" class="pml-link">F#: The Option type</a>. You can also search the net for &quot;haskell maybe&quot; or &quot;f# option&quot;.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="ch__2" class="pml-chapter">
+                            <h1 class="pml-chapter-title">Why Should We Care?</h1>
+                            <blockquote class="pml-quote">
+                                <div class="pml-quote-text-block">
+                                    <div class="pml-quote-text-prefix"></div>
+                                    <div class="pml-quote-text">
+                                        <p class="pml-paragraph">I call it my billion-dollar mistake. It was the invention of the null reference in 1965. ... This has led to innumerable errors, vulnerabilities, and system crashes, which have probably caused a billion dollars of pain and damage in the last forty years. ...</p>
+                                    </div>
+                                    <div class="pml-quote-text-suffix"></div>
+                                </div>
+                                <div class="pml-quote-source">Tony Hoare</div>
+                            </blockquote>
+                            <p class="pml-paragraph">In the context of Java, Professor John Sargeant from the Manchester school of computer science puts it like <a href="http://www.cs.man.ac.uk/~johns/npe.html" class="pml-link">this</a>:</p>
+                            <blockquote class="pml-quote">
+                                <div class="pml-quote-text-block">
+                                    <div class="pml-quote-text-prefix"></div>
+                                    <div class="pml-quote-text">
+                                        <p class="pml-paragraph">Of the things which can go wrong at runtime in Java programs, null pointer exceptions are by far the most common.</p>
+                                    </div>
+                                    <div class="pml-quote-text-suffix"></div>
+                                </div>
+                                <div class="pml-quote-source">John Sargeant</div>
+                            </blockquote>
+                            <p class="pml-paragraph">We can easily deduce:</p>
+                            <blockquote class="pml-quote">
+                                <div class="pml-quote-text-block">
+                                    <div class="pml-quote-text-prefix"></div>
+                                    <div class="pml-quote-text">
+                                        <p class="pml-paragraph">By eliminating the infamous null pointer error, we <b class="pml-bold">eliminate one of the most frequent reasons for software failures</b>.</p>
+                                    </div>
+                                    <div class="pml-quote-text-suffix"></div>
+                                </div>
+                            </blockquote>
+                            <p class="pml-paragraph">That's a big deal!</p>
+                            <p class="pml-paragraph">We should care about it.</p>
+                        </div>
+                        <div id="ch__3" class="pml-chapter">
+                            <h1 class="pml-chapter-title">Three Approaches</h1>
+                            <p class="pml-paragraph">Besides showing the <i class="pml-italic">reason</i> for the null pointer error, this article also aims to demonstrate how the null pointer error can be <i class="pml-italic">eliminated</i>.</p>
+                            <p class="pml-paragraph">We will therefore compare three different approaches:</p>
+                            <ul class="pml-list">
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph"><b class="pml-bold">The language uses <code class="pml-inline-code">null</code>, but doesn't provide null-safety.</b></p>
+                                    <p class="pml-paragraph">In these languages null pointer errors occur frequently.</p>
+                                    <p class="pml-paragraph">Most popular languages fall into this category. For example: C, C++, Java, Javascript, PHP, Python, Ruby, Visual Basic.</p>
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph"><b class="pml-bold">The language doesn't support <code class="pml-inline-code">null</code>, but uses <code class="pml-inline-code">Maybe</code> (also called <code class="pml-inline-code">Option</code> or <code class="pml-inline-code">Optional</code>) to represent the 'absence of a value'</b>.</p>
+                                    <p class="pml-paragraph">As <code class="pml-inline-code">null</code> is not supported, there are no null pointer errors.</p>
+                                    <p class="pml-paragraph">This approach is mostly used in some functional programming languages. But it can as well be used in non-functional languages.</p>
+                                    <p class="pml-paragraph">At the time of writing, the most prominent languages using this approach are probably Haskell, F#, and Swift.</p>
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph"><b class="pml-bold">The language uses null and provides compile-time-null-safety.</b></p>
+                                    <p class="pml-paragraph">Null pointer errors cannot occur.</p>
+                                    <p class="pml-paragraph">Some modern languages support this approach. </p>
+                                </li>
+                            </ul>
+                        </div>
+                        <div id="ch__4" class="pml-chapter">
+                            <h1 class="pml-chapter-title">Source Code Examples</h1>
+                            <p class="pml-paragraph">In this chapter we'll look at some source code examples of common use cases involving 'the absence of a value'. We will compare the code written in the three following languages representing the three approaches mentioned in the previous chapter:</p>
+                            <ul class="pml-list">
+                                <li class="pml-list-element">
+                                    <div class="pml-node-title">Java (supports null, but not null-safe)</div>
+                                    <p class="pml-paragraph"><a href="https://en.wikipedia.org/wiki/Java_(programming_language)" class="pml-link">Java</a> is one of the industry's leading languages, and one of the most successful ones in the history of programming languages. But it isn't null-safe. Hence, it is well suited to demonstrate the problem of the null pointer error.</p>
+                                </li>
+                                <li class="pml-list-element">
+                                    <div class="pml-node-title">Haskell (Maybe type)</div>
+                                    <p class="pml-paragraph"><a href="https://en.wikipedia.org/wiki/Haskell_(programming_language)" class="pml-link">Haskell</a> is the most famous one in the category of pure functional languages. It doesn't support <code class="pml-inline-code">null</code>. Instead it uses the <code class="pml-inline-code">Maybe</code> monad to represent the 'absence of a value'.</p>
+                                    <div class="pml-admonition">
+                                        <div class="pml-admonition-label">Note</div>
+                                        <div class="pml-admonition-content">
+                                            <p class="pml-paragraph">I am by no means a Haskell expert. If you see any mistake or need for improvement in the following examples, then please leave a comment so that the article can be updated.</p>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="pml-list-element">
+                                    <div class="pml-node-title">PPL (supports null and is null-safe)</div>
+                                    <p class="pml-paragraph">The <a href="https://www.ppl-lang.dev/" class="pml-link">Practical Programming Language</a> (PPL) supports <code class="pml-inline-code">null</code> and has been designed with full support for compile-time-null-safety from the ground up. However, be warned! PPL is just a <i class="pml-italic">work in progress</i>, not ready yet to write mission-critical enterprise applications. I use it in this article because (full disclosure!) I am the creator of PPL, and I want to initiate some interest for it. I hope you don't mind - after reading this article.</p>
+                                </li>
+                            </ul>
+                            <p class="pml-paragraph">All source code examples are available on <a href="https://github.com/pp-articles/null_vs_maybe/tree/master/examples/" class="pml-link">Github</a>. The Github source code files contain alternative solutions for some examples, not shown in this article.</p>
+                            <div id="ch__5" class="pml-chapter">
+                                <h2 class="pml-chapter-title">Null-Safety</h2>
+                                <p class="pml-paragraph">How does null-safety work in practice? Let's see.</p>
+                                <div id="ch__6" class="pml-chapter">
+                                    <h3 class="pml-chapter-title">Null Not Allowed</h3>
+                                    <p class="pml-paragraph">We start with an example of code where <code class="pml-inline-code">null</code> is <i class="pml-italic">not allowed</i>.</p>
+                                    <p class="pml-paragraph">Say we want to write a very simple function that takes a positive integer and returns a string. Neither the input nor the output can be <code class="pml-inline-code">null</code>. If the input value is 1, we return &quot;one&quot;. If it is not 1, we return &quot;not one&quot;. How does the code look like in the three languages? And, more importantly, how safe is it?</p>
+                                    <div id="ch__7" class="pml-chapter">
+                                        <h4 class="pml-chapter-title">Java</h4>
+                                        <p class="pml-paragraph">This is the function written in Java:</p>
+                                        <pre class="pml-code"><code class="nohighlight">static String intToString ( Integer i ) {
+    if ( i == 1 ) {
+        return &quot;one&quot;;
+    } else {
+        return &quot;not one&quot;;
+    }
+}</code></pre>
+                                        <p class="pml-paragraph">We can use the ternary operator and shorten the code a bit:</p>
+                                        <pre class="pml-code"><code class="nohighlight">static String intToString ( Integer i ) {
+    return i == 1 ? &quot;one&quot; : &quot;not one&quot;;
+}</code></pre>
+                                        <div class="pml-admonition">
+                                            <div class="pml-admonition-label">Note</div>
+                                            <div class="pml-admonition-content">
+                                                <p class="pml-paragraph">I am using type <code class="pml-inline-code">Integer</code>, which is a <i class="pml-italic">reference</i> type. I am not using type <code class="pml-inline-code">int</code>, which is a <i class="pml-italic">value</i> type. The reason is that <code class="pml-inline-code">null</code> works only with reference types.</p>
+                                            </div>
+                                        </div>
+                                        <p class="pml-paragraph">To test the code, we can write a simple Java application like this:</p>
+                                        <pre class="pml-code"><code class="nohighlight">public class NullNotAllowedTest {
+
+    static String intToString ( Integer i ) {
+        return i == 1 ? &quot;one&quot; : &quot;not one&quot;;
+    }
+
+    public static void main ( String[] args ) {
+        System.out.println ( intToString ( 1 ) );
+        System.out.println ( intToString ( 2 ) );
+    }
+}</code></pre>
+                                        <p class="pml-paragraph">If you want to try out this code you can use an online Java Executor like <a href="https://www.tutorialspoint.com/compile_java_online.php" class="pml-link">this one</a>. Just copy/paste the above code in the <code class="pml-inline-code">Source File</code> tab, and click <code class="pml-inline-code">Execute</code>. It looks like this:</p>
+                                        <div style="text-align: left">
+                                            <img class="pml-image pml-bordered" src="images/NullNotAllowedTest_Java.png">
+                                        </div>
+                                        <p class="pml-paragraph">If you have Java installed on your system, you can also proceed like this:</p>
+                                        <ul class="pml-list">
+                                            <li class="pml-list-element">
+                                                <p class="pml-paragraph">Save the above code in file <code class="pml-inline-code">NullNotAllowedTest.java</code>.</p>
+                                            </li>
+                                            <li class="pml-list-element">
+                                                <p class="pml-paragraph">Compile and run it by typing the following two commands in a terminal:</p>
+                                                <pre class="pml-input">javac NullNotAllowedTest.java
+java NullNotAllowedTest</pre>
+                                            </li>
+                                        </ul>
+                                        <p class="pml-paragraph">The output written to the OS out device is:</p>
+                                        <pre class="pml-output">one
+not one</pre>
+                                        <p class="pml-paragraph">So far so good.</p>
+                                    </div>
+                                    <div id="ch__8" class="pml-chapter">
+                                        <h4 class="pml-chapter-title">Haskell</h4>
+                                        <p class="pml-paragraph">In Haskell, there are a few ways to write the function. For example:</p>
+                                        <pre class="pml-code"><code class="nohighlight">intToString :: Integer -&gt; String
+intToString i = case i of
+    1 -&gt; &quot;one&quot;
+    _ -&gt; &quot;not one&quot;</code></pre>
+                                        <div class="pml-admonition">
+                                            <div class="pml-admonition-label">Note</div>
+                                            <div class="pml-admonition-content">
+                                                <p class="pml-paragraph">The first line in the above code could be omitted, because Haskell supports type inference for function arguments. However, it's considered <a href="https://wiki.haskell.org/Type_signatures_as_good_style" class="pml-link">good style</a> to include the type signature, because it makes the code more readable. Hence, we will always include the type signature in the upcoming Haskell examples.</p>
+                                                <p class="pml-paragraph">The above code uses pattern matching, which is the idiomatic way to write code in Haskell.</p>
+                                            </div>
+                                        </div>
+                                        <p class="pml-paragraph">We can write a simple Haskell application to test the code:</p>
+                                        <pre class="pml-code"><code class="nohighlight">intToString :: Integer -&gt; String
+intToString i = case i of
+    1 -&gt; &quot;one&quot;
+    _ -&gt; &quot;not one&quot;
+
+main :: IO ()
+main = do
+    putStrLn $ intToString 1
+    putStrLn $ intToString 2</code></pre>
+                                        <p class="pml-paragraph">As for Java, you can use an <a href="https://www.tutorialspoint.com/compile_haskell_online.php" class="pml-link">online Haskell executor</a> to try out the code. Here is a screenshot:</p>
+                                        <div style="text-align: left">
+                                            <img class="pml-image pml-bordered" src="images/NullNotAllowedTest_Haskell.png">
+                                        </div>
+                                        <p class="pml-paragraph">Alternatively, if Haskell is installed on your system, you can save the above code in file <code class="pml-inline-code">NothingNotAllowedTest.hs</code>. Then you can compile and run it with these two commands:</p>
+                                        <pre class="pml-input">ghc -o NothingNotAllowedTest NothingNotAllowedTest.hs
+NothingNotAllowedTest.exe</pre>
+                                        <p class="pml-paragraph">The output is the same as in the Java version:</p>
+                                        <pre class="pml-output">one
+not one</pre>
+                                    </div>
+                                    <div id="ch__9" class="pml-chapter">
+                                        <h4 class="pml-chapter-title">PPL</h4>
+                                        <p class="pml-paragraph">In PPL the function can be written like this:</p>
+                                        <pre class="pml-code"><code class="nohighlight">function int_to_string ( i pos_32 ) -&gt; string
+    if i =v 1 then
+        return &quot;one&quot;
+    else
+        return &quot;not one&quot;
+    .
+.</code></pre>
+                                        <div class="pml-admonition">
+                                            <div class="pml-admonition-label">Note</div>
+                                            <div class="pml-admonition-content">
+                                                <p class="pml-paragraph">The comparison operator <code class="pml-inline-code">=v</code> in the above code is suffixed with a <code class="pml-inline-code">v</code> to make it clear we are comparing <b class="pml-bold">v</b>alues. If we wanted to compare references, we would use operator <code class="pml-inline-code">=r</code>.</p>
+                                            </div>
+                                        </div>
+                                        <p class="pml-paragraph">We can shorten the code by using an if-then-else <i class="pml-italic">expression</i> (instead of an if-then-else <i class="pml-italic">statement</i>):</p>
+                                        <pre class="pml-code"><code class="nohighlight">function int_to_string ( i pos_32 ) -&gt; string = \
+    if i =v 1 then &quot;one&quot; else &quot;not one&quot;</code></pre>
+                                        <p class="pml-paragraph">A simple PPL application to test the code looks like this:</p>
+                                        <pre class="pml-code"><code class="nohighlight">function int_to_string ( i pos_32 ) -&gt; string = \
+    if i =v 1 then &quot;one&quot; else &quot;not one&quot;
+
+function start
+    write_line ( int_to_string ( 1 ) )
+    write_line ( int_to_string ( 2 ) )
+.</code></pre>
+                                        <p class="pml-paragraph">At the time of writing there is no online PPL executor available. To try out code you have to <a href="https://www.ppl-lang.dev/ppl/downloads/install_PPL.html" class="pml-link">install PPL</a> and then proceed like this:</p>
+                                        <ul class="pml-list">
+                                            <li class="pml-list-element">
+                                                <p class="pml-paragraph">Save the above code in file <code class="pml-inline-code">null_not_allowed_test.ppl</code></p>
+                                            </li>
+                                            <li class="pml-list-element">
+                                                <p class="pml-paragraph">Compile and run the code in a terminal by typing:</p>
+                                                <pre class="pml-input">ppl null_not_allowed_test.ppl</pre>
+                                            </li>
+                                        </ul>
+                                        <p class="pml-paragraph">Again, the output is:</p>
+                                        <pre class="pml-output">one
+not one</pre>
+                                    </div>
+                                    <div id="ch__10" class="pml-chapter">
+                                        <h4 class="pml-chapter-title">Discussion</h4>
+                                        <p class="pml-paragraph">As we have seen (and expected), the three languages allow us to write 'code that works correctly'. Here is a reprint of the three versions, so that you can easily compare the three versions:</p>
+                                        <ul class="pml-list">
+                                            <li class="pml-list-element">
+                                                <div class="pml-node-title">Java</div>
+                                                <pre class="pml-code"><code class="nohighlight">static String intToString ( Integer i ) {
+    return i == 1 ? &quot;one&quot; : &quot;not one&quot;;
+}</code></pre>
+                                            </li>
+                                            <li class="pml-list-element">
+                                                <div class="pml-node-title">Haskell</div>
+                                                <pre class="pml-code"><code class="nohighlight">intToString :: Integer -&gt; String
+intToString i = case i of
+    1 -&gt; &quot;one&quot;
+    _ -&gt; &quot;not one&quot;</code></pre>
+                                            </li>
+                                            <li class="pml-list-element">
+                                                <div class="pml-node-title">PPL</div>
+                                                <pre class="pml-code"><code class="nohighlight">function int_to_string ( i pos_32 ) -&gt; string = \
+    if i =v 1 then &quot;one&quot; else &quot;not one&quot;</code></pre>
+                                            </li>
+                                        </ul>
+                                        <p class="pml-paragraph">A pivotal question remains unanswered:</p>
+                                        <blockquote class="pml-quote">
+                                            <div class="pml-quote-text-block">
+                                                <div class="pml-quote-text-prefix"></div>
+                                                <div class="pml-quote-text">
+                                                    <p class="pml-paragraph">What happens in case of a bug in the source code?</p>
+                                                </div>
+                                                <div class="pml-quote-text-suffix"></div>
+                                            </div>
+                                            <div class="pml-quote-source">The Crucial Question</div>
+                                        </blockquote>
+                                        <p class="pml-paragraph">In the context of this article we want to know: What happens if the function is called with <code class="pml-inline-code">null</code> as input? And what if the function returns <code class="pml-inline-code">null</code>?</p>
+                                        <p class="pml-paragraph">This question is easy to answer in the Haskell world. <code class="pml-inline-code">null</code> doesn't exist in Haskell. Haskell uses the <code class="pml-inline-code">Maybe</code> monad to represent the 'absence of a value'. We will soon see how this works. Hence, in Haskell it is not possible to call <code class="pml-inline-code">intToString</code> with a <code class="pml-inline-code">null</code> as input. And we can't write code that returns <code class="pml-inline-code">null</code>.</p>
+                                        <p class="pml-paragraph">PPL supports <code class="pml-inline-code">null</code>, unlike Haskell. However, all types are <i class="pml-italic">non-null by default</i>. This is a fundamental rule in all effective null-safe languages. A PPL function with the type signature <code class="pml-inline-code">pos_32 -&gt; string</code> states that the function cannot be called with <code class="pml-inline-code">null</code> as input, and it cannot return <code class="pml-inline-code">null</code>. This is enforced at <code class="pml-inline-code">compile-time</code>, so we are on the safe side. Code like <code class="pml-inline-code">int_to_string ( null )</code> simply doesn't compile.</p>
+                                        <blockquote class="pml-quote">
+                                            <div class="pml-quote-text-block">
+                                                <div class="pml-quote-text-prefix"></div>
+                                                <div class="pml-quote-text">
+                                                    <p class="pml-paragraph">By default all types are <i class="pml-italic">non-null</i> in a null-safe language.</p>
+                                                    <p class="pml-paragraph">By default it is illegal to assign <code class="pml-inline-code">null</code>.</p>
+                                                </div>
+                                                <div class="pml-quote-text-suffix"></div>
+                                            </div>
+                                            <div class="pml-quote-source">The 'non-null by default' rule</div>
+                                        </blockquote>
+                                        <p class="pml-paragraph">What about Java?</p>
+                                        <p class="pml-paragraph">Java is not null-safe. Every type is <i class="pml-italic">nullable</i>, and there is no way to specify a non-null type for a reference. This means that <code class="pml-inline-code">intToString</code> can be called with <code class="pml-inline-code">null</code> as input. Moreover, nothing prevents us from writing code that returns <code class="pml-inline-code">null</code> from <code class="pml-inline-code">intToString</code>.</p>
+                                        <p class="pml-paragraph">So, what happens if we make a function call like <code class="pml-inline-code">intToString ( null )</code>? The program compiles, but the disreputable <code class="pml-inline-code">NullPointerException</code> is thrown at run-time:</p>
+                                        <pre class="pml-output">Exception in thread &quot;main&quot; java.lang.NullPointerException
+    at NullNotAllowedTest.intToString(NullNotAllowedTest.java:4)
+    at NullNotAllowedTest.main(NullNotAllowedTest.java:10)</pre>
+                                        <p class="pml-paragraph">Why? The test <code class="pml-inline-code">i == 1</code> is equivalent to <code class="pml-inline-code">i.compareTo&#8203; ( new Integer&#8203;(1) )</code>. But <code class="pml-inline-code">i</code> is <code class="pml-inline-code">null</code> in our case. And executing a method on a <code class="pml-inline-code">null</code> object is impossible and generates a <code class="pml-inline-code">NullPointerException</code>.</p>
+                                        <p class="pml-paragraph">This is the well-known reason for the infamous <i class="pml-italic">billion-dollar mistake</i>.</p>
+                                        <p class="pml-paragraph">What if <code class="pml-inline-code">intToString</code> accidentally returns <code class="pml-inline-code">null</code>, as in the following code:</p>
+                                        <pre class="pml-code"><code class="nohighlight">public class NullNotAllowedTest {
+
+    static String intToString ( Integer i ) {
+        return null;
+    }
+
+    public static void main ( String[] args ) {
+        System.out.println ( intToString ( 1 ) );
+    }
+}</code></pre>
+                                        <p class="pml-paragraph">Again, no compiler error. But a runtime error occurs, right? Wrong, the output is:</p>
+                                        <pre class="pml-output">null</pre>
+                                        <p class="pml-paragraph">Why?</p>
+                                        <p class="pml-paragraph">The reason is that <code class="pml-inline-code">System.out.println</code> has been programmed to write the string <code class="pml-inline-code">&quot;null&quot;</code> if it is called with <code class="pml-inline-code">null</code> as input. The method signature doesn't show this, but it is clearly stated in the Java API documentation: &quot;If the argument is null then the string 'null' is printed.&quot;.</p>
+                                        <p class="pml-paragraph">What if instead of printing the string returned by <code class="pml-inline-code">intToString</code>, we want to print the string's size (i.e. the number of characters). Let's try it by replacing ...</p>
+                                        <pre class="pml-code"><code class="nohighlight">System.out.println ( intToString ( 1 ) );</code></pre>
+                                        <p class="pml-paragraph">... with this:</p>
+                                        <pre class="pml-code"><code class="nohighlight">System.out.println ( intToString ( 1 ).length() );</code></pre>
+                                        <p class="pml-paragraph">Now the program doesn't continue silently. A <code class="pml-inline-code">NullPointerException</code> is thrown again, because the program tries to execute <code class="pml-inline-code">length()</code> on a <code class="pml-inline-code">null</code> object.</p>
+                                        <p class="pml-paragraph">As we can see from this simple example, the result of misusing <code class="pml-inline-code">null</code> is inconsistent.</p>
+                                        <p class="pml-paragraph">In the real world, the final outcome of incorrect <code class="pml-inline-code">null</code> handling ranges from totally harmless to totally harmful, and is often unpredictable. This is a general, and frustrating property of all programming languages that support <code class="pml-inline-code">null</code>, but don't provide <code class="pml-inline-code">compile-time-null-safety</code>. Imagine a big application with thousands of functions, most of them much more complex than our simple toy code. None of these functions are implicitly protected against misuses of <code class="pml-inline-code">null</code>. It is understandable why <code class="pml-inline-code">null</code> and the &quot;billion dollar mistake&quot; have become synonyms for many software developers.</p>
+                                        <p class="pml-paragraph">We can of course try to improve the Java code and make it a bit more robust. For example, we could explicitly check for a <code class="pml-inline-code">null</code> input in method <code class="pml-inline-code">intToString</code> and throw an <code class="pml-inline-code">IllegalArgumentException</code>. We could also add a <code class="pml-inline-code">NonNull</code> annotation that can be used by some static code analyzers or super-sophisticated IDEs. But all these improvements require manual work, might depend on additional tools and libraries, and don't lead to a satisfactory and reliable solution. Therefore, we will not discuss them. We are not interested in <i class="pml-italic">mitigating</i> the problem of the null pointer error, we want to <i class="pml-italic">eliminate</i> it. Completely!</p>
+                                    </div>
+                                </div>
+                                <div id="ch__11" class="pml-chapter">
+                                    <h3 class="pml-chapter-title">Null Allowed</h3>
+                                    <p class="pml-paragraph">Let's slightly change the specification of function <code class="pml-inline-code">int_to_string</code>. We want it to accept <code class="pml-inline-code">null</code> as input and return:</p>
+                                    <ul class="pml-list">
+                                        <li class="pml-list-element">
+                                            <p class="pml-paragraph"><code class="pml-inline-code">&quot;one&quot;</code> if the input is 1</p>
+                                        </li>
+                                        <li class="pml-list-element">
+                                            <p class="pml-paragraph"><code class="pml-inline-code">&quot;not one&quot;</code> if the input is not 1 and not <code class="pml-inline-code">null</code></p>
+                                        </li>
+                                        <li class="pml-list-element">
+                                            <p class="pml-paragraph"><code class="pml-inline-code">null</code> if the input is <code class="pml-inline-code">null</code></p>
+                                        </li>
+                                    </ul>
+                                    <p class="pml-paragraph">How does this affect the code in the three languages?</p>
+                                    <div id="ch__12" class="pml-chapter">
+                                        <h4 class="pml-chapter-title">Java</h4>
+                                        <p class="pml-paragraph">This is the new code written in Java:</p>
+                                        <pre class="pml-code"><code class="nohighlight">static String intToString ( Integer i ) {
+    if ( i == null ) {
+        return null;
+    } else {
+        return i == 1 ? &quot;one&quot; : &quot;not one&quot;;
+    }
+}</code></pre>
+                                        <div class="pml-admonition">
+                                            <div class="pml-admonition-label">Note</div>
+                                            <div class="pml-admonition-content">
+                                                <p class="pml-paragraph">We could again use the ternary operator and write more succinct code:</p>
+                                                <pre class="pml-code"><code class="nohighlight">static String intToString ( Integer i ) {
+    return i == null ? null : i == 1 ? &quot;one&quot; : &quot;not one&quot;;
+}</code></pre>
+                                                <p class="pml-paragraph">Whether to chose the first or second version is a matter of debate. As a general rule, we should value readability more than terseness of code. So, let's stick with version 1.</p>
+                                            </div>
+                                        </div>
+                                        <p class="pml-paragraph">The crucial point here is that the function's signature has <i class="pml-italic">not changed</i>, although the function's specification is now different. Whether the function accepts and returns <code class="pml-inline-code">null</code> or not, the signature is the same:</p>
+                                        <pre class="pml-code"><code class="nohighlight">String intToString ( Integer i ) {</code></pre>
+                                        <p class="pml-paragraph">This doesn't come as a surprise. As we saw already in the previous example, Java (and other languages without null-safety) doesn't make a difference between nullable and non-nullable types. All types are always nullable. Hence by just looking at a function signature we don't know if the function accepts <code class="pml-inline-code">null</code> as input, and we don't know if it might return <code class="pml-inline-code">null</code>. The best we can do is to document nullability for each input/output argument. But there is no compile-time protection against misuses.</p>
+                                        <p class="pml-paragraph">To check if it works, we can write a simplistic test application:</p>
+                                        <pre class="pml-code"><code class="nohighlight">public class NullAllowedTest {
+
+    static String intToString ( Integer i ) {
+        if ( i == null ) {
+            return null;
+        } else {
+            return i == 1 ? &quot;one&quot; : &quot;not one&quot;;
+        }
+    }
+
+    static void displayResult ( String s ) {
+        String result = s == null ? &quot;null&quot; : s;
+        System.out.println ( &quot;Result: &quot; + result );
+    }
+
+    public static void main ( String[] args ) {
+        displayResult ( intToString ( 1 ) );
+        displayResult ( intToString ( 2 ) );
+        displayResult ( intToString ( null ) );
+    }
+}</code></pre>
+                                        <p class="pml-paragraph">Output:</p>
+                                        <pre class="pml-output">Result: one
+Result: not one
+Result: null</pre>
+                                    </div>
+                                    <div id="ch__13" class="pml-chapter">
+                                        <h4 class="pml-chapter-title">Haskell</h4>
+                                        <p class="pml-paragraph">This is the code in Haskell:</p>
+                                        <pre class="pml-code"><code class="nohighlight">intToString :: Maybe Integer -&gt; Maybe String
+intToString i = case i of
+    Just 1  -&gt; Just &quot;one&quot;
+    Nothing -&gt; Nothing
+    _       -&gt; Just &quot;not one&quot;</code></pre>
+                                        <p class="pml-paragraph">Key points:</p>
+                                        <ul class="pml-list">
+                                            <li class="pml-list-element">
+                                                <p class="pml-paragraph">Haskell doesn't support <code class="pml-inline-code">null</code>. It uses the <code class="pml-inline-code">Maybe</code> monad.</p>
+                                                <p class="pml-paragraph">The Maybe type is defined as follows:</p>
+                                                <pre><code>data Maybe a = Just a | Nothing
+    deriving (Eq, Ord)</code></pre>
+                                                <p class="pml-paragraph">The <a href="http://hackage.haskell.org/package/base-4.12.0.0/docs/Data-Maybe.html" class="pml-link">Haskell doc</a> states: &quot;The <code class="pml-inline-code">Maybe</code> type encapsulates an optional value. A value of type <code class="pml-inline-code">Maybe a</code> either contains a value of type <code class="pml-inline-code">a</code> (represented as <code class="pml-inline-code">Just a</code>), or it is empty (represented as <code class="pml-inline-code">Nothing</code>). The <code class="pml-inline-code">Maybe</code> type is also a monad.&quot;</p>
+                                                <div class="pml-admonition">
+                                                    <div class="pml-admonition-label">Note</div>
+                                                    <div class="pml-admonition-content">
+                                                        <p class="pml-paragraph">More information can be found <a href="https://stackoverflow.com/questions/29456824/what-is-the-maybe-type-and-how-does-it-work" class="pml-link">here</a> and <a href="https://wiki.haskell.org/Maybe" class="pml-link">here</a>. Or you can read about the <a href="https://fsharpforfunandprofit.com/posts/the-option-type/" class="pml-link">Option type in F#</a>.</p>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li class="pml-list-element">
+                                                <p class="pml-paragraph">The function signature clearly states that calling the function with no integer (i.e. the value <code class="pml-inline-code">Nothing</code> in Haskell) is allowed, and the function might or might not return a string.</p>
+                                            </li>
+                                            <li class="pml-list-element">
+                                                <p class="pml-paragraph">For string values the syntax <code class="pml-inline-code">Just &quot;string&quot;</code> is used to denote a string, and <code class="pml-inline-code">Nothing</code> is used to denote 'the absence of a value'. Analogously, the syntax <code class="pml-inline-code">Just 1</code> and <code class="pml-inline-code">Nothing</code> is used for integers.</p>
+                                            </li>
+                                            <li class="pml-list-element">
+                                                <p class="pml-paragraph">Haskell uses pattern matching to check for 'the absence of a value' (e.g. <code class="pml-inline-code">Nothing -&gt;</code>). The symbol <code class="pml-inline-code">_</code> is used to denote 'any other case'. Note that the <code class="pml-inline-code">_</code> case includes the <code class="pml-inline-code">Nothing</code> case. Hence if we forget the explicit check for <code class="pml-inline-code">Nothing</code> there will be no compiler error, and <code class="pml-inline-code">&quot;not one&quot;</code> will be returned if the function is called with <code class="pml-inline-code">Nothing</code> as input.</p>
+                                            </li>
+                                        </ul>
+                                        <p class="pml-paragraph">Here is a simple test application:</p>
+                                        <pre class="pml-code"><code class="nohighlight">import Data.Maybe (fromMaybe)
+
+intToString :: Maybe Integer -&gt; Maybe String
+intToString i = case i of
+    Just 1  -&gt; Just &quot;one&quot;
+    Nothing -&gt; Nothing
+    _       -&gt; Just &quot;not one&quot;
+    
+displayResult :: Maybe String -&gt; IO()
+displayResult s = 
+    putStrLn $ &quot;Result: &quot; ++ fromMaybe &quot;null&quot; s
+
+main :: IO ()
+main = do
+    displayResult $ intToString (Just 1)
+    displayResult $ intToString (Just 2)
+    displayResult $ intToString (Nothing)</code></pre>
+                                        <p class="pml-paragraph">Output:</p>
+                                        <pre class="pml-output">Result: one
+Result: not one
+Result: null</pre>
+                                        <p class="pml-paragraph">Note the <code class="pml-inline-code">fromMaybe &quot;null&quot; s</code> expression in the above code. In Haskell this is a way to provide a default value in case of <code class="pml-inline-code">Nothing</code>. It's conceptually similar to the expression <code class="pml-inline-code">s == null ? &quot;null&quot; : s</code> in Java.</p>
+                                    </div>
+                                    <div id="ch__14" class="pml-chapter">
+                                        <h4 class="pml-chapter-title">PPL</h4>
+                                        <p class="pml-paragraph">In PPL the code looks like this:</p>
+                                        <pre class="pml-code"><code class="nohighlight">function int_to_string ( i pos_32 or null ) -&gt; string or null
+    case value of i
+        when null
+            return null
+        when 1
+            return &quot;one&quot;
+        otherwise
+            return &quot;not one&quot;
+    .
+.</code></pre>
+                                        <div class="pml-admonition">
+                                            <div class="pml-admonition-label">Note</div>
+                                            <div class="pml-admonition-content">
+                                                <p class="pml-paragraph">A case <i class="pml-italic">expression</i> will be available in a future version of PPL (besides the case <i class="pml-italic">statement</i> shown above). Then the code can be written more concisely as follows:</p>
+                                                <pre class="pml-code"><code class="nohighlight">function int_to_string ( i pos_32 or null ) -&gt; string or null = \
+    case value of i
+        when null: null
+        when 1   : &quot;one&quot;
+        otherwise: &quot;not one&quot;</code></pre>
+                                            </div>
+                                        </div>
+                                        <p class="pml-paragraph">Key points:</p>
+                                        <ul class="pml-list">
+                                            <li class="pml-list-element">
+                                                <p class="pml-paragraph">In PPL <code class="pml-inline-code">null</code> is a regular type (like <code class="pml-inline-code">string</code>, <code class="pml-inline-code">pos_32</code>, etc.) that has one possible value: <code class="pml-inline-code">null</code>.</p>
+                                                <p class="pml-paragraph">It appears as follows in the top of PPL's type hierarchy:</p>
+                                                <div style="text-align: center">
+                                                    <img class="pml-image" src="images/PPL_top_types.png">
+                                                </div>
+                                            </li>
+                                            <li class="pml-list-element">
+                                                <p class="pml-paragraph">PPL supports union types (also called sum types, or choice types). For example, if a reference can be a string or a number, the type is <code class="pml-inline-code">string or number</code>.</p>
+                                                <p class="pml-paragraph">That's why we use the syntax <code class="pml-inline-code">pos_32 or null</code> and <code class="pml-inline-code">string or null</code> to denote nullable types. The type <code class="pml-inline-code">string or null</code> simply means that the value can be any string <i class="pml-italic">or</i> <code class="pml-inline-code">null</code>.</p>
+                                            </li>
+                                            <li class="pml-list-element">
+                                                <p class="pml-paragraph">The function clearly states that it accepts <code class="pml-inline-code">null</code> as input, and that it might return <code class="pml-inline-code">null</code>.</p>
+                                            </li>
+                                            <li class="pml-list-element">
+                                                <p class="pml-paragraph">We use a <code class="pml-inline-code">case</code> instruction to check the input and return an appropriate string. The compiler ensures that each case is covered in the <code class="pml-inline-code">when</code> clauses. It is not possible to accidentally forget to check for <code class="pml-inline-code">null</code>, because (in contrats to Haskell) the <code class="pml-inline-code">otherwise</code> clause doesn't cover the <code class="pml-inline-code">null</code> clause.</p>
+                                            </li>
+                                        </ul>
+                                        <p class="pml-paragraph">A simple test application looks like this:</p>
+                                        <pre class="pml-code"><code class="nohighlight">function int_to_string ( i pos_32 or null ) -&gt; string or null
+    case value of i
+        when null
+            return null
+        when 1
+            return &quot;one&quot;
+        otherwise
+            return &quot;not one&quot;
+    .
+.
+
+function display_result ( s string or null )
+    write_line ( &quot;&quot;&quot;Result: {{s if_null: &quot;null&quot;}}&quot;&quot;&quot; )
+.
+
+function start
+    display_result ( int_to_string ( 1 ) )
+    display_result ( int_to_string ( 2 ) )
+    display_result ( int_to_string ( null ) )
+.</code></pre>
+                                        <p class="pml-paragraph">Output:</p>
+                                        <pre class="pml-output">Result: one
+Result: not one
+Result: null</pre>
+                                        <p class="pml-paragraph">Note the <code class="pml-inline-code">&quot;&quot;&quot;Result: {{s if_null: &quot;null&quot;}}&quot;&quot;&quot;</code> expression used in function <code class="pml-inline-code">display_result</code>. We use string interpolation: an expression embedded between a <code class="pml-inline-code">{{</code> and <code class="pml-inline-code">}}</code> pair. And we use the <code class="pml-inline-code">if_null:</code> operator to provide a string that represents <code class="pml-inline-code">null</code>. Writing <code class="pml-inline-code">s if_null: &quot;null&quot;</code> is similar to <code class="pml-inline-code">s == null ? &quot;null&quot; : s</code> in Java.</p>
+                                        <p class="pml-paragraph">If we wanted to print nothing in case of <code class="pml-inline-code">null</code>, we could code <code class="pml-inline-code">&quot;&quot;&quot;Result: {{? s}}&quot;&quot;&quot;</code></p>
+                                    </div>
+                                    <div id="ch__15" class="pml-chapter">
+                                        <h4 class="pml-chapter-title">Discussion</h4>
+                                        <p class="pml-paragraph">Again, the three languages allow us to write code that works correctly.</p>
+                                        <p class="pml-paragraph">But there are some notable differences:</p>
+                                        <ul class="pml-list">
+                                            <li class="pml-list-element">
+                                                <p class="pml-paragraph">In Haskell and PPL, the functions clearly state that 'the absence of a value' is allowed (i.e. <code class="pml-inline-code">Nothing</code> in Haskell, or <code class="pml-inline-code">null</code> in PPL). In Java, there is no way to make a difference between nullable and non-nullable arguments (except via comments or annotations, of course).</p>
+                                            </li>
+                                            <li class="pml-list-element">
+                                                <p class="pml-paragraph">In Haskell and PPL, the compiler ensures we don't forget to check for 'the absence of a value'. Executing an operation on a possibly <code class="pml-inline-code">Nothing</code> or <code class="pml-inline-code">null</code> value is not allowed. In Java we are left on our own.</p>
+                                            </li>
+                                        </ul>
+                                        <p class="pml-paragraph">Here is a comparison of the three versions of function <code class="pml-inline-code">int_to_string</code>:</p>
+                                        <ul class="pml-list">
+                                            <li class="pml-list-element">
+                                                <div class="pml-node-title">Java</div>
+                                                <pre class="pml-code"><code class="nohighlight">static String intToString ( Integer i ) {
+    if ( i == null ) {
+        return null;
+    } else {
+        return i == 1 ? &quot;one&quot; : &quot;not one&quot;;
+    }
+}</code></pre>
+                                            </li>
+                                            <li class="pml-list-element">
+                                                <div class="pml-node-title">Haskell</div>
+                                                <pre class="pml-code"><code class="nohighlight">intToString :: Maybe Integer -&gt; Maybe String
+intToString i = case i of
+    Just 1 -&gt; Just &quot;one&quot;
+    Nothing -&gt; Nothing
+    _ -&gt; Just &quot;not one&quot;</code></pre>
+                                            </li>
+                                            <li class="pml-list-element">
+                                                <div class="pml-node-title">PPL</div>
+                                                <p class="pml-paragraph">New version (not available yet):</p>
+                                                <pre class="pml-code"><code class="nohighlight">function int_to_string ( i pos_32 or null ) -&gt; string or null = \
+    case value of i
+        when null: null
+        when 1   : &quot;one&quot;
+        otherwise: &quot;not one&quot;</code></pre>
+                                                <p class="pml-paragraph">Current version:</p>
+                                                <pre class="pml-code"><code class="nohighlight">function int_to_string ( i pos_32 or null ) -&gt; string or null
+    case value of i
+        when null
+            return null
+        when 1
+            return &quot;one&quot;
+        otherwise
+            return &quot;not one&quot;
+    .
+.</code></pre>
+                                            </li>
+                                        </ul>
+                                        <p class="pml-paragraph">And here is the function used to display the result:</p>
+                                        <ul class="pml-list">
+                                            <li class="pml-list-element">
+                                                <div class="pml-node-title">Java</div>
+                                                <pre class="pml-code"><code class="nohighlight">static void displayResult ( String s ) {
+    String result = s == null ? &quot;null&quot; : s;
+    System.out.println ( &quot;Result: &quot; + result );
+}</code></pre>
+                                            </li>
+                                            <li class="pml-list-element">
+                                                <div class="pml-node-title">Haskell</div>
+                                                <pre class="pml-code"><code class="nohighlight">import Data.Maybe (fromMaybe)
+
+displayResult :: Maybe String -&gt; IO()
+displayResult s = 
+    putStrLn $ &quot;Result: &quot; ++ fromMaybe &quot;null&quot; s</code></pre>
+                                            </li>
+                                            <li class="pml-list-element">
+                                                <div class="pml-node-title">PPL</div>
+                                                <pre class="pml-code"><code class="nohighlight">function display_result ( s string or null )
+    write_line ( &quot;&quot;&quot;Result: {{s if_null: &quot;null&quot;}}&quot;&quot;&quot; )
+.</code></pre>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="ch__16" class="pml-chapter">
+                                <h2 class="pml-chapter-title">Useful Null-Handling Features</h2>
+                                <p class="pml-paragraph">Besides null-safety, a language should also provide specific support for common null handling operations. Let's have a look at some examples.</p>
+                                <div class="pml-admonition">
+                                    <div class="pml-admonition-label">Note</div>
+                                    <div class="pml-admonition-content">
+                                        <p class="pml-paragraph">The additional support for null-handling presented in the following chapters is typically found only in null-safe languages. However, other languages can also provide these features, even if they are not null-safe.</p>
+                                    </div>
+                                </div>
+                                <div id="ch__17" class="pml-chapter">
+                                    <h3 class="pml-chapter-title">Searching the First Non-Null Value</h3>
+                                    <p class="pml-paragraph">Suppose we want to look up a discount for a customer. First we try to retrieve the value from a web-service. If the value is not available (i.e. the result is <code class="pml-inline-code">null</code>), we try to retrieve it from a database, then from a local cache. If the value is still <code class="pml-inline-code">null</code> we use a default value of 0.0.</p>
+                                    <p class="pml-paragraph">Now we want to write a function that provides the discount for a given customer. To keep the example simple, we ignore error-handling. Moreover, we don't use asynchronous functions to make the lookup process faster.</p>
+                                    <div id="ch__18" class="pml-chapter">
+                                        <h4 class="pml-chapter-title">Java</h4>
+                                        <p class="pml-paragraph">First attempt:</p>
+                                        <pre class="pml-code"><code class="nohighlight">static Double customerDiscount ( String customerID ) {
+
+    Double result = discountFromNet ( customerID );
+    if ( result != null ) {
+        return result;
+    } else {
+        result = discountFromDB ( customerID );
+        if ( result != null ) {
+            return result;
+        } else {
+            result = discountFromCache ( customerID );
+            if ( result != null ) {
+                return result;
+            } else {
+                return 0.0; // default value
+            }
+        }
+    }
+}</code></pre>
+                                        <p class="pml-paragraph">What an ugly monstrosity! Let's quickly rewrite it:</p>
+                                        <pre class="pml-code"><code class="nohighlight">static Double customerDiscount ( String customerID ) {
+    
+    Double result = discountFromNet ( customerID );
+    if ( result != null ) return result;
+
+    result = discountFromDB ( customerID );
+    if ( result != null ) return result;
+
+    result = discountFromCache ( customerID );
+    if ( result != null ) return result;
+
+    return 0.0; // default value
+}</code></pre>
+                                        <div class="pml-admonition">
+                                            <div class="pml-admonition-label">Note</div>
+                                            <div class="pml-admonition-content">
+                                                <p class="pml-paragraph">There's nothing wrong with using several <code class="pml-inline-code">return</code> statement, as in the code above (although some people might disagree).</p>
+                                            </div>
+                                        </div>
+                                        <p class="pml-paragraph">The complete Java source code for a test application is available <a href="https://github.com/pp-articles/null_vs_maybe/tree/master/examples/search_first_non_null/Java/SearchFirstNonNullTest.java" class="pml-link">here</a>.</p>
+                                    </div>
+                                    <div id="ch__19" class="pml-chapter">
+                                        <h4 class="pml-chapter-title">Haskell</h4>
+                                        <p class="pml-paragraph">Let's start again with the straightforward, but ugly version:</p>
+                                        <pre class="pml-code"><code class="nohighlight">customerDiscount :: String -&gt; Float
+customerDiscount customerID =
+    case (discountFromNet customerID) of
+    Just d -&gt; d
+    Nothing -&gt; case (discountFromDB customerID) of
+               Just d -&gt; d
+               Nothing -&gt; case (discountFromCache customerID) of
+                          Just d -&gt; d
+                          Nothing -&gt; 0.0</code></pre>
+                                        <p class="pml-paragraph">There are different ways to write better code. Here is one way:</p>
+                                        <pre class="pml-code"><code class="nohighlight">customerDiscount :: String -&gt; Float
+customerDiscount customerID =
+    let discountMaybe = discountFromNet customerID
+                        &lt;|&gt; discountFromDB customerID
+                        &lt;|&gt; discountFromCache customerID
+    in fromMaybe 0.0 discountMaybe</code></pre>
+                                        <p class="pml-paragraph">The complete Haskell source code for a test application, including alternative ways to write the above function, is available <a href="https://github.com/pp-articles/null_vs_maybe/tree/master/examples/search_first_non_null/Haskell/SearchFirstNonNullTest.hs" class="pml-link">here</a>.</p>
+                                        <p class="pml-paragraph">More information (and even more alternatives) can be found in the Stackoverflow question <a href="https://stackoverflow.com/questions/5606228/using-the-maybe-monad-in-reverse" class="pml-link">Using the Maybe Monad in reverse</a>.</p>
+                                    </div>
+                                    <div id="ch__20" class="pml-chapter">
+                                        <h4 class="pml-chapter-title">PPL</h4>
+                                        <p class="pml-paragraph">Again, first the ugly version:</p>
+                                        <pre class="pml-code"><code class="nohighlight">function customer_discount ( customer_id string ) -&gt; float_64
+    if discount_from_net ( customer_id ) as net_result is not null then
+        return net_result
+    else
+        if discount_from_DB ( customer_id ) as DB_result is not null then
+            return DB_result
+        else
+            if discount_from_cache ( customer_id ) as cache_result is not null then
+                return cache_result
+            else
+                return 0.0
+            .
+        .
+    .
+.</code></pre>
+                                        <p class="pml-paragraph">The code becomes a one-liner and more readable with the practical <code class="pml-inline-code">if_null:</code> operator designed for this common use case:</p>
+                                        <pre class="pml-code"><code class="nohighlight">function customer_discount ( customer_id string ) -&gt; float_64 = \
+    discount_from_net ( customer_id ) \
+    if_null: discount_from_DB ( customer_id ) \
+    if_null: discount_from_cache ( customer_id ) \
+    if_null: 0.0</code></pre>
+                                        <p class="pml-paragraph">The <code class="pml-inline-code">if_null:</code> operator works like this: It evaluates the expression on the left. If the result is non-null, it returns that result. Else it returns the expression on the right.</p>
+                                        <p class="pml-paragraph">In our example we use a chain of <code class="pml-inline-code">if_null:</code> operators to find the first non-null value. If the three functions called in the expression return <code class="pml-inline-code">null</code>, we return the default value <code class="pml-inline-code">0.0</code>.</p>
+                                        <p class="pml-paragraph">The complete PPL source code for a test application is available <a href="https://github.com/pp-articles/null_vs_maybe/tree/master/examples/search_first_non_null/PPL/search_first_non_null_test.ppl" class="pml-link">here</a>.</p>
+                                    </div>
+                                </div>
+                                <div id="ch__21" class="pml-chapter">
+                                    <h3 class="pml-chapter-title">Getting a Value in a Path With Nulls</h3>
+                                    <p class="pml-paragraph">Sometimes we need to do the opposite of what we did in the previous chapter. Instead of stopping at the first non-null value, we continue until we've found the last non-null value.</p>
+                                    <p class="pml-paragraph">For example, suppose a <code class="pml-inline-code">customer</code> record type with two attributes:</p>
+                                    <ul class="pml-list">
+                                        <li class="pml-list-element">
+                                            <p class="pml-paragraph"><code class="pml-inline-code">name</code>: a non-null string</p>
+                                        </li>
+                                        <li class="pml-list-element">
+                                            <p class="pml-paragraph"><code class="pml-inline-code">address</code>: a nullable address</p>
+                                        </li>
+                                    </ul>
+                                    <p class="pml-paragraph">Record type <code class="pml-inline-code">address</code> is defined as follows:</p>
+                                    <ul class="pml-list">
+                                        <li class="pml-list-element">
+                                            <p class="pml-paragraph"><code class="pml-inline-code">city</code>: a nullable string</p>
+                                        </li>
+                                        <li class="pml-list-element">
+                                            <p class="pml-paragraph"><code class="pml-inline-code">country</code>: a non-null string</p>
+                                        </li>
+                                    </ul>
+                                    <p class="pml-paragraph">Now we want to create a function that takes a customer as input, and returns the number of characters in the customer's city. If the customer's address attribute is <code class="pml-inline-code">null</code>, or if the address's <code class="pml-inline-code">city</code> attribute is <code class="pml-inline-code">null</code> then the function should return 0.</p>
+                                    <div id="ch__22" class="pml-chapter">
+                                        <h4 class="pml-chapter-title">Java</h4>
+                                        <p class="pml-paragraph">These are the record types written in idiomatic Java:</p>
+                                        <pre class="pml-code"><code class="nohighlight">static class Customer {
+
+    private final String name;
+    private final Address address;
+
+    public Customer ( String name, Address address) {
+        this.name = name;
+        this.address = address;
+    }
+
+    public String getName() { return name; }
+    public Address getAddress() { return address; }
+}
+
+static class Address {
+
+    private final String city;
+    private final String country;
+
+    public Address ( String city, String country) {
+        this.city = city;
+        this.country = country;
+    }
+
+    public String getCity() { return city; }
+    public String getCountry() { return country; }
+}</code></pre>
+                                        <div class="pml-admonition">
+                                            <div class="pml-admonition-label">Note</div>
+                                            <div class="pml-admonition-content">
+                                                <p class="pml-paragraph">We don't use setters because we want our types to be immutable.</p>
+                                                <p class="pml-paragraph">As seen already, all types are nullable in Java. We cannot explicitly specify if <code class="pml-inline-code">null</code> is allowed for class fields.</p>
+                                            </div>
+                                        </div>
+                                        <p class="pml-paragraph">Function (method) <code class="pml-inline-code">customerCitySize</code> can be implemented as follows:</p>
+                                        <pre class="pml-code"><code class="nohighlight">static Integer customerCitySize ( Customer customer ) {
+
+    Address address = customer.getAddress();
+    if ( address == null ) return 0;
+
+    String city = address.getCity();
+    if ( city == null ) return 0;
+    
+    return city.length();
+}</code></pre>
+                                        <p class="pml-paragraph">Alternatively we could have used nested if statements, but the above version is more readable and avoids the complexity of nested statements.</p>
+                                        <p class="pml-paragraph">We can write a simplistic test:</p>
+                                        <pre class="pml-code"><code class="nohighlight">public static void main ( String[] args ) {
+
+    // city is non-null
+    Address address = new Address ( &quot;Orlando&quot;, &quot;USA&quot; );
+    Customer customer = new Customer ( &quot;Foo&quot;, address );
+    System.out.println ( customerCitySize ( customer ) );
+
+    // city is null
+    address = new Address ( null, &quot;USA&quot; );
+    customer = new Customer ( &quot;Foo&quot;, address );
+    System.out.println ( customerCitySize ( customer ) );
+
+    // address is null
+    customer = new Customer ( &quot;Foo&quot;, null );
+    System.out.println ( customerCitySize ( customer ) );
+}</code></pre>
+                                        <p class="pml-paragraph">Output:</p>
+                                        <pre class="pml-output">7
+0
+0</pre>
+                                        <p class="pml-paragraph">Seems to work!</p>
+                                        <p class="pml-paragraph">The whole Java source code is available <a href="https://github.com/pp-articles/null_vs_maybe/tree/master/examples/search_last_non_null/Java/SearchLastNonNullTest.java" class="pml-link">here</a>.</p>
+                                    </div>
+                                    <div id="ch__23" class="pml-chapter">
+                                        <h4 class="pml-chapter-title">Haskell</h4>
+                                        <p class="pml-paragraph">Defining the record types is easy:</p>
+                                        <pre class="pml-code"><code class="nohighlight">data Customer = Customer {
+    name :: String,
+    address :: Maybe Address
+}
+
+data Address = Address { 
+    city :: Maybe String,
+    country :: String 
+}</code></pre>
+                                        <p class="pml-paragraph">There are several ways to write function <code class="pml-inline-code">customerCitySize</code> in Haskell. Here is, I think, the most readable one for people more familiar with imperative programming. It uses the do notation:</p>
+                                        <pre class="pml-code"><code class="nohighlight">import Data.Maybe (fromMaybe)
+
+customerCitySize :: Customer -&gt; Int
+customerCitySize customer =
+    let sizeMaybe = do
+        address &lt;- address customer        -- type Address
+        city &lt;- city address               -- type String
+        return $ length city               -- type Maybe Int
+    in fromMaybe 0 sizeMaybe</code></pre>
+                                        <p class="pml-paragraph">Here is a version that doesn't use the do notation:</p>
+                                        <pre class="pml-code"><code class="nohighlight">customerCitySize :: Customer -&gt; Int
+customerCitySize customer =
+    let addressMaybe = address customer    -- type Maybe Address
+        cityMaybe = addressMaybe &gt;&gt;= city  -- type Maybe String
+        sizeMaybe = length &lt;$&gt; cityMaybe   -- type Maybe Int
+    in fromMaybe 0 sizeMaybe</code></pre>
+                                        <p class="pml-paragraph">If we are careful with operator precedence, we can shorten the code:</p>
+                                        <pre class="pml-code"><code class="nohighlight">customerCitySize :: Customer -&gt; Int
+customerCitySize customer =
+    fromMaybe 0 $ length &lt;$&gt; (address customer &gt;&gt;= city)</code></pre>
+                                        <p class="pml-paragraph">Instead of using <code class="pml-inline-code">fromMaybe</code> we can use <code class="pml-inline-code">maybe</code> to provide the default value:</p>
+                                        <pre class="pml-code"><code class="nohighlight">customerCitySize :: Customer -&gt; Int
+customerCitySize customer =
+    maybe 0 length $ address customer &gt;&gt;= city</code></pre>
+                                        <p class="pml-paragraph">Yes, this code is concise. But there is a lot going on behind the scenes. <i class="pml-italic">A looooot!</i>. To really understand the above code one has to understand Haskell. And yes, we use a monad, indicated by the bind operator <code class="pml-inline-code">&gt;&gt;=</code> in the code. For more information please refer to Haskell's documentation.</p>
+                                        <p class="pml-paragraph">We can write a quick test:</p>
+                                        <pre class="pml-code"><code class="nohighlight">main :: IO ()
+main = do
+
+    -- city is defined
+    let address1 = Address {city = Just &quot;Orlando&quot;, country = &quot;USA&quot;}
+    let customer1 = Customer {name = &quot;Foo&quot;, address = Just address1}
+    putStrLn $ show $ customerCitySize customer1
+
+    -- city is not defined
+    let address2 = Address {city = Nothing, country = &quot;USA&quot;}
+    let customer2 = Customer {name = &quot;Foo&quot;, address = Just address2}
+    putStrLn $ show $ customerCitySize customer2
+
+    -- address is not defined
+    let customer3 = Customer {name = &quot;Foo&quot;, address = Nothing}
+    putStrLn $ show $ customerCitySize customer3</code></pre>
+                                        <p class="pml-paragraph">Again, the output is:</p>
+                                        <pre class="pml-output">7
+0
+0</pre>
+                                        <p class="pml-paragraph">The whole Haskell source code is available <a href="https://github.com/pp-articles/null_vs_maybe/tree/master/examples/search_last_non_null/Haskell/SearchLastNonNullTest.hs" class="pml-link">here</a>. There are also two examples of <code class="pml-inline-code">customerCitySize</code> implementations that compile without errors, but produce wrong results.</p>
+                                    </div>
+                                    <div id="ch__24" class="pml-chapter">
+                                        <h4 class="pml-chapter-title">PPL</h4>
+                                        <p class="pml-paragraph">First, the record types:</p>
+                                        <pre class="pml-code"><code class="nohighlight">record type customer
+    attributes
+        name string
+        address address or null
+    .
+.
+
+record type address
+    attributes
+        city string or null
+        country string
+    .
+.</code></pre>
+                                        <p class="pml-paragraph">Function <code class="pml-inline-code">customerCitySize</code> is written like this:</p>
+                                        <pre class="pml-code"><code class="nohighlight">function customer_city_size ( customer ) -&gt; zero_pos_32 =
+    customer.address.null?.city.null?.size if_null: 0</code></pre>
+                                        <p class="pml-paragraph">Note the embedded <code class="pml-inline-code">null?</code> checks. The evaluation of <code class="pml-inline-code">customer.address.null?.city.null?.size</code> stops as soon as a <code class="pml-inline-code">null</code> is detected in the chain. In that case, the whole expression evaluates to <code class="pml-inline-code">null</code>.</p>
+                                        <p class="pml-paragraph">The <code class="pml-inline-code">if_null:</code> operator is used to return the default value <code class="pml-inline-code">0</code> if the expression on the left evaluates to <code class="pml-inline-code">null</code>.</p>
+                                        <p class="pml-paragraph">Instead of <code class="pml-inline-code">.null?.</code> we can also simply write <code class="pml-inline-code">?.</code>. Hence the function can be shortened to:</p>
+                                        <pre class="pml-code"><code class="nohighlight">function customer_city_size ( customer ) -&gt; zero_pos_32 =
+    customer.address?.city?.size if_null: 0</code></pre>
+                                        <p class="pml-paragraph">Simple test code looks like this:</p>
+                                        <pre class="pml-code"><code class="nohighlight">function start
+
+    // city is non-null
+    const address1 = address.create ( city = &quot;Orlando&quot;, country = &quot;USA&quot; )
+    const customer1 = customer.create ( name = &quot;Foo&quot;, address = address1 )
+    write_line ( customer_city_size ( customer1 ).to_string )
+
+    // city is null
+    const address2 = address.create ( city = null, country = &quot;USA&quot; )
+    const customer2 = customer.create ( name = &quot;Foo&quot;, address = address2 )
+    write_line ( customer_city_size ( customer2 ).to_string )
+
+    // address is null
+    const customer3 = customer.create ( name = &quot;Foo&quot;, address = null )
+    write_line ( customer_city_size ( customer3 ).to_string )
+.</code></pre>
+                                        <p class="pml-paragraph">Output:</p>
+                                        <pre class="pml-output">7
+0
+0</pre>
+                                        <p class="pml-paragraph">The whole PPL source code is available <a href="https://github.com/pp-articles/null_vs_maybe/tree/master/examples/search_last_non_null/PPL/search_last_non_null_test.ppl" class="pml-link">here</a>.</p>
+                                    </div>
+                                    <div id="ch__25" class="pml-chapter">
+                                        <h4 class="pml-chapter-title">Comparison</h4>
+                                        <p class="pml-paragraph">Here is a copy of the three implementations:</p>
+                                        <ul class="pml-list">
+                                            <li class="pml-list-element">
+                                                <div class="pml-node-title">Java</div>
+                                                <pre class="pml-code"><code class="nohighlight">static Integer customerCitySize ( Customer customer ) {
+
+    Address address = customer.getAddress();
+    if ( address == null ) return 0;
+
+    String city = address.getCity();
+    if ( city == null ) return 0;
+    
+    return city.length();
+}</code></pre>
+                                            </li>
+                                            <li class="pml-list-element">
+                                                <div class="pml-node-title">Haskell</div>
+                                                <pre class="pml-code"><code class="nohighlight">customerCitySize :: Customer -&gt; Int
+customerCitySize customer =
+    maybe 0 length $ address customer &gt;&gt;= city</code></pre>
+                                            </li>
+                                            <li class="pml-list-element">
+                                                <div class="pml-node-title">PPL</div>
+                                                <pre class="pml-code"><code class="nohighlight">function customer_city_size ( customer ) -&gt; zero_pos_32 =
+    customer.address?.city?.size if_null: 0</code></pre>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="ch__26" class="pml-chapter">
+                            <h1 class="pml-chapter-title">Comparisons</h1>
+                            <p class="pml-paragraph">Now that we know how the null pointer error is eliminated, let us look at some differences between using the <code class="pml-inline-code">Maybe</code> monad in Haskell and null-safety in PPL.</p>
+                            <div class="pml-admonition">
+                                <div class="pml-admonition-label">Note</div>
+                                <div class="pml-admonition-content">
+                                    <p class="pml-paragraph">The following discussion is based on the Haskell and PPL examples shown in the previous chapters. Hence, some of the following observations are not valid in other languages that work in a similar way. For example, F#'s <code class="pml-inline-code">Option</code> type is very similar to Haskell's <code class="pml-inline-code">Maybe</code> type, but these two languages are far from being the same. Reader comments about other languages are of course very welcome.</p>
+                                </div>
+                            </div>
+                            <div id="ch__27" class="pml-chapter">
+                                <h2 class="pml-chapter-title">Source Code</h2>
+                                <p class="pml-paragraph">Here is a summary of the differences we saw in the source code examples.</p>
+                                <div id="ch__28" class="pml-chapter">
+                                    <h3 class="pml-chapter-title">Declaring the type of a nullable reference</h3>
+                                    <p class="pml-paragraph">Haskell: <code class="pml-inline-code">Maybe string</code> (other languages use <code class="pml-inline-code">Option</code> or <code class="pml-inline-code">Optional</code>)</p>
+                                    <p class="pml-paragraph">PPL: <code class="pml-inline-code">string or null</code> (other languages use <code class="pml-inline-code">string?</code>)</p>
+                                    <p class="pml-paragraph">As seen already, the difference between Haskell and PPL is not just syntax. Both use different concepts.</p>
+                                    <p class="pml-paragraph">Haskell uses the <code class="pml-inline-code">Maybe</code> type with a generic type parameter. Form the Haskell doc.: &quot;A value of type Maybe a either contains a value of type a (represented as Just a), or it is empty (represented as Nothing). The Maybe type is also a monad.&quot;</p>
+                                    <p class="pml-paragraph">On the other hand, PPL uses union types to state that a value is either a specific type, or <code class="pml-inline-code">null</code>.</p>
+                                </div>
+                                <div id="ch__29" class="pml-chapter">
+                                    <h3 class="pml-chapter-title">A non-null value used for a nullable type</h3>
+                                    <p class="pml-paragraph">Haskell: <code class="pml-inline-code">Just &quot;qwe&quot;</code> (other languages: <code class="pml-inline-code">Some &quot;qwe&quot;</code>)</p>
+                                    <p class="pml-paragraph">PPL: <code class="pml-inline-code">&quot;qwe&quot;</code></p>
+                                    <p class="pml-paragraph">This difference is important!</p>
+                                    <p class="pml-paragraph">In Haskell <code class="pml-inline-code">&quot;qwe&quot;</code> is not type compatible to <code class="pml-inline-code">Just &quot;qwe&quot;</code>. Suppose the following function signature:</p>
+                                    <pre class="pml-code"><code class="nohighlight">foo :: Maybe String -&gt; String</code></pre>
+                                    <p class="pml-paragraph">This function can be called as follows:</p>
+                                    <pre class="pml-code"><code class="nohighlight">foo $ Just &quot;qwe&quot;</code></pre>
+                                    <p class="pml-paragraph">But a compiler error arises if we try to call it like this:</p>
+                                    <pre class="pml-code"><code class="nohighlight">foo &quot;qwe&quot;</code></pre>
+                                    <p class="pml-paragraph">There are a few consequences to be aware of.</p>
+                                    <p class="pml-paragraph">First, if a type changes from <code class="pml-inline-code">Maybe T</code> to <code class="pml-inline-code">T</code>, then all occurrences of <code class="pml-inline-code">Just expression</code> must be changed to <code class="pml-inline-code">expression</code>. The inverse is true too. A change from type <code class="pml-inline-code">T</code> to <code class="pml-inline-code">Maybe T</code> requires all occurrences of <code class="pml-inline-code">expression</code> to be refactored to <code class="pml-inline-code">Just expression</code>.</p>
+                                    <p class="pml-paragraph">This is not the case in PPL. An expression of type <code class="pml-inline-code">string</code> is type-compatible to an expression of <code class="pml-inline-code">string or null</code> (but the inverse is not true). For example, the function ...</p>
+                                    <pre class="pml-code"><code class="nohighlight">foo ( s string or null ) -&gt; string</code></pre>
+                                    <p class="pml-paragraph">... can be called like this:</p>
+                                    <pre class="pml-code"><code class="nohighlight">foo ( &quot;qwe&quot; )</code></pre>
+                                    <p class="pml-paragraph">If the function is later refactored to ...</p>
+                                    <pre class="pml-code"><code class="nohighlight">foo ( s string ) -&gt; string</code></pre>
+                                    <p class="pml-paragraph">... then it can still be called with:</p>
+                                    <pre class="pml-code"><code class="nohighlight">foo ( &quot;qwe&quot; )</code></pre>
+                                    <p class="pml-paragraph">Secondly, in Haskell some functions with the same name might exist for input type <code class="pml-inline-code">Maybe T</code>, as well as for input <code class="pml-inline-code">T</code>. But the semantics are different. For example, <code class="pml-inline-code">length &quot;qwe&quot;</code> returns 3 in Haskell, while <code class="pml-inline-code">length $ Just &quot;qwe&quot;</code> returns 1. It is important to be aware of this, because there is no compile-time error if function <code class="pml-inline-code">length</code> is used for an expression whose type changes from <code class="pml-inline-code">Maybe T</code> to <code class="pml-inline-code">T</code> or vice-versa.</p>
+                                    <p class="pml-paragraph">Thirdly, one has to be aware of the possibility of nested <code class="pml-inline-code">Maybe</code>s in Haskell. For example, suppose again we declare:</p>
+                                    <pre class="pml-code"><code class="nohighlight">data Customer = Customer {
+    name :: String,
+    address :: Maybe Address
+}
+
+data Address = Address { 
+    city :: Maybe String,
+    country :: String 
+}</code></pre>
+                                    <p class="pml-paragraph">What is the return type of the following function?</p>
+                                    <pre class="pml-code"><code class="nohighlight">customerCity customer = city &lt;$&gt; address customer</code></pre>
+                                    <p class="pml-paragraph">Is it <code class="pml-inline-code">Maybe string</code>. No, it's <code class="pml-inline-code">Maybe ( Maybe string )</code> - a nested <code class="pml-inline-code">Maybe</code>. Ignoring this can lead to subtle bugs. For an interesting discussion see the Stackoverflow question <a href="https://stackoverflow.com/questions/19655870/simplifying-nested-maybe-pattern-matching" class="pml-link">Simplifying nested Maybe pattern matching</a>.</p>
+                                </div>
+                                <div id="ch__30" class="pml-chapter">
+                                    <h3 class="pml-chapter-title">'No value' symbol</h3>
+                                    <p class="pml-paragraph">Haskell: <code class="pml-inline-code">Nothing</code> (other languages: <code class="pml-inline-code">None</code>)</p>
+                                    <p class="pml-paragraph">PPL: <code class="pml-inline-code">null</code> (other languages: <code class="pml-inline-code">nil</code>, <code class="pml-inline-code">void</code>, ...)</p>
+                                </div>
+                                <div id="ch__31" class="pml-chapter">
+                                    <h3 class="pml-chapter-title">Checking for null</h3>
+                                    <p class="pml-paragraph">Haskell (one way to do it):</p>
+                                    <pre class="pml-code"><code class="nohighlight">intToString :: Maybe Integer -&gt; Maybe String
+intToString i = case i of
+    Just 1  -&gt; Just &quot;one&quot;
+    Nothing -&gt; Nothing
+    _       -&gt; Just &quot;not one&quot;            </code></pre>
+                                    <p class="pml-paragraph">Note: Omitting the <code class="pml-inline-code">Nothing</code> case does not produce a compiler error. Instead, the function returns <code class="pml-inline-code">Just &quot;not one&quot;</code> if it is called with <code class="pml-inline-code">Nothing</code> as input.</p>
+                                    <p class="pml-paragraph">PPL (new version):</p>
+                                    <pre class="pml-code"><code class="nohighlight">function int_to_string ( i pos_32 or null ) -&gt; string or null = \
+    case value of i
+        when null: null
+        when 1   : &quot;one&quot;
+        otherwise: &quot;not one&quot;</code></pre>
+                                    <p class="pml-paragraph">Note: Omitting the <code class="pml-inline-code">when null</code> case results in the following compiler error:</p>
+                                    <pre class="pml-output">Clause 'when null' is required because the case expression might be null at run-time.</pre>
+                                </div>
+                                <div id="ch__32" class="pml-chapter">
+                                    <h3 class="pml-chapter-title">Providing a default non-null value</h3>
+                                    <p class="pml-paragraph">Haskell: <code class="pml-inline-code">fromMaybe 0 size</code> (requires Data.Maybe; F#: <code class="pml-inline-code">defaultArg 0 size</code>)</p>
+                                    <p class="pml-paragraph">PPL: <code class="pml-inline-code">size if_null: 0</code> (other languages: <code class="pml-inline-code">size ?: 0</code>, ( <code class="pml-inline-code">?:</code> is sometimes called 'Elvis operator')</p>
+                                </div>
+                                <div id="ch__33" class="pml-chapter">
+                                    <h3 class="pml-chapter-title">Getting the first non-null value in a chain, or else a default value</h3>
+                                    <p class="pml-paragraph">Haskell:</p>
+                                    <pre class="pml-code"><code class="nohighlight">customerDiscount :: String -&gt; Float
+customerDiscount customerID =
+    let discountMaybe = discountFromNet customerID
+                        &lt;|&gt; discountFromDB customerID
+                        &lt;|&gt; discountFromCache customerID
+    in fromMaybe 0.0 discountMaybe</code></pre>
+                                    <p class="pml-paragraph">PPL:</p>
+                                    <pre class="pml-code"><code class="nohighlight">function customer_discount ( customer_id string ) -&gt; float_64 = \
+    discount_from_net ( customer_id ) \
+    if_null: discount_from_DB ( customer_id ) \
+    if_null: discount_from_cache ( customer_id ) \
+    if_null: 0.0</code></pre>
+                                </div>
+                                <div id="ch__34" class="pml-chapter">
+                                    <h3 class="pml-chapter-title">Getting the last value in a chain, or else a default value</h3>
+                                    <p class="pml-paragraph">Haskell:</p>
+                                    <pre class="pml-code"><code class="nohighlight">customerCitySize :: Customer -&gt; Int
+customerCitySize customer =
+    maybe 0 length $ address customer &gt;&gt;= city</code></pre>
+                                    <p class="pml-paragraph">PPL:</p>
+                                    <pre class="pml-code"><code class="nohighlight">function customer_city_size ( customer ) -&gt; zero_pos_32 =
+    customer.address?.city?.size if_null: 0</code></pre>
+                                </div>
+                            </div>
+                            <div id="ch__35" class="pml-chapter">
+                                <h2 class="pml-chapter-title">Implementation</h2>
+                                <p class="pml-paragraph">Back in 1965, Tony Hoare introduced <code class="pml-inline-code">null</code> in ALGOL &quot;simply because it was so easy to implement&quot;, as he said.</p>
+                                <p class="pml-paragraph">In Java, and probably most other programming languages, <code class="pml-inline-code">null</code> is implemented by simply using the value <code class="pml-inline-code">0</code> for a reference. That is to say, if we write something like <code class="pml-inline-code">name = &quot;Bob&quot;</code>, then the memory address used for variable <code class="pml-inline-code">name</code> contains the starting address of the memory block that stores the string value <code class="pml-inline-code">&quot;Bob&quot;</code>. On the other hand, when <code class="pml-inline-code">name = null</code> is executed, then the content of the memory address used for variable <code class="pml-inline-code">name</code> is set to <code class="pml-inline-code">0</code> (i.e. all bits set to zero). Easy and efficient, indeed!</p>
+                                <p class="pml-paragraph">A more thorough explanation is available in chapter <i class="pml-italic">Run-time Implementation</i> of my article <a href="https://www.ppl-lang.dev/blog/meaning-of-null/index.html" class="pml-link">A quick and thorough guide to 'null'</a>.</p>
+                                <p class="pml-paragraph">So, implementing <code class="pml-inline-code">null</code> is easy. However, adding null-<i class="pml-italic">safety</i> to a language is a totally different story. Implementing compile-time-null-safety in a practical way is far from being easy. Adding good support to simplify null-handling as far as possible is a challenge. Adding null-safety and good support for null-handling makes life more difficult for language <i class="pml-italic">creators</i>, but much easier for language <i class="pml-italic">users</i> (i.e. software developers). This doesn't come as a surprise, though. It's just a frequently observed fact of life:</p>
+                                <ul class="pml-list">
+                                    <li class="pml-list-element">
+                                        <p class="pml-paragraph">It is easy to make it difficult to use.</p>
+                                    </li>
+                                    <li class="pml-list-element">
+                                        <p class="pml-paragraph">It is difficult to make it easy to use.</p>
+                                    </li>
+                                </ul>
+                                <p class="pml-paragraph">On the other hand, a type like <code class="pml-inline-code">Maybe</code> can simply be added to the language's standard library, without the need for special support in the language.</p>
+                                <p class="pml-paragraph">In the case of Haskell, <code class="pml-inline-code">Maybe</code> is a monad in the standard prelude, and Haskell's standard functional programming features are used to handle <code class="pml-inline-code">Maybe</code> values.</p>
+                            </div>
+                            <div id="ch__36" class="pml-chapter">
+                                <h2 class="pml-chapter-title">Space and Time</h2>
+                                <p class="pml-paragraph">Let's starts with <code class="pml-inline-code">null</code>.</p>
+                                <p class="pml-paragraph">There are just two kinds of basic operations needed at run-time:</p>
+                                <ul class="pml-list">
+                                    <li class="pml-list-element">
+                                        <p class="pml-paragraph">Assign <code class="pml-inline-code">null</code> to a reference (e.g. <code class="pml-inline-code">name = null</code>): this is typically done by just writing <code class="pml-inline-code">0</code> to a memory cell.</p>
+                                    </li>
+                                    <li class="pml-list-element">
+                                        <p class="pml-paragraph">Check if a reference points to <code class="pml-inline-code">null</code> (e.g. <code class="pml-inline-code">if name is null</code>): this is very quickly done by just comparing the content of a memory cell with <code class="pml-inline-code">0</code>.</p>
+                                    </li>
+                                </ul>
+                                <p class="pml-paragraph">The conclusion is obvious: <code class="pml-inline-code">null</code> operations are extremely space- and time-efficient.</p>
+                                <p class="pml-paragraph">On the other hand, using a wrapper type is probably less efficient, unless the compiler uses very clever optimizations.</p>
+                                <p class="pml-paragraph">As a general observation, it is probably fair to say that, for a given language, using a wrapper type cannot be made <i class="pml-italic">faster</i> than using 0 for a <code class="pml-inline-code">null</code> reference.</p>
+                                <p class="pml-paragraph">In practice, however, the performance difference might not be an issue in many kinds of applications.</p>
+                            </div>
+                        </div>
+                        <div id="ch__37" class="pml-chapter">
+                            <h1 class="pml-chapter-title">A Note On The &quot;Billion Dollar Mistake&quot;</h1>
+                            <p class="pml-paragraph">Yes, Tony Hoare stated that <code class="pml-inline-code">null</code> has &quot;probably caused a billion dollars of pain and damage in the last forty years&quot;.</p>
+                            <p class="pml-paragraph">However, a few seconds later he <a href="https://everythingsysadmin.com/2009/01/tony-hoare-apologizes-for-inve.html" class="pml-link">said</a> the following, which is really important, but often ignored:</p>
+                            <blockquote class="pml-quote">
+                                <div class="pml-quote-text-block">
+                                    <div class="pml-quote-text-prefix"></div>
+                                    <div class="pml-quote-text">
+                                        <p class="pml-paragraph">More recent programming languages like Spec# have introduced declarations for non-null references. This is the solution, which I rejected in 1965.</p>
+                                    </div>
+                                    <div class="pml-quote-text-suffix"></div>
+                                </div>
+                                <div class="pml-quote-source">Tony Hoare</div>
+                            </blockquote>
+                            <p class="pml-paragraph">The mistake was not the invention of null per se. The mistake was the <i class="pml-italic">lack of compile-time-null-safety and good support for null-handling</i> in programming languages.</p>
+                            <p class="pml-paragraph">As seen in this article it <i class="pml-italic">is</i> possible to eliminate the null pointer error in languages that use <code class="pml-inline-code">null</code>. No &quot;billion-dollar mistake&quot; anymore!</p>
+                            <p class="pml-paragraph">Isn't it amazing that it took the software development industry over 40 years to recognize this and start creating null-safe languages?</p>
+                        </div>
+                        <div id="ch__38" class="pml-chapter">
+                            <h1 class="pml-chapter-title">Summary</h1>
+                            <p class="pml-paragraph">Here is a summary of the key points:</p>
+                            <p class="pml-paragraph"><b class="pml-bold">Java (and most other popular programming languages)</b></p>
+                            <ul class="pml-list">
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">All reference types are nullable.</p>
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph"><code class="pml-inline-code">null</code> can be assigned to any reference (variable, input argument, function return value, etc.).</p>
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">There is no protection against null pointer errors. They occur frequently and are the reason for the <i class="pml-italic">billion-dollar mistake</i>.</p>
+                                </li>
+                            </ul>
+                            <p class="pml-paragraph"><b class="pml-bold">Haskell (and some other programming languages using Maybe/Option)</b></p>
+                            <ul class="pml-list">
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph"><code class="pml-inline-code">null</code> is not supported. Hence null pointer errors cannot occur.</p>
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">The <code class="pml-inline-code">Maybe</code> type (a monad with a type parameter) is used to manage the 'absence of a value'.</p>
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">Pattern matching is used to test for <code class="pml-inline-code">Nothing</code>.</p>
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">Standard language features are used to handle <code class="pml-inline-code">Maybe</code> values (e.g. the monad's <code class="pml-inline-code">bind</code> operator <code class="pml-inline-code">&gt;&gt;=</code>).</p>
+                                </li>
+                            </ul>
+                            <p class="pml-paragraph"><b class="pml-bold">PPL (and some other null-safe programming languages)</b></p>
+                            <ul class="pml-list">
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">By default all reference types are non-nullable and <code class="pml-inline-code">null</code> cannot be assigned.</p>
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph"><code class="pml-inline-code">null</code> is an ordinary type with the single value <code class="pml-inline-code">null</code>. Union types are used to handle the 'absence of a value' (e.g. <code class="pml-inline-code">string or null</code>).</p>
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">The compiler ensures a <code class="pml-inline-code">null</code>-check is done before executing an operation on a nullable type. Thus null pointer errors cannot occur.</p>
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">The language provides specific support to simplify <code class="pml-inline-code">null</code>-handling as far as possible. Null-handling code is concise, and easy to read and write.</p>
+                                </li>
+                            </ul>
+                        </div>
+                        <div id="ch__39" class="pml-chapter">
+                            <h1 class="pml-chapter-title">Conclusion</h1>
+                            <p class="pml-paragraph">The aim of this article was to compare null-safety in PPL with the <code class="pml-inline-code">Maybe</code> type in Haskell. We did this by looking at a number of representative source code examples.</p>
+                            <p class="pml-paragraph">By comparing two languages, we must of course be careful not to generalize our observations to all other languages (especially if the author of the article is also the author of one of the languages used in the article).</p>
+                            <p class="pml-paragraph">However, in the context of this article we saw that:</p>
+                            <ul class="pml-list">
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">Null-safety, as well as the <code class="pml-inline-code">Maybe</code> type eliminate the null pointer error.</p>
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">Using the <code class="pml-inline-code">Maybe/Optional</code> type is easier to <i class="pml-italic">implement</i> in a language than null-safety. It simplifies life for language designers and implementers.</p>
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">Providing good support for null-safety is a challenge for language creators. But null-safety often simplifies life for developers.</p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            window.onload = function() {
+                adaptSplitWidths ( getCurrentElementWidth ( "PMLHsplitLeftPanel" ) );
+            }
+            
+            var dragStartScreenX = 0;
+            var dragStartLeftPanelWidth = 0;
+            
+            function PMLHsplitPanelSeparatorDragStart ( event ) {
+    
+                dragStartScreenX = event.screenX;
+                dragStartLeftPanelWidth = getCurrentElementWidth ( "PMLHsplitLeftPanel" );
+    
+                // This is necessary to make dragging work in Firefox 
+                // see https://stackoverflow.com/questions/19055264/why-doesnt-html5-drag-and-drop-work-in-firefox
+                event.dataTransfer.setData ( 'text', 'anything' );
+            }
+            
+            function PMLHsplitPanelSeparatorDragging ( event ) {
+                
+                // doesn't work in Firefox
+                // adaptSplitWidths ( event.pageX );
+                
+                adaptSplitWidths ( dragStartLeftPanelWidth + event.screenX - dragStartScreenX );
+            }
+            
+            function PMLHsplitPanelSeparatorDragEnd ( event ) {
+                
+                // doesn't work in Firefox
+                // adaptSplitWidths ( event.pageX );
+                
+                adaptSplitWidths ( dragStartLeftPanelWidth + event.screenX - dragStartScreenX );
+            }
+    
+            function adaptSplitWidths ( leftPanelWidth ) {
+            
+                setElementWidth ( "PMLHsplitLeftPanel", leftPanelWidth );
+                
+                // compute left margin of the right panel so that the content is displayed in the center of the browser window
+                
+                const bodyWidth = document.body.clientWidth;
+                const contentMaxWidth = getCSSPropertyIntegerForID ( "PMLHsplitRightPanelContent", "max-width" );
+                const separatorWidth = getCurrentElementWidth ( "PMLHsplitPanelSeparator" );
+                
+                let HsplitRightPanelLeftMargin = bodyWidth / 2 - contentMaxWidth / 2 - leftPanelWidth - separatorWidth;
+                if ( HsplitRightPanelLeftMargin < 0 ) {
+                    HsplitRightPanelLeftMargin = 0;
+                }
+
+                document.getElementById ( "PMLHsplitRightPanel" ).style.marginLeft = HsplitRightPanelLeftMargin + "px";
+            }
+
+            function getCurrentElementWidth ( elementID ) {
+                
+                const element = document.getElementById ( elementID );
+                return element.getBoundingClientRect().width;
+            }
+
+            function setElementWidth ( elementID, width ) {
+                
+                const element = document.getElementById ( elementID );
+                element.style.width = width + "px";
+            }
+
+            function getCSSPropertyIntegerForID ( elementID, CSSPropertyName ) {
+                
+                return parseInt ( getCSSPropertyForID ( elementID, CSSPropertyName ), 10 );
+            }
+
+            function getCSSPropertyForID ( elementID, CSSPropertyName ) {
+                
+                const element = document.getElementById ( elementID );
+                const style = window.getComputedStyle ( element );
+                return style.getPropertyValue ( CSSPropertyName );
+            }
+        </script>
+
+        <script>
+            var branch_prefixes = document.getElementsByClassName ( "pml-toc-branch-prefix" );
+            
+            for ( var i = 0; i < branch_prefixes.length; i++ ) {
+                branch_prefixes[i].addEventListener ( "click", function ( event ) {
+        
+                    const sub_chapters = this.parentElement.parentElement.querySelector ( ".pml-toc-sub-chapters" );
+                    sub_chapters.classList.toggle ( "pml-hidden" );
+                    
+                    if ( sub_chapters.classList.contains ( "pml-hidden" ) ) {
+                        this.classList.remove ( "pml-toc-branch-visible" );
+                        this.classList.add ( "pml-toc-branch-hidden" );
+                    } else {
+                        this.classList.remove ( "pml-toc-branch-hidden" );
+                        this.classList.add ( "pml-toc-branch-visible" );
+                    }
+                });
+            } 
+        </script>
+
+    </body>
+</html>

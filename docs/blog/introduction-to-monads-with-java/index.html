@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Simple Introduction to Monads - With Java Examples</title>
+        <link rel="stylesheet" href="css/pml-default.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.15.6/build/styles/default.min.css">
+    </head>
+    <body>
+        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.15.6/build/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+        <div class="pml-hsplit-panel">
+            <div class="pml-hsplit-left-panel" id="PMLHsplitLeftPanel">
+                <nav class="pml-toc">
+                    <h2 class="pml-toc-title"></h2>
+                    <div class="pml-toc-content">
+                        <ul class="pml-toc-tree">
+                            <li>
+                                <div class="pml-toc-leaf-node">
+                                    <div class="pml-toc-leaf-prefix"></div>
+                                    <a class="pml-toc-leaf-link" href="#ch__1">Introduction</a>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="pml-toc-leaf-node">
+                                    <div class="pml-toc-leaf-prefix"></div>
+                                    <a class="pml-toc-leaf-link" href="#ch__2">A Simple Problem</a>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="pml-toc-leaf-node">
+                                    <div class="pml-toc-leaf-prefix"></div>
+                                    <a class="pml-toc-leaf-link" href="#ch__3">A Simple Solution in Java</a>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="pml-toc-leaf-node">
+                                    <div class="pml-toc-leaf-prefix"></div>
+                                    <a class="pml-toc-leaf-link" href="#ch__4">Only Functions!</a>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="pml-toc-branch-node">
+                                    <div class="pml-toc-branch-prefix pml-toc-branch-hidden"></div>
+                                    <a class="pml-toc-branch-link" href="#ch__5">Function Composition</a>
+                                </div>
+                                <ul class="pml-toc-sub-chapters pml-hidden">
+                                    <li>
+                                        <div class="pml-toc-leaf-node">
+                                            <div class="pml-toc-leaf-prefix"></div>
+                                            <a class="pml-toc-leaf-link" href="#ch__6">Unix Pipes</a>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="pml-toc-leaf-node">
+                                            <div class="pml-toc-leaf-prefix"></div>
+                                            <a class="pml-toc-leaf-link" href="#ch__7">Pipe Operator</a>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="pml-toc-leaf-node">
+                                            <div class="pml-toc-leaf-prefix"></div>
+                                            <a class="pml-toc-leaf-link" href="#ch__8">Function Composition Operator</a>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <div class="pml-toc-leaf-node">
+                                    <div class="pml-toc-leaf-prefix"></div>
+                                    <a class="pml-toc-leaf-link" href="#errors">Errors, But No Exceptions</a>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="pml-toc-leaf-node">
+                                    <div class="pml-toc-leaf-prefix"></div>
+                                    <a class="pml-toc-leaf-link" href="#ch__9">The 'bind' Function</a>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="pml-toc-leaf-node">
+                                    <div class="pml-toc-leaf-prefix"></div>
+                                    <a class="pml-toc-leaf-link" href="#ch__10">A Monad, Finally!</a>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="pml-toc-leaf-node">
+                                    <div class="pml-toc-leaf-prefix"></div>
+                                    <a class="pml-toc-leaf-link" href="#ch__11">Maximizing Reusability</a>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="pml-toc-leaf-node">
+                                    <div class="pml-toc-leaf-prefix"></div>
+                                    <a class="pml-toc-leaf-link" href="#ch__12">An OO Bind</a>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="pml-toc-leaf-node">
+                                    <div class="pml-toc-leaf-prefix"></div>
+                                    <a class="pml-toc-leaf-link" href="#ch__13">Summary</a>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="pml-toc-leaf-node">
+                                    <div class="pml-toc-leaf-prefix"></div>
+                                    <a class="pml-toc-leaf-link" href="#ch__14">Final Words</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+            <div class="pml-hsplit-panel-separator" id="PMLHsplitPanelSeparator" draggable="true" ondragstart="PMLHsplitPanelSeparatorDragStart(event)" ondrag="PMLHsplitPanelSeparatorDragging(event)" ondragend="PMLHsplitPanelSeparatorDragEnd(event)"></div>
+            <div class="pml-hsplit-right-panel" id="PMLHsplitRightPanel">
+                <div class="pml-hsplit-right-panel-content" id="PMLHsplitRightPanelContent">
+                    <article class="pml-document">
+                        <div class="pml-document-header">
+                            <h1 class="pml-document-title">Simple Introduction to Monads - With Java Examples</h1>
+                            <div class="pml-document-authors">Christian Neumanns</div>
+                            <time class="pml-document-date-time" datetime="2020-04-02">2020-04-02</time>
+                        </div>
+                        <p class="pml-paragraph">Version history:<br /> v1: 2020-04-02<br /> v2: 2020-12-23</p>
+                        <p class="pml-paragraph"><br /></p>
+                        <figure style="text-align: left">
+                            <img class="pml-image" src="images/function_composition.png">
+                        </figure>
+                        <section id="ch__1" class="pml-chapter">
+                            <h2 class="pml-chapter-title">Introduction</h2>
+                            <p class="pml-paragraph">Monads are heavily used in most functional programming languages. In Haskell, for example, they are essential and appear everywhere, in all kinds of applications and libraries.</p>
+                            <p class="pml-paragraph">On the other hand, monads are <i class="pml-italic">rarely</i> used in popular, non-pure-functional programming languages like C#, Java, Python, etc.</p>
+                            <p class="pml-paragraph">Why is there such a big discrepancy?</p>
+                            <p class="pml-paragraph">To find the answer we first have to know:</p>
+                            <ul class="pml-list">
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">What is a monad?</p>
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">Why are they used in functional languages? What's the problem(s) they solve?</p>
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">How could we use monads in languages like C#, Java, Python, etc.? Should we do that?</p>
+                                </li>
+                            </ul>
+                            <p class="pml-paragraph">After reading this article you'll hopefully be able to answer these questions without hesitation.</p>
+                            <div class="pml-admonition">
+                                <div class="pml-admonition-label">Note</div>
+                                <div class="pml-admonition-content">
+                                    <p class="pml-paragraph">This article is primarily written for software developers with a good background in non-pure-functional programming languages.</p>
+                                    <p class="pml-paragraph">Examples in this article are shown in Java. But readers are not required to be Java experts, because only basic Java is used. The examples would look very similar in C#, and they could easily be rewritten in other languages that support generic types (type parameters) and higher order functions (functions that can take a function as input argument, and return functions).</p>
+                                    <p class="pml-paragraph">The full source code is available on <a href="https://gitlab.com/ppl-lang/blog/-/tree/master/2020-03-Monad_Intro/Java_examples/monadtests" class="pml-link">Gitlab</a>.</p>
+                                </div>
+                            </div>
+                        </section>
+                        <section id="ch__2" class="pml-chapter">
+                            <h2 class="pml-chapter-title">A Simple Problem</h2>
+                            <p class="pml-paragraph">Suppose we have to write a simple function to 'enthuse' a sentence. The function should do this by transforming an input string as follows:</p>
+                            <ul class="pml-list">
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">remove leading and trailing spaces</p>
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">convert all letters to uppercase</p>
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">append an exclamation point</p>
+                                </li>
+                            </ul>
+                            <p class="pml-paragraph">For example, feeding the function with <code class="pml-inline-code">&quot; Hello bob &quot;</code> should return <code class="pml-inline-code">&quot;HELLO BOB!&quot;</code>.</p>
+                        </section>
+                        <section id="ch__3" class="pml-chapter">
+                            <h2 class="pml-chapter-title">A Simple Solution in Java</h2>
+                            <p class="pml-paragraph">In most programming languages this is trivial to do. Here is a solution in Java:</p>
+                            <pre class="pml-code"><code class="nohighlight">static String enthuse ( String sentence ) {
+    return sentence.trim().toUpperCase().concat ( &quot;!&quot; );
+}</code></pre>
+                            <p class="pml-paragraph">To write a complete Java 'application' including a rudimentary test, we can put the code below in file <code class="pml-inline-code">MonadTest_01.java</code>:</p>
+                            <pre class="pml-code"><code class="nohighlight">public class MonadTest_01 {
+    
+    static String enthuse ( String sentence ) {
+        return sentence.trim().toUpperCase().concat ( &quot;!&quot; );
+    }
+    
+    public static void main ( String[] args ) {
+        System.out.println ( enthuse ( &quot;  Hello bob  &quot; ) );
+    }
+}
+</code></pre>
+                            <p class="pml-paragraph">Then we can compile and run the program with the following commands:</p>
+                            <pre class="pml-input">javac MonadTest_01.java
+java MonadTest_01</pre>
+                            <p class="pml-paragraph">The output looks as expected:</p>
+                            <pre class="pml-output">HELLO BOB!</pre>
+                            <p class="pml-paragraph">So far so good.</p>
+                        </section>
+                        <section id="ch__4" class="pml-chapter">
+                            <h2 class="pml-chapter-title">Only Functions!</h2>
+                            <p class="pml-paragraph">In the previous Java example we used <i class="pml-italic">object methods</i> (e.g. <code class="pml-inline-code">sentence.trim()</code>). However, as this article is about monads, we have to be aware that pure functional programming languages don't have methods (functions) executed on objects. A pure functional programming language (based on the lambda calculus) has only side-effect-free functions that take an input and return a result.</p>
+                            <p class="pml-paragraph">Let us therefore rewrite the previous code (still in Java) by using only pure functions. This is important, because we have to use functions in order to finally understand why monads have been invented.</p>
+                            <p class="pml-paragraph">Here is the new code:</p>
+                            <pre class="pml-code"><code class="nohighlight">static String trim ( String string ) {
+    return string.trim();
+}
+
+static String toUpperCase ( String string ) {
+    return string.toUpperCase();
+}
+
+static String appendExclam ( String string ) {
+    return string.concat ( &quot;!&quot; );
+}
+
+static String enthuse ( String sentence ) {
+    return appendExclam ( toUpperCase ( trim ( sentence ) ) );
+}
+
+public static void test() {
+    System.out.println ( enthuse ( &quot;  Hello bob  &quot; ) );
+}</code></pre>
+                            <p class="pml-paragraph">The code starts with three pure functions (<code class="pml-inline-code">trim</code>, <code class="pml-inline-code">toUpperCase</code>, and <code class="pml-inline-code">appendExclam</code>) that take a string as input, and return a string as result. Note that I cheated a bit, because I still use object methods in the function's bodies (e.g. <code class="pml-inline-code">string.trim()</code>). But that doesn't matter here, because in this exercise we don't care about the <i class="pml-italic">implementations</i> of these three functions - we care about their <i class="pml-italic">signatures</i>.</p>
+                            <p class="pml-paragraph">The interesting part is the body of function <code class="pml-inline-code">enthuse</code>:</p>
+                            <pre class="pml-code"><code class="nohighlight">return appendExclam ( toUpperCase ( trim ( sentence ) ) );</code></pre>
+                            <p class="pml-paragraph">We can see that there are only function calls (as in functional programming languages). The calls are nested, and executed like this:</p>
+                            <ul class="pml-list">
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">step 1: <code class="pml-inline-code">trim ( sentence )</code> is executed</p>
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">step 2: the result of step 1 is fed into <code class="pml-inline-code">toUpperCase</code></p>
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">step 3: the result of step 2 is fed into <code class="pml-inline-code">appendExclam</code></p>
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">finally the result of step 3 is returned as the result of function <code class="pml-inline-code">enthuse</code></p>
+                                </li>
+                            </ul>
+                            <p class="pml-paragraph">The following picture illustrates how the initial input is transformed by chaining three functions: <br /></p>
+                            <figure style="text-align: left">
+                                <img class="pml-image" src="images/hello_bob_functions_chains.png" width="700">
+                            </figure>
+                            <p class="pml-paragraph">To see if everything still works fine we can execute function <code class="pml-inline-code">test</code>. The result remains the same:</p>
+                            <pre class="pml-output">HELLO BOB!</pre>
+                        </section>
+                        <section id="ch__5" class="pml-chapter">
+                            <h2 class="pml-chapter-title">Function Composition</h2>
+                            <p class="pml-paragraph">In functional programming languages, nested function calls (like our <code class="pml-inline-code">appendExclam ( toUpperCase ( trim ( sentence ) ) )</code>) are called <i class="pml-italic">function composition</i>.</p>
+                            <div class="pml-admonition">
+                                <div class="pml-admonition-label">Important</div>
+                                <div class="pml-admonition-content">
+                                    <p class="pml-paragraph">Function <i class="pml-italic">composition</i> is the bread and butter of functional programming languages. In the lambda calculus, the body of a function is a single expression. Complex expressions can be created by composing functions.</p>
+                                </div>
+                            </div>
+                            <p class="pml-paragraph"><br /></p>
+                            <figure style="text-align: left">
+                                <img class="pml-image" src="images/function_composition.png">
+                            </figure>
+                            <div class="pml-caption">Function composition</div>
+                            <p class="pml-paragraph">As we will see later, monads provide a solution to a problem that can arise when we compose functions. Before going on, let us therefore see variations of using function composition in different environments. Readers familiar with this important concept can jump to the <a href="#errors" class="pml-xref">next</a> chapter.</p>
+                            <section id="ch__6" class="pml-chapter">
+                                <h3 class="pml-chapter-title">Unix Pipes</h3>
+                                <p class="pml-paragraph">First, it is interesting to note that the idea of function composition is similar to <a href="https://www.geeksforgeeks.org/piping-in-unix-or-linux/" class="pml-link">pipes in Unix/Linux</a>. The output of a first command is fed as input into a second command. Then the output of the second command is fed as input into a third command, and so on. In Unix/Linux the symbol <code class="pml-inline-code">|</code> is used to pipe commands. Here is an example of a pipe that counts the number of files containing <code class="pml-inline-code">&quot;page&quot;</code> in their name (example borrowed from <a href="https://www.howtogeek.com/438882/how-to-use-pipes-on-linux/" class="pml-link">How to Use Pipes on Linux</a>):</p>
+                                <pre class="pml-code"><code class="nohighlight">ls - | grep &quot;page&quot; | wc -l</code></pre>
+                            </section>
+                            <section id="ch__7" class="pml-chapter">
+                                <h3 class="pml-chapter-title">Pipe Operator</h3>
+                                <p class="pml-paragraph">Because pipes are useful in many contexts, some programming languages have a specific <i class="pml-italic">pipe operator</i>. For example, F# uses <code class="pml-inline-code">|&gt;</code> to chain function calls. If Java had this operator, then function <code class="pml-inline-code">enthuse</code> could be written as:</p>
+                                <pre class="pml-code"><code class="nohighlight">static String enthuse ( String sentence ) {
+    return trim ( sentence ) |&gt; toUpperCase |&gt; appendExclam;
+}</code></pre>
+                                <p class="pml-paragraph">... which would semantically be the same, but a bit more readable than real Java that uses nested function calls:</p>
+                                <pre class="pml-code"><code class="nohighlight">static String enthuse ( String sentence ) {
+    return appendExclam ( toUpperCase ( trim ( sentence ) ) );
+}</code></pre>
+                            </section>
+                            <section id="ch__8" class="pml-chapter">
+                                <h3 class="pml-chapter-title">Function Composition Operator</h3>
+                                <p class="pml-paragraph">As function composition is essential, most functional programming languages have a dedicated <i class="pml-italic">function composition operator</i> that makes it trivial to compose functions.</p>
+                                <p class="pml-paragraph">For example, in Haskell a dot (<code class="pml-inline-code">.</code>) is used to compose functions (derived from the ring operator symbol &#x2218; used in maths). The dot is itself a function whose signature is defined as follows:</p>
+                                <pre class="pml-code"><code class="nohighlight">(.) :: (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c</code></pre>
+                                <p class="pml-paragraph">This tells us that the function takes two functions as input (<code class="pml-inline-code">b -&gt; c</code> and <code class="pml-inline-code">a -&gt; b</code>), and returns another function (<code class="pml-inline-code">a -&gt; c</code>), which is the composition of the two input functions.</p>
+                                <p class="pml-paragraph">Hence, to state that function <code class="pml-inline-code">h</code> is the composition of functions <code class="pml-inline-code">f</code> and <code class="pml-inline-code">g</code>, in Haskell you can simply write:</p>
+                                <pre class="pml-code"><code class="nohighlight">h = f . g</code></pre>
+                                <p class="pml-paragraph">Note the totally different semantics of the dot operator in Haskell and object oriented languages like C#, Java, etc. In Java, <code class="pml-inline-code">f.g</code> means applying <code class="pml-inline-code">g</code> on object <code class="pml-inline-code">f</code> (e.g. <code class="pml-inline-code">person.name</code>). In Haskell it means composing functions <code class="pml-inline-code">f</code> and <code class="pml-inline-code">g</code>.</p>
+                                <p class="pml-paragraph">F# uses <code class="pml-inline-code">&gt;&gt;</code> to compose functions. It is defined like this:</p>
+                                <pre class="pml-code"><code class="nohighlight">let (&gt;&gt;) f g x = g(f(x))</code></pre>
+                                <p class="pml-paragraph">And it is used as follows:</p>
+                                <pre class="pml-code"><code class="nohighlight">let h = f &gt;&gt; g</code></pre>
+                                <p class="pml-paragraph">Note: F#'s <code class="pml-inline-code">&gt;&gt;</code> operator must not be confused with the <i class="pml-italic">Monad sequencing operator</i> in Haskell, which also uses the symbol <code class="pml-inline-code">&gt;&gt;</code>.</p>
+                                <p class="pml-paragraph">If Java had a syntax similar to F# for function composition, then function <code class="pml-inline-code">enthuse</code> could simply be written as follows:</p>
+                                <pre class="pml-code"><code class="nohighlight">static String enthuse ( String sentence ) = trim &gt;&gt; toUpperCase &gt;&gt; appendExclam;</code></pre>
+                            </section>
+                        </section>
+                        <section id="errors" class="pml-chapter">
+                            <h2 class="pml-chapter-title">Errors, But No Exceptions</h2>
+                            <p class="pml-paragraph">For the sake of this tutorial, suppose that our functions can fail in the following ways:</p>
+                            <ul class="pml-list">
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">Function <code class="pml-inline-code">trim</code> fails if the input string is empty or contains only spaces (i.e. the result cannot be an empty string).</p>
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">Function <code class="pml-inline-code">toUpperCase</code> fails if the input string is empty or contains characters others than letters or spaces.</p>
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">Function <code class="pml-inline-code">appendExclam</code> fails if the input string is more than 20 characters long.</p>
+                                </li>
+                            </ul>
+                            <p class="pml-paragraph">In idiomatic Java an exception is thrown to indicate an error. But pure functional programming languages don't support exceptions, because a function cannot have a side-effect. A function that can fail must return error information as part of the result returned by the function. For example, the function returns a string in case of success, or error data in case of an error.</p>
+                            <p class="pml-paragraph">So let's do that in Java.</p>
+                            <p class="pml-paragraph">First we define a simple error class with an <code class="pml-inline-code">info</code> field that describes the error:</p>
+                            <pre class="pml-code"><code class="nohighlight">public class SimpleError {
+    
+    private final String info;
+
+    public SimpleError ( String info ) {
+        this.info = info;
+    }
+    
+    public String getInfo() { return info; }
+
+    public String toString() { return info; }
+}
+</code></pre>
+                            <p class="pml-paragraph">As said already, the functions must be able to return a string in case of success, or else an error object. To achieve this we can define class <code class="pml-inline-code">ResultOrError</code>:</p>
+                            <pre class="pml-code"><code class="nohighlight">public class ResultOrError {
+    
+    private final String result;
+    private final SimpleError error;
+    
+    public ResultOrError ( String result ) {
+        this.result = result;
+        this.error = null;
+    }
+
+    public ResultOrError ( SimpleError error ) {
+        this.result = null;
+        this.error = error;
+    }
+    
+    public String getResult() { return result; }
+    
+    public SimpleError getError() { return error; }
+    
+    public boolean isResult() { return error == null; }
+    
+    public boolean isError() { return error != null; }
+    
+    public String toString() {
+        if ( isResult() ) {
+            return &quot;Result: &quot; + result; 
+        } else {
+            return &quot;Error: &quot; + error.getInfo(); 
+        }
+    }
+}
+</code></pre>
+                            <p class="pml-paragraph">As we can see:</p>
+                            <ul class="pml-list">
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">The class has two immutable fields to hold either a result or an error</p>
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">There are two constructors.</p>
+                                    <p class="pml-paragraph">The first one is used in case of success (e.g. <code class="pml-inline-code">return new ResultOrError ( &quot;hello&quot;);</code> ).</p>
+                                    <p class="pml-paragraph">The second constructor is used in case of failure (e.g. <code class="pml-inline-code">return new ResultOrError ( new Error ( &quot;Something went wrong&quot;) );</code> ).</p>
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph"><code class="pml-inline-code">isResult</code> and <code class="pml-inline-code">isError</code> are utility functions</p>
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph"><code class="pml-inline-code">toString</code> is overridden for debugging purposes</p>
+                                </li>
+                            </ul>
+                            <p class="pml-paragraph">Now we can rewrite the three utility functions to include error handling:</p>
+                            <pre class="pml-code"><code class="nohighlight">public class StringFunctions {
+
+    public static ResultOrError trim ( String string ) {
+        
+        String result = string.trim();
+        if ( result.isEmpty() ) {
+            return new ResultOrError ( new SimpleError (
+                &quot;String must contain non-space characters.&quot; ) );
+        }
+
+        return new ResultOrError ( result );
+    }
+    
+    public static ResultOrError toUpperCase ( String string ) {
+        
+        if ( ! string.matches ( &quot;[a-zA-Z ]+&quot; ) ) {
+            return new ResultOrError ( new SimpleError (
+                &quot;String must contain only letters and spaces.&quot; ) );
+        }
+        
+        return new ResultOrError ( string.toUpperCase() );
+    }
+    
+    public static ResultOrError appendExclam ( String string ) {
+        
+        if ( string.length() &gt; 20 ) {
+            return new ResultOrError ( new SimpleError (
+                &quot;String must not exceed 20 characters.&quot; ) );
+        }
+
+        return new ResultOrError ( string.concat ( &quot;!&quot; ) );
+    }
+}
+</code></pre>
+                            <div class="pml-admonition">
+                                <div class="pml-admonition-label">Note</div>
+                                <div class="pml-admonition-content">
+                                    <p class="pml-paragraph">To keep this exercise code simple, we don't check and handle <code class="pml-inline-code">null</code> values (as we would do in production code). For example, if a function is called with <code class="pml-inline-code">null</code> as input we simply accept that a <code class="pml-inline-code">NullPointerException</code> is thrown.</p>
+                                </div>
+                            </div>
+                            <p class="pml-paragraph">What matters is that the three functions who previously returned a string, now return a <code class="pml-inline-code">ResultOrError</code> object.</p>
+                            <p class="pml-paragraph">As a consequence, function <code class="pml-inline-code">enthuse</code> that was defined as follows:</p>
+                            <pre class="pml-code"><code class="nohighlight">static String enthuse ( String sentence ) {
+    return appendExclam ( toUpperCase ( trim ( sentence ) ) );
+}</code></pre>
+                            <p class="pml-paragraph">... doesn't work anymore.</p>
+                            <p class="pml-paragraph">Unfortunately, function composition is now invalid, because the functions now return a <code class="pml-inline-code">ResultOrError</code> object, but require a <code class="pml-inline-code">string</code> as input. The output/input types don't match anymore. The functions can't be chained anymore.</p>
+                            <p class="pml-paragraph">In the previous version, when the functions returned strings, the output of a function could be fed as input to the next function: <br /></p>
+                            <figure style="text-align: left">
+                                <img class="pml-image" src="images/string_functions_chains.png" width="700">
+                            </figure>
+                            <div class="pml-caption">Chained String Functions</div>
+                            <p class="pml-paragraph">But now this can't be done anymore: <br /></p>
+                            <figure style="text-align: left">
+                                <img class="pml-image" src="images/string_ROE_functions.png" width="700">
+                            </figure>
+                            <p class="pml-paragraph">However, we can still implement <code class="pml-inline-code">enthuse</code> <i class="pml-italic">in Java</i> like this:</p>
+                            <pre class="pml-code"><code class="nohighlight">static ResultOrError enthuse ( String sentence ) {
+    
+    ResultOrError trimmed = trim ( sentence );
+    if ( trimmed.isResult() ) {
+        ResultOrError upperCased = toUpperCase ( trimmed.getResult() );
+        if ( upperCased.isResult() ) {
+            return appendExclam ( upperCased.getResult() );
+        } else {
+            return upperCased;
+        }
+    } else {
+        return trimmed;
+    }
+}</code></pre>
+                            <p class="pml-paragraph">Not good! The initial simple one-liner has turned into an ugly monster.</p>
+                            <p class="pml-paragraph">We can improve a bit:</p>
+                            <pre class="pml-code"><code class="nohighlight">static ResultOrError enthuse_2 ( String sentence ) {
+    
+    ResultOrError trimmed = trim ( sentence );
+    if ( trimmed.isError() ) return trimmed;
+    
+    ResultOrError upperCased = toUpperCase ( trimmed.getResult() );
+    if ( upperCased.isError() ) return upperCased;
+    
+    return appendExclam ( upperCased.getResult() );
+}</code></pre>
+                            <p class="pml-paragraph">This kind of code works in Java and many other programming languages. But it's certainly not the code we want to write over and over again. Error handling code intermixed with normal flow makes code difficult to read, write, and maintain.</p>
+                            <p class="pml-paragraph">More importantly, we simply can't write code like this in pure functional programming languages. Remember: An expression returned by a function is made up of <i class="pml-italic">function composition</i>.</p>
+                            <p class="pml-paragraph">It's easy to image other cases that lead to the same dilemma. And what should we do in situations where the same problem appears in many variations? Yes, we should try to find a general solution that can be used in a maximum of cases.</p>
+                            <p class="pml-paragraph">Monads to the rescue!</p>
+                            <p class="pml-paragraph">Monads provide a general solution for this kind of problem, and they have other benefits as well. As we will see later, monads enable function composition for so-called monadic functions that cannot be composed directly because their types are incompatible.</p>
+                            <p class="pml-paragraph">Some people say: &quot;You could have invented monads if they didn't exist.&quot; (for example Brian Beckman in his excellent presentation <a href="https://www.youtube.com/watch?v=ZhuHCtR3xq8" class="pml-link">Don't fear the Monad</a>)</p>
+                            <p class="pml-paragraph">That's true!</p>
+                            <p class="pml-paragraph">So let's try to find a solution ourselves, temporarily ignoring the fact that a monad would solve our problem.</p>
+                        </section>
+                        <section id="ch__9" class="pml-chapter">
+                            <h2 class="pml-chapter-title">The 'bind' Function</h2>
+                            <p class="pml-paragraph">In functional programming languages, everything is done with functions. So we know already that we have to create a function to solve our problem.</p>
+                            <p class="pml-paragraph">Let's call this function <code class="pml-inline-code">bind</code>, because it's role is to bind two functions that cannot be composed directly.</p>
+                            <p class="pml-paragraph">Next we have to decide what should be the input of <code class="pml-inline-code">bind</code>, and what should it return. Let's consider the case of chaining functions <code class="pml-inline-code">trim</code> and <code class="pml-inline-code">toUppercase</code>:</p>
+                            <figure style="text-align: left">
+                                <img class="pml-image" src="images/trim_toUppercase_functions_chains.png">
+                            </figure>
+                            <p class="pml-paragraph">The logic to implement must work as follows:</p>
+                            <ul class="pml-list">
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">If <code class="pml-inline-code">trim</code> returns a string, then <code class="pml-inline-code">toUppercase</code> can be called, because it takes a string as input. So the final output will be the output of <code class="pml-inline-code">toUppercase</code></p>
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">If <code class="pml-inline-code">trim</code> returns an error, then <code class="pml-inline-code">toUppercase</code> cannot be called, and the error must simply be forwarded. So the final output will be the output of <code class="pml-inline-code">trim</code></p>
+                                </li>
+                            </ul>
+                            <p class="pml-paragraph">We can deduce that <code class="pml-inline-code">bind</code> needs two input arguments:</p>
+                            <ul class="pml-list">
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">the result of <code class="pml-inline-code">trim</code>, which is of type <code class="pml-inline-code">ResultOrError</code></p>
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">function <code class="pml-inline-code">toUppercase</code>, because if <code class="pml-inline-code">trim</code> returns a string then <code class="pml-inline-code">bind</code> must call <code class="pml-inline-code">toUppercase</code></p>
+                                </li>
+                            </ul>
+                            <p class="pml-paragraph">The output type of <code class="pml-inline-code">bind</code> is easy to determine. If <code class="pml-inline-code">trim</code> returns a string then the output of <code class="pml-inline-code">bind</code> is the output of <code class="pml-inline-code">toUppercase</code>, which is of type <code class="pml-inline-code">ResultOrError</code>. If <code class="pml-inline-code">trim</code> fails then the output of <code class="pml-inline-code">bind</code> is the output of <code class="pml-inline-code">trim</code>, which is also of type <code class="pml-inline-code">ResultOrError</code>. As the output type is <code class="pml-inline-code">ResultOrError</code> in both cases, the output type of <code class="pml-inline-code">bind</code> must be <code class="pml-inline-code">ResultOrError</code>.</p>
+                            <p class="pml-paragraph">So now we know the signature of <code class="pml-inline-code">bind</code>:</p>
+                            <figure style="text-align: left">
+                                <img class="pml-image" src="images/string_ROE_bind_function.png">
+                            </figure>
+                            <p class="pml-paragraph">In Java this is written as:</p>
+                            <pre class="pml-code"><code class="nohighlight">ResultOrError bind ( ResultOrError value, Function&lt;String, ResultOrError&gt; function )</code></pre>
+                            <p class="pml-paragraph">Implementing <code class="pml-inline-code">bind</code> is easy, because we know exactly what needs to be done:</p>
+                            <pre class="pml-code"><code class="nohighlight">static ResultOrError bind ( ResultOrError value, Function&lt;String, ResultOrError&gt; function ) {
+    
+    if ( value.isResult() ) {
+        return function.apply ( value.getResult() );
+    } else {
+        return value;
+    }
+}</code></pre>
+                            <p class="pml-paragraph">Function <code class="pml-inline-code">enthuse</code> can now be rewritten as follows:</p>
+                            <pre class="pml-code"><code class="nohighlight">static ResultOrError enthuse ( String sentence ) {
+    
+    ResultOrError trimmed = trim ( sentence );
+    
+    ResultOrError upperCased = bind ( trimmed, StringFunctions::toUpperCase );
+    // alternative:
+    // ResultOrError upperCased = bind ( trimmed, string -&gt; toUpperCase(string) );
+    
+    ResultOrError result = bind ( upperCased, StringFunctions::appendExclam );
+    return result;
+}</code></pre>
+                            <p class="pml-paragraph">But this is still imperative code (a sequence of statements). If we did a good job, then we must be able to rewrite <code class="pml-inline-code">enthuse</code> by just using function composition. And indeed, we can do it like this:</p>
+                            <pre class="pml-code"><code class="nohighlight">static ResultOrError enthuse_2 ( String sentence ) {
+    
+    return bind ( bind ( trim ( sentence ), StringFunctions::toUpperCase ), StringFunctions::appendExclam );
+}</code></pre>
+                            <p class="pml-paragraph">At first sight the body of <code class="pml-inline-code">bind</code> might be a bit confusing. We will change that later. The point is that we use only function composition in the body of <code class="pml-inline-code">enthuse</code>.</p>
+                            <div class="pml-admonition">
+                                <div class="pml-admonition-label">Note</div>
+                                <div class="pml-admonition-content">
+                                    <p class="pml-paragraph">If you never saw this kind of code before, then please take your time to digest and fully understand what's going on here.</p>
+                                    <p class="pml-paragraph">Understanding <code class="pml-inline-code">bind</code> is the key to understanding monads!</p>
+                                    <p class="pml-paragraph"><code class="pml-inline-code">bind</code> is the function name used in Haskell. There are alternative names, such as: <code class="pml-inline-code">flatMap</code>, <code class="pml-inline-code">chain</code>, <code class="pml-inline-code">andThen</code>.</p>
+                                </div>
+                            </div>
+                            <p class="pml-paragraph">Does it work correctly? Let's test it. Here is a class containing <code class="pml-inline-code">bind</code>, the two variations of <code class="pml-inline-code">enthuse</code>, and some simplistic tests that cover the success and all error paths:</p>
+                            <pre class="pml-code"><code class="nohighlight">public class MonadTest_04 {
+
+    // start bind
+    static ResultOrError bind ( ResultOrError value, Function&lt;String, ResultOrError&gt; function ) {
+        
+        if ( value.isResult() ) {
+            return function.apply ( value.getResult() );
+        } else {
+            return value;
+        }
+    }
+    // end bind
+
+    // start enthuse_1
+    static ResultOrError enthuse ( String sentence ) {
+        
+        ResultOrError trimmed = trim ( sentence );
+        
+        ResultOrError upperCased = bind ( trimmed, StringFunctions::toUpperCase );
+        // alternative:
+        // ResultOrError upperCased = bind ( trimmed, string -&gt; toUpperCase(string) );
+        
+        ResultOrError result = bind ( upperCased, StringFunctions::appendExclam );
+        return result;
+    }
+    // end enthuse_1
+
+    // start enthuse_2
+    static ResultOrError enthuse_2 ( String sentence ) {
+        
+        return bind ( bind ( trim ( sentence ), StringFunctions::toUpperCase ), StringFunctions::appendExclam );
+    }
+    // end enthuse_2
+
+    private static void test ( String sentence ) {
+
+        System.out.println ( enthuse ( sentence ) );
+        System.out.println ( enthuse_2 ( sentence ) );
+    }
+    
+    public static void tests() {
+        
+        test ( &quot;  Hello bob  &quot; );
+        test ( &quot;   &quot; );
+        test ( &quot;hello 123&quot; );
+        test ( &quot;Krungthepmahanakhon is the capital of Thailand&quot; );
+    }
+}
+</code></pre>
+                            <p class="pml-paragraph">Running function <code class="pml-inline-code">tests</code> outputs:</p>
+                            <pre class="pml-output">Result: HELLO BOB!
+Result: HELLO BOB!
+Error: String must contain non-space characters.
+Error: String must contain non-space characters.
+Error: String must contain only letters and spaces.
+Error: String must contain only letters and spaces.
+Error: String must not exceed 20 characters.
+Error: String must not exceed 20 characters.    </pre>
+                            <p class="pml-paragraph">The <code class="pml-inline-code">bind</code> function defined above serves our specific problem. But to make it part of a monad we will have to make it more general. We will do that soon.</p>
+                            <div class="pml-admonition">
+                                <div class="pml-admonition-label">Note</div>
+                                <div class="pml-admonition-content">
+                                    <p class="pml-paragraph">Using <code class="pml-inline-code">bind</code> as shown above, is the common way to solve our problem of function composition. But it's not the only way. An alternative is called <i class="pml-italic">Kleisli composition</i> (out of the scope of this article).</p>
+                                </div>
+                            </div>
+                        </section>
+                        <section id="ch__10" class="pml-chapter">
+                            <h2 class="pml-chapter-title">A Monad, Finally!</h2>
+                            <p class="pml-paragraph">Now that we have <code class="pml-inline-code">bind</code>, the remaining steps to get to the monad are easy. We just need to make some improvements in order to have a more general solution that can be applied in other cases too.</p>
+                            <p class="pml-paragraph">Our goal in this chapter is clear: See the pattern and improve <code class="pml-inline-code">ResultOrError</code>, so that we can finally enthuse:</p>
+                            <p class="pml-paragraph">&quot;A MONAD!&quot;</p>
+                            <p class="pml-paragraph"><b class="pml-bold">First improvement:</b></p>
+                            <p class="pml-paragraph">In the previous chapter we defined <code class="pml-inline-code">bind</code> as an isolated function that fulfilled our specific needs. A first improvement is to move <code class="pml-inline-code">bind</code> into the <code class="pml-inline-code">ResultOrError</code> class. Function <code class="pml-inline-code">bind</code> must be part of our monad class. The reason is that the implementation of <code class="pml-inline-code">bind</code> depends on the monad that uses <code class="pml-inline-code">bind</code>. While the <i class="pml-italic">signature</i> of <code class="pml-inline-code">bind</code> is always the same, different kinds of monads use different <i class="pml-italic">implementations</i>.</p>
+                            <p class="pml-paragraph"><b class="pml-bold">Second Improvement:</b></p>
+                            <p class="pml-paragraph">In our example code, the composed functions all take a string as input, and return either a string or an error. What if we have to compose functions that take an integer, and return an integer or error? Can we improve <code class="pml-inline-code">ResultOrError</code> so that it works with <i class="pml-italic">any</i> type of result? Yes, we can. We just have to add a type parameter to <code class="pml-inline-code">ResultOrError</code>.</p>
+                            <p class="pml-paragraph">After moving <code class="pml-inline-code">bind</code> into the class and adding a type parameter, the new version now becomes:</p>
+                            <pre class="pml-code"><code class="nohighlight">public class ResultOrErrorMona&lt;R&gt; {
+    
+    private final R result;
+    private final SimpleError error;
+    
+    public ResultOrErrorMona ( R result ) {
+        this.result = result;
+        this.error = null;
+    }
+
+    public ResultOrErrorMona ( SimpleError error ) {
+        this.result = null;
+        this.error = error;
+    }
+    
+    public R getResult() { return result; }
+    
+    public SimpleError getError() { return error; }
+    
+    public boolean isResult() { return error == null; }
+    
+    public boolean isError() { return error != null; }
+    
+    static &lt;R&gt; ResultOrErrorMona&lt;R&gt; bind ( ResultOrErrorMona&lt;R&gt; value, Function&lt;R, ResultOrErrorMona&lt;R&gt;&gt; function ) {
+        
+        if ( value.isResult() ) {
+            return function.apply ( value.getResult() );
+        } else {
+            return value;
+        }
+    }
+
+    public String toString() {
+
+        if ( isResult() ) {
+            return &quot;Result: &quot; + result; 
+        } else {
+            return &quot;Error: &quot; + error.getInfo(); 
+        }
+    }
+}
+</code></pre>
+                            <p class="pml-paragraph">Note the class name: <code class="pml-inline-code">ResultOrErrorMona</code>. This is not a typo. The class isn't a monad yet, so I call it a mona (just for fun).</p>
+                            <p class="pml-paragraph"><b class="pml-bold">Third Improvement:</b></p>
+                            <p class="pml-paragraph">Suppose we have to chain the following two functions:</p>
+                            <pre class="pml-code"><code class="nohighlight">ResultOrError&lt;Integer&gt; f1 ( Integer value )
+ResultOrError&lt;String&gt;  f2 ( Integer value )</code></pre>
+                            <p class="pml-paragraph">Here is a picture to illustrate this:</p>
+                            <figure style="text-align: left">
+                                <img class="pml-image" src="images/integer_string_functions_chain.png">
+                            </figure>
+                            <p class="pml-paragraph">Our current <code class="pml-inline-code">bind</code> function is not able to handle this case, because the output types of the two functions are different (<code class="pml-inline-code">ResultOrError&lt;Integer&gt;</code> and <code class="pml-inline-code">ResultOrError&lt;String&gt;</code>). We have to make <code class="pml-inline-code">bind</code> more general, so that functions of different value types can be chained. The signature of <code class="pml-inline-code">bind</code> must be changed from</p>
+                            <pre class="pml-code"><code class="nohighlight">static &lt;R&gt; Monad&lt;R&gt; bind ( Monad&lt;R&gt; monad, Function&lt;R, Monad&lt;R&gt;&gt; function )</code></pre>
+                            <p class="pml-paragraph">... to</p>
+                            <pre class="pml-code"><code class="nohighlight">static &lt;R1, R2&gt; Monad&lt;R2&gt; bind ( Monad&lt;R1&gt; monad, Function&lt;R1, Monad&lt;R2&gt;&gt; function )</code></pre>
+                            <p class="pml-paragraph">The implementation of <code class="pml-inline-code">bind</code> must be adapted too. Here is the new class:</p>
+                            <pre id="ResultOrErrorMonad" class="pml-code"><code class="nohighlight">public class ResultOrErrorMonad&lt;R&gt; {
+    
+    private final R result;
+    private final SimpleError error;
+    
+    public ResultOrErrorMonad ( R result ) {
+        this.result = result;
+        this.error = null;
+    }
+
+    public ResultOrErrorMonad( SimpleError error ) {
+        this.result = null;
+        this.error = error;
+    }
+    
+    public R getResult() { return result; }
+    
+    public SimpleError getError() { return error; }
+    
+    public boolean isResult() { return error == null; }
+    
+    public boolean isError() { return error != null; }
+    
+    static &lt;R1, R2&gt; ResultOrErrorMonad&lt;R2&gt; bind ( ResultOrErrorMonad&lt;R1&gt; value, Function&lt;R1, ResultOrErrorMonad&lt;R2&gt;&gt; function ) {
+        
+        if ( value.isResult() ) {
+            return function.apply ( value.result );
+        } else {
+            return new ResultOrErrorMonad&lt;R2&gt; ( value.error );
+        }
+    }
+
+    public String toString() {
+
+        if ( isResult() ) {
+            return &quot;Result: &quot; + result.toString(); 
+        } else {
+            return &quot;Error: &quot; + error.toString(); 
+        }
+    }
+}
+</code></pre>
+                            <p class="pml-paragraph">Note the class name again: <code class="pml-inline-code">ResultOrErrorMonad</code>.</p>
+                            <p class="pml-paragraph">Yes, now it's a monad.</p>
+                            <div class="pml-admonition">
+                                <div class="pml-admonition-label">Note</div>
+                                <div class="pml-admonition-content">
+                                    <p class="pml-paragraph">In the real world we don't add a &quot;monad&quot; suffix for types that are monads. I called the class <code class="pml-inline-code">ResultOrErrorMonad</code> (instead of simply <code class="pml-inline-code">ResultOrError</code>) to make it clear that the class is a monad.</p>
+                                </div>
+                            </div>
+                            <p class="pml-paragraph">How can we be sure the class is indeed a monad?</p>
+                            <p class="pml-paragraph">While the term 'monad' has a very precise definition in mathematics (as everything in maths), the term isn't yet unequivocally defined in the world of programming languages. However, Wikipedia states a <a href="https://en.wikipedia.org/wiki/Monad_(functional_programming)#Definition" class="pml-link">common definition</a>. A monad consists of three parts:</p>
+                            <ul class="pml-list">
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph"><b class="pml-bold">A type constructor M that builds up a monadic type M T.</b></p>
+                                    <p class="pml-paragraph">In other words, there is a type parameter for the value contained in the monad.</p>
+                                    <p class="pml-paragraph">In our case it's type parameter <code class="pml-inline-code">R</code> in the class declaration:</p>
+                                    <pre class="pml-code"><code class="nohighlight">class ResultOrErrorMonad&lt;R&gt;</code></pre>
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph"><b class="pml-bold">A type converter, often called unit or return, that embeds an object x in the monad: <code class="pml-inline-code">unit(x) : T &#8594; M T</code></b></p>
+                                    <p class="pml-paragraph">In Haskell, the type converter is defined as: <code class="pml-inline-code">return :: a -&gt; m a</code></p>
+                                    <p class="pml-paragraph">In Java-like languages, this means there must be a constructor that takes a value of type <code class="pml-inline-code">R</code>, and returns a monad <code class="pml-inline-code">M&lt;R&gt;</code> that contains this value.</p>
+                                    <p class="pml-paragraph">In our specific case it's the constructor of class <code class="pml-inline-code">ResultOrErrorMonad</code>:</p>
+                                    <pre class="pml-code"><code class="nohighlight">public ResultOrErrorMonad ( R result ) </code></pre>
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph"><b class="pml-bold">A combinator, typically called bind (as in binding a variable) and represented with an infix operator &gt;&gt;=, that unwraps a monadic variable, then inserts it into a monadic function/expression, resulting in a new monadic value: <code class="pml-inline-code">(mx &gt;&gt;= f) : (M T, T &#8594; M U) &#8594; M U</code></b></p>
+                                    <p class="pml-paragraph">In Haskell, bind is defined as: <code class="pml-inline-code">(&gt;&gt;=) :: m a -&gt; (a -&gt; m b) -&gt; m b</code></p>
+                                    <p class="pml-paragraph">In our example it's the <code class="pml-inline-code">bind</code> function:</p>
+                                    <pre class="pml-code"><code class="nohighlight">&lt;R1, R2&gt; ResultOrErrorMonad&lt;R2&gt; bind ( ResultOrErrorMonad&lt;R1&gt; value, Function&lt;R1, ResultOrErrorMonad&lt;R2&gt;&gt; function )</code></pre>
+                                </li>
+                            </ul>
+                            <p class="pml-paragraph">Wikipedia then states: &quot;To fully qualify as a monad though, these three parts must also respect a few laws: ...&quot;</p>
+                            <p class="pml-paragraph">In <a href="https://hackage.haskell.org/package/base-4.12.0.0/docs/Control-Monad.html#t:Monad" class="pml-link">Haskell</a> the three laws as defined as follows:</p>
+                            <ul class="pml-list">
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph"><code class="pml-inline-code">return a &gt;&gt;= k = k a</code></p>
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph"><code class="pml-inline-code">m &gt;&gt;= return = m</code></p>
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph"><code class="pml-inline-code">m &gt;&gt;= (\x -&gt; k x &gt;&gt;= h) = (m &gt;&gt;= k) &gt;&gt;= h</code></p>
+                                </li>
+                            </ul>
+                            <p class="pml-paragraph">Discussing these laws is out of scope of this article (this is an <i class="pml-italic">introduction</i> to monads). The laws ensure that monads behave well in all situations. Violating them can lead to subtle and painful bugs as explained <a href="https://www.reddit.com/r/haskell/comments/16iakr/what_happens_when_a_monad_violates_monadic_laws/" class="pml-link">here</a>, <a href="https://stackoverflow.com/questions/12617664/a-simple-example-showing-that-io-doesnt-satisfy-the-monad-laws" class="pml-link">here</a>, and <a href="https://www.quora.com/What-would-be-the-practical-implications-if-an-implementation-of-Haskells-Monad-typeclass-didnt-satisfy-the-monadic-laws" class="pml-link">here</a>. As far as I know, there is currently no compiler able to enforce the monad laws. Hence, it's the developer's responsibility to verify that the monad laws are respected. Suffice to say that the above <code class="pml-inline-code">ResultOrErrorMonad</code> fulfills the monad laws.</p>
+                            <p class="pml-paragraph">Although we are done, there is still room for improvement.</p>
+                        </section>
+                        <section id="ch__11" class="pml-chapter">
+                            <h2 class="pml-chapter-title">Maximizing Reusability</h2>
+                            <p class="pml-paragraph">Besides having a type parameter for the result value, we could also add a type parameter for the error value. This makes the monad more reusable, because users of the monad are now free to decide which type of error they want to use. For an example you can look at F#'s <a href="https://docs.microsoft.com/en-us/dotnet/fsharp/language-reference/results" class="pml-link">Result</a> type.</p>
+                            <p class="pml-paragraph">Finally we could make the monad even more reusable by letting the user define the meaning of the two values. In our example, one value represents a result, and the other one represents an error. But we can abstract more. We can create a monad that simply holds one of two possible values - either value_1 or value_2. And the type of each value can be freely defined by a type parameter. This is indeed a standard monad supported by some functional programming languages. In Haskell it's called <code class="pml-inline-code">Either</code>. It's constructor is defined as follows:</p>
+                            <pre class="pml-code"><code class="nohighlight">data Either a b = Left a | Right b</code></pre>
+                            <p class="pml-paragraph">Using our <code class="pml-inline-code">ResultOrErrorMonad</code> class as a starting point, it would be easy to create an <code class="pml-inline-code">Either</code> monad in Java.</p>
+                            <div class="pml-admonition">
+                                <div class="pml-admonition-label">Note</div>
+                                <div class="pml-admonition-content">
+                                    <p class="pml-paragraph">Some projects use an <code class="pml-inline-code">Either</code> monad for functions that might fail. In my opinion, using a more specific <code class="pml-inline-code">ResultOrError</code> type is a better, less error-prone option (for reasons not explained here).</p>
+                                </div>
+                            </div>
+                        </section>
+                        <section id="ch__12" class="pml-chapter">
+                            <h2 class="pml-chapter-title">An OO Bind</h2>
+                            <p class="pml-paragraph">Now that we know how a monad works in functional programming languages, let's go back to the world of OOP (object-oriented programming). Could we create something like an OO-monad?</p>
+                            <p class="pml-paragraph">If we look at class <a href="#ResultOrErrorMonad" class="pml-xref">ResultOrErrorMonad</a>, we can see that everything in this class is already standard Java, with one exception: Function <code class="pml-inline-code">bind</code> is a static member of the class. This means we can't use the dot-syntax of object methods for <code class="pml-inline-code">bind</code>. Currently the syntax for calling <code class="pml-inline-code">bind</code> is <code class="pml-inline-code">bind ( v, f )</code>. But if <code class="pml-inline-code">bind</code> was a non-static member of the class, we could write <code class="pml-inline-code">v.bind ( f )</code>. This would make the syntax more readable in the case of nested function calls.</p>
+                            <p class="pml-paragraph">Luckily, it's easy to make <code class="pml-inline-code">bind</code> non-static.</p>
+                            <p class="pml-paragraph">To make the monad a bit more versatile, let's also introduce a second type parameter for error values. Then the users are not required to use <code class="pml-inline-code">SimpleError</code> - they can use their own error class.</p>
+                            <p class="pml-paragraph">Here is the code of a <code class="pml-inline-code">ResultOrError</code> monad, OO-style:</p>
+                            <pre class="pml-code"><code class="nohighlight">public class ResultOrError&lt;R, E&gt; {
+    
+    private final R result;
+    private final E error;
+    
+    private ResultOrError ( R result, E error ) {
+        this.result = result;
+        this.error = error;
+    }
+    
+    public static &lt;R, E&gt; ResultOrError&lt;R, E&gt; createResult ( R result ) {
+        return new ResultOrError&lt;R, E&gt; ( result, null );
+    }
+
+    public static &lt;R, E&gt; ResultOrError&lt;R, E&gt; createError ( E error ) {
+        return new ResultOrError&lt;R, E&gt; ( null, error );
+    }
+
+    public R getResult() { return result; }
+
+    public E getError() { return error; }
+
+    public boolean isResult() { return error == null; }
+    
+    public boolean isError() { return error != null; }
+    
+    public &lt;R2&gt; ResultOrError&lt;R2,E&gt; bind ( Function&lt;R, ResultOrError&lt;R2,E&gt;&gt; function ) {
+        
+        if ( isResult() ) {
+            return function.apply ( result );
+        } else {
+            return createError ( error );
+        }
+    }
+
+    public String toString() {
+
+        if ( isResult() ) {
+            return &quot;Result: &quot; + result.toString(); 
+        } else {
+            return &quot;Error: &quot; + error.toString(); 
+        }
+    }
+}
+</code></pre>
+                            <p class="pml-paragraph">Now the code for using bind in the body of function <code class="pml-inline-code">enthuse</code> becomes more readable. Instead of writing:</p>
+                            <pre class="pml-code"><code class="nohighlight">return bind ( bind ( trim ( sentence ), v -&gt; toUpperCase(v) ), v -&gt; appendExclam(v) );</code></pre>
+                            <p class="pml-paragraph">... we can avoid the nesting and write:</p>
+                            <pre class="pml-code"><code class="nohighlight">return trim ( sentence ).bind ( v -&gt; toUpperCase(v) ).bind ( v -&gt; appendExclam(v) );</code></pre>
+                            <p class="pml-paragraph">So, can monads be useful in real-world OOP environments?</p>
+                            <p class="pml-paragraph">Yes, they <i class="pml-italic">can</i>.</p>
+                            <p class="pml-paragraph">But the word &quot;can&quot; needs to be stressed, because it depends (as so often) on what we want to achieve. Let's say, for instance, that we have some good reasons to 'not use exceptions' for error handling.</p>
+                            <p class="pml-paragraph">Remember the ugly error-handling code we had to write in chapter <a href="#errors" class="pml-xref">Errors, But No Exceptions</a>:</p>
+                            <pre class="pml-code"><code class="nohighlight">static ResultOrError enthuse ( String sentence ) {
+    
+    ResultOrError trimmed = trim ( sentence );
+    if ( trimmed.isResult() ) {
+        ResultOrError upperCased = toUpperCase ( trimmed.getResult() );
+        if ( upperCased.isResult() ) {
+            return appendExclam ( upperCased.getResult() );
+        } else {
+            return upperCased;
+        }
+    } else {
+        return trimmed;
+    }
+}</code></pre>
+                            <p class="pml-paragraph">Using a monad removes the boilerplate:</p>
+                            <pre class="pml-code"><code class="nohighlight">static ResultOrError enthuse ( String sentence ) {
+    return trim ( sentence ).bind ( v -&gt; toUpperCase(v) ).bind ( v -&gt; appendExclam(v) );
+}</code></pre>
+                            <p class="pml-paragraph">Nice!</p>
+                        </section>
+                        <section id="ch__13" class="pml-chapter">
+                            <h2 class="pml-chapter-title">Summary</h2>
+                            <p class="pml-paragraph">The key to understanding monads is to understand <code class="pml-inline-code">bind</code> (also called <code class="pml-inline-code">chain</code>, <code class="pml-inline-code">andThen</code>, etc.). Function <code class="pml-inline-code">bind</code> is used to compose two monadic functions. A monadic function is a function that takes a value of type T and returns an object that contains the value (<code class="pml-inline-code">a -&gt; m a</code>). Monadic functions cannot be directly composed because the output type of the first function called is not compatible to the input type of the second function. <code class="pml-inline-code">bind</code> solves this problem.</p>
+                            <p class="pml-paragraph">Function <code class="pml-inline-code">bind</code> is useful on its own. But it's just one part of a monad.</p>
+                            <p class="pml-paragraph">In Java-like world, a monad is a class (type) <code class="pml-inline-code">M</code> with:</p>
+                            <ul class="pml-list">
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">a type parameter <code class="pml-inline-code">T</code> tat defines the type of the value stored in the monad (e.g. <code class="pml-inline-code">M&lt;T&gt;</code>)</p>
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">a constructor that takes a value of type <code class="pml-inline-code">T</code> and returns a monad <code class="pml-inline-code">M&lt;T&gt;</code> containing the value</p>
+                                    <ul class="pml-list">
+                                        <li class="pml-list-element">
+                                            <p class="pml-paragraph">Java-like languages:<br /><code class="pml-inline-code">M&lt;T&gt; create ( T value )</code></p>
+                                            <figure style="text-align: left">
+                                                <img class="pml-image" src="images/create_function.png">
+                                            </figure>
+                                        </li>
+                                        <li class="pml-list-element">
+                                            <p class="pml-paragraph">Haskell:<br /><code class="pml-inline-code">return :: a -&gt; m a</code></p>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">a <code class="pml-inline-code">bind</code> function used to compose two monadic functions</p>
+                                    <ul class="pml-list">
+                                        <li class="pml-list-element">
+                                            <p class="pml-paragraph">Java-like languages:<br /><code class="pml-inline-code">M&lt;T2&gt; bind ( M&lt;T1&gt; monad, Function&lt;T1, M&lt;T2&gt;&gt; function )</code></p>
+                                            <figure style="text-align: left">
+                                                <img class="pml-image" src="images/generic_bind_function.png">
+                                            </figure>
+                                        </li>
+                                        <li class="pml-list-element">
+                                            <p class="pml-paragraph">Haskell:<br /><code class="pml-inline-code">(&gt;&gt;=) :: m a -&gt; (a -&gt; m b) -&gt; m b</code></p>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            <p class="pml-paragraph">A monad must respect three monad laws. These laws ensure that the monad behaves well in all situations.</p>
+                            <p class="pml-paragraph">Monads are primarily used in functional programming languages, because these languages rely on function composition. But they can also be useful in the context of other paradigms, such as object-oriented programming languages that support generic types and higher order functions.</p>
+                        </section>
+                        <section id="ch__14" class="pml-chapter">
+                            <h2 class="pml-chapter-title">Final Words</h2>
+                            <p class="pml-paragraph">As hinted in it's title, this article is an <i class="pml-italic">introduction</i> to monads. It doesn't cover the full spectrum of monads, it doesn't show other useful examples of monads (Maybe monad, IO monad, state monad, etc) and it completely ignores 'category theory', the mathematical background for monads. For those who want to know more, an abundance of information is already available on the net.</p>
+                            <p class="pml-paragraph">Hopefully this article helps to get the gist of monads, see their beauty, and understand how they can improve code and simplify life.</p>
+                            <p class="pml-paragraph">&quot;HAPPY MONADING!&quot;</p>
+                            <div class="pml-admonition">
+                                <div class="pml-admonition-label">Note</div>
+                                <div class="pml-admonition-content">
+                                    <p class="pml-paragraph">This article was written in <a href="https://www.pml-lang.dev" class="pml-link">PML</a> (Practical Markup Language). You can look at the PML code on <a href="https://gitlab.com/ppl-lang/blog/-/tree/master/2020-03-Monad_Intro/PML_source" class="pml-link">Gitlab</a>.</p>
+                                    <p class="pml-paragraph">The source code examples used in this article are stored on <a href="https://gitlab.com/ppl-lang/blog/-/tree/master/2020-03-Monad_Intro/Java_examples/monadtests" class="pml-link">Gitlab</a>.</p>
+                                </div>
+                            </div>
+                        </section>
+                    </article>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            window.onload = function() {
+                adaptSplitWidths ( getCurrentElementWidth ( "PMLHsplitLeftPanel" ) );
+            }
+            
+            var dragStartScreenX = 0;
+            var dragStartLeftPanelWidth = 0;
+            
+            function PMLHsplitPanelSeparatorDragStart ( event ) {
+    
+                dragStartScreenX = event.screenX;
+                dragStartLeftPanelWidth = getCurrentElementWidth ( "PMLHsplitLeftPanel" );
+    
+                // This is necessary to make dragging work in Firefox 
+                // see https://stackoverflow.com/questions/19055264/why-doesnt-html5-drag-and-drop-work-in-firefox
+                event.dataTransfer.setData ( 'text', 'anything' );
+            }
+            
+            function PMLHsplitPanelSeparatorDragging ( event ) {
+                
+                // doesn't work in Firefox
+                // adaptSplitWidths ( event.pageX );
+                
+                adaptSplitWidths ( dragStartLeftPanelWidth + event.screenX - dragStartScreenX );
+            }
+            
+            function PMLHsplitPanelSeparatorDragEnd ( event ) {
+                
+                // doesn't work in Firefox
+                // adaptSplitWidths ( event.pageX );
+                
+                adaptSplitWidths ( dragStartLeftPanelWidth + event.screenX - dragStartScreenX );
+            }
+    
+            function adaptSplitWidths ( leftPanelWidth ) {
+            
+                setElementWidth ( "PMLHsplitLeftPanel", leftPanelWidth );
+                
+                // compute left margin of the right panel so that the content is displayed in the center of the browser window
+                
+                const bodyWidth = document.body.clientWidth;
+                const contentMaxWidth = getCSSPropertyIntegerForID ( "PMLHsplitRightPanelContent", "max-width" );
+                const separatorWidth = getCurrentElementWidth ( "PMLHsplitPanelSeparator" );
+                
+                let HsplitRightPanelLeftMargin = bodyWidth / 2 - contentMaxWidth / 2 - leftPanelWidth - separatorWidth;
+                if ( HsplitRightPanelLeftMargin < 0 ) {
+                    HsplitRightPanelLeftMargin = 0;
+                }
+
+                document.getElementById ( "PMLHsplitRightPanel" ).style.marginLeft = HsplitRightPanelLeftMargin + "px";
+            }
+
+            function getCurrentElementWidth ( elementID ) {
+                
+                const element = document.getElementById ( elementID );
+                return element.getBoundingClientRect().width;
+            }
+
+            function setElementWidth ( elementID, width ) {
+                
+                const element = document.getElementById ( elementID );
+                element.style.width = width + "px";
+            }
+
+            function getCSSPropertyIntegerForID ( elementID, CSSPropertyName ) {
+                
+                return parseInt ( getCSSPropertyForID ( elementID, CSSPropertyName ), 10 );
+            }
+
+            function getCSSPropertyForID ( elementID, CSSPropertyName ) {
+                
+                const element = document.getElementById ( elementID );
+                const style = window.getComputedStyle ( element );
+                return style.getPropertyValue ( CSSPropertyName );
+            }
+        </script>
+
+        <script>
+            var branch_prefixes = document.getElementsByClassName ( "pml-toc-branch-prefix" );
+            
+            for ( var i = 0; i < branch_prefixes.length; i++ ) {
+                branch_prefixes[i].addEventListener ( "click", function ( event ) {
+        
+                    const sub_chapters = this.parentElement.parentElement.querySelector ( ".pml-toc-sub-chapters" );
+                    sub_chapters.classList.toggle ( "pml-hidden" );
+                    
+                    if ( sub_chapters.classList.contains ( "pml-hidden" ) ) {
+                        this.classList.remove ( "pml-toc-branch-visible" );
+                        this.classList.add ( "pml-toc-branch-hidden" );
+                    } else {
+                        this.classList.remove ( "pml-toc-branch-hidden" );
+                        this.classList.add ( "pml-toc-branch-visible" );
+                    }
+                });
+            } 
+        </script>
+
+    </body>
+</html>

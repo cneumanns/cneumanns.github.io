@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- Created with PPL (https://www.ppl-lang.dev) -->		
+
+<svg xmlns="http://www.w3.org/2000/svg" width="370" height="410">
+<rect x="0" y="0" width="370" height="410" style="stroke-width:0; fill:white" />
+<line x1="70" y1="50" x2="70" y2="20" stroke="black" stroke-width="2" />
+<line x1="200" y1="50" x2="200" y2="20" stroke="black" stroke-width="2" />
+<rect x="70" y="50" width="130" height="40" fill="white" stroke="black" stroke-width="2" />
+<text x="90" y="75" font-size="16" font-family="Verdana" fill="black">
+0042 (&quot;B&quot;)</text>
+<text x="20" y="75" font-size="16" font-family="Verdana">
+A0A1</text>
+<rect x="70" y="90" width="130" height="40" fill="white" stroke="black" stroke-width="2" />
+<text x="90" y="115" font-size="16" font-family="Verdana" fill="black">
+006F (&quot;o&quot;)</text>
+<text x="20" y="115" font-size="16" font-family="Verdana">
+A0A2</text>
+<rect x="70" y="130" width="130" height="40" fill="white" stroke="black" stroke-width="2" />
+<text x="90" y="155" font-size="16" font-family="Verdana" fill="black">
+0062 (&quot;b&quot;)</text>
+<text x="20" y="155" font-size="16" font-family="Verdana">
+A0A3</text>
+<rect x="70" y="170" width="130" height="40" fill="white" stroke="black" stroke-width="2" />
+<text x="90" y="195" font-size="16" font-family="Verdana" fill="black">
+0000</text>
+<text x="20" y="195" font-size="16" font-family="Verdana">
+A0A4</text>
+<line x1="70" y1="210" x2="70" y2="240" stroke="black" stroke-width="2" />
+<line x1="200" y1="210" x2="200" y2="240" stroke="black" stroke-width="2" />
+<text x="210" y="75" font-size="16" font-family="Verdana">
+(variable &apos;name&apos;)</text>
+</svg>

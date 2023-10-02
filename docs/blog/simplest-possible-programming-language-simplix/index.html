@@ -1,0 +1,2666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.10">
+<meta name="author" content="Christian Neumanns">
+<title>How to Design and Build the "Simplest Possible" Programming Language?</title>
+<link rel="stylesheet" href="./asciidoctor-default.css">
+</head>
+<body class="article">
+<div id="header">
+<h1>How to Design and Build the "Simplest Possible" Programming Language?</h1>
+<div class="details">
+<span id="author" class="author">Christian Neumanns</span><br>
+<span id="revdate">2018-04-29</span>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Suppose we created the <em>simplest possible programming language</em>. How would it look like? How long would it take you to learn it? How could we implement it? Would it be practical and useful for real-life applications? Let&#8217;s see.</p>
+</div>
+<div id="toc" class="toc">
+<div id="toctitle" class="title">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_introduction_how_many_meters">Introduction: How many meters?</a></li>
+<li><a href="#_simplest_possible">"Simplest Possible"</a></li>
+<li><a href="#_design">Design</a>
+<ul class="sectlevel2">
+<li><a href="#_data">Data</a></li>
+<li><a href="#_code">Code</a></li>
+<li><a href="#_libraries">Libraries</a></li>
+<li><a href="#development_environment">Development Environment</a></li>
+<li><a href="#_deployment">Deployment</a></li>
+</ul>
+</li>
+<li><a href="#_examples">Examples</a>
+<ul class="sectlevel2">
+<li><a href="#_hello_world">Hello World</a></li>
+<li><a href="#count_lines_of_code">Count Lines of Code</a></li>
+<li><a href="#_interacting_with_the_os">Interacting With the OS</a></li>
+<li><a href="#_interacting_with_java">Interacting With Java</a></li>
+<li><a href="#_miscellaneous">Miscellaneous</a></li>
+</ul>
+</li>
+<li><a href="#_implementation">Implementation</a></li>
+<li><a href="#limitations">Limitations</a>
+<ul class="sectlevel2">
+<li><a href="#_data_2">Data</a></li>
+<li><a href="#_code_2">Code</a></li>
+<li><a href="#_development_environment">Development environment</a></li>
+</ul>
+</li>
+<li><a href="#_summary">Summary</a></li>
+<li><a href="#_final_thoughts">Final Thoughts</a></li>
+<li><a href="#_links">Links</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_introduction_how_many_meters">Introduction: How many meters?</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>About 30 years ago I started to create commercial software applications. I used <a href="https://en.wikipedia.org/wiki/Clipper_(programming_language)">Clipper</a> (dBaseIII), a DOS-based programming language and database in a single package. The manual was about 300 pages. After reading 300 pages, you knew everything you needed to know and you knew where to search for help when you got stuck.</p>
+</div>
+<div class="paragraph">
+<p>In 1994 I switched to <a href="https://en.wikipedia.org/wiki/PowerBuilder">Powerbuilder</a> to write Windows GUI applications. The documentation was bigger: there were several books, totaling about 3000 pages. I can still remember how  amazed I was by the total thickness of the books on my bookshelf: 20 centimeters.</p>
+</div>
+<div class="paragraph">
+<p>Three years later I upgraded to the newest version of Powerbuilder. Now I needed even more space on my shelf: 35 centimeters. But there was another otherness: Amazement turned into nervousness. I realized I wouldn&#8217;t be able anymore to 'know everything'.</p>
+</div>
+<div class="paragraph">
+<p>In 2003 I upgraded again. I was surprised when the postman handed me a small box with &#8230;&#8203; <em>no books</em> inside. The documentation was on CDs - a clever way to reduce the documentation&#8217;s weight, volume, and price.</p>
+</div>
+<div class="paragraph">
+<p>Now <em>imagine</em>: You are a full-stack developer in 2018. The postman rings at your door and delivers a "Full-Stack Software Development Environment for Creating Big Professional Web Applications, All Books Included".</p>
+</div>
+<div class="paragraph">
+<p>How many meters would you need to free up on your bookshelf?</p>
+</div>
+<div class="paragraph">
+<p>How many thousands of pages would you need to read if you wanted to 'know everything'?</p>
+</div>
+<div class="paragraph">
+<p>And how long would your knowledge be up to date?</p>
+</div>
+<div class="paragraph">
+<p>It looks like something is wrong. <em>Very wrong!</em></p>
+</div>
+<div class="paragraph">
+<p>An important question arises: Couldn&#8217;t we have much simpler software development environments allowing us to write the same kind of applications?</p>
+</div>
+<div class="paragraph">
+<p>Bjarne Stroustrup, the creator of C++ (generally considered as one of the most complex programming languages) thinks himself computers should be easier to use:</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>I have always wished for my computer to be as easy to use as my telephone; my wish has come true because I can no longer figure out how to use my telephone.</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>He also <a href="http://www.stroustrup.com/bs_faq.html#really-say-that">states</a> there <em>are</em> ways to reduce complexity:</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>I&#8217;m convinced that you could design a language about a tenth of the size of C++ (whichever way you measure size) providing roughly what C++ does.</p>
+</div>
+<div class="paragraph">
+<p>Within C++, there is a much smaller and cleaner language struggling to get out.</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p><strong>Remember:</strong></p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="images/not_want_complexity_2.png" alt="Simplicity" width="700">
+</div>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="images/we_want_simplicity.png" alt="Simplicity" width="700">
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_simplest_possible">"Simplest Possible"</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>A few weeks ago I started to ponder about how a language would look like if it was 'as simple as possible'. I asked myself:</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>What is the simplest thing that could possibly work?</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>I set a few goals:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>There should be a minimum of concepts that are easy to understand. Anybody should be able to learn the language in a few days or hours, depending on his/her experience with other languages. The thickness of the complete manual should be measured in <em>millimeters</em>.</p>
+</li>
+<li>
+<p>The language should be practical, enjoyable, and well suited for creating useful, real-life mini-applications.</p>
+</li>
+<li>
+<p>The language should be portable and run on Windows, Unix/Linux and Mac.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>I also defined a few non-goals:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The goal is not to design a language that is easy to <em>build</em>. If we can chose between making life easy for the user or the compiler, we will chose 'user' - without hesitation.</p>
+</li>
+<li>
+<p>'Powerful language features' that are nice in exceptional situations will be omitted.</p>
+</li>
+<li>
+<p>Time and memory consumption of a running application are not priorities.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>We need a name for the thing we are going to talk about. Let&#8217;s simply call it <em>Simplix</em>.</p>
+</div>
+<div class="paragraph">
+<p>In the rest of this article I will:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>explain the step-by-step <em>design</em> process of Simplix</p>
+</li>
+<li>
+<p>show some <em>examples</em> of source code (including real-life examples)</p>
+</li>
+<li>
+<p>present a proof-of-concept <em>implementation</em> of Simplix</p>
+</li>
+<li>
+<p><em>discuss</em> the result</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Remember:</strong></p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Simplix should be easy to learn, enjoyable, and useful.</p>
+</div>
+</blockquote>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_design">Design</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_data">Data</h3>
+<div class="paragraph">
+<p>The article <a href="http://www.practical-programming.org/blog/pragmatics-software-developers/index.html">Fundamental Pragmatics for Successful Programmers</a> states a key principle for designing software <em>applications</em>:</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Before writing code, design your data carefully!</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/data_1_code_2.png" alt="data 1 code 2"></span></p>
+</div>
+<div class="paragraph">
+<p>We should apply the same rule for <em>language</em> design. Let&#8217;s first think about data, before thinking about code.</p>
+</div>
+<div class="paragraph">
+<p>Many programming languages provide the following data types:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>primitive data types: boolean, number (integer and float), character, string</p>
+</li>
+<li>
+<p>collections: list, set, map</p>
+</li>
+<li>
+<p>structures (records), such as a <code>person</code> structure composed of fields <code>identifier</code>, <code>name</code>, <code>city</code></p>
+</li>
+<li>
+<p><code>null</code>: the absence of a value</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Some languages also provide enums, tuples, binary data, and maybe some more.</p>
+</div>
+<div class="paragraph">
+<p>What should we do if we want to keep it <em>as simple as possible</em>?</p>
+</div>
+<div class="paragraph">
+<p>It turns out that we just need one data type. Yes, <em>one</em> single data type: a list whose elements can be strings or lists. Put more simply: a <em>tree of strings</em>.</p>
+</div>
+<div class="paragraph">
+<p>Here are some simple examples:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>[ "Hello" ]
+[ "Bob" "Alice" ]
+[ "1" "2" [ "a" "b" "c" ] "foo" ]</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It is easy to show that all above mentioned data types can be represented by just using a <em>tree of strings</em> data type.</p>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s look at each case:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Primitive data types can be represented by a list containing one string representing the value:</p>
+<div class="listingblock">
+<div class="content">
+<pre>// boolean
+[ "yes" ]
+[ "no" ]
+// we could also use "true" and "false", but let's stick with "yes" and "no"
+
+// numbers
+[ "123" ]
+[ "-123.45" ]
+
+// character
+[ "a" ]
+
+// string (or enum)
+[ "big" ]</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Collections:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>a list or a tuple is a tree with only leaf nodes:</p>
+<div class="listingblock">
+<div class="content">
+<pre>[ "a" "b" "a" ]</pre>
+</div>
+</div>
+</li>
+<li>
+<p>a set is a list with unique elements:</p>
+<div class="listingblock">
+<div class="content">
+<pre>[ "a" "b" "c" ]</pre>
+</div>
+</div>
+</li>
+<li>
+<p>a map can be represented by a list whose elements are lists with two elements providing a key/value pair:</p>
+<div class="listingblock">
+<div class="content">
+<pre>[ [ "1" "one" ] [ "2" "two" ] ]</pre>
+</div>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>A structure can be represented with a map:</p>
+<div class="listingblock">
+<div class="content">
+<pre>[
+   [ "name"       "Albert" ]
+   [ "birthday"   "1879-03-14" ]
+   [ "birthplace" "Ulm" ]
+]</pre>
+</div>
+</div>
+</li>
+<li>
+<p><code>null</code> is represented by an empty list:</p>
+<div class="listingblock">
+<div class="content">
+<pre>[]</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Binary data can be coded as strings containing hexadecimal characters</p>
+<div class="listingblock">
+<div class="content">
+<pre>[ "F0A1" "BC78" ]</pre>
+</div>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>To simplify coding let&#8217;s provide the following practical and intuitive syntax sugar:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The surrounding square brackets can be omitted for lists containing one element. Instead of &#8230;&#8203;</p>
+<div class="listingblock">
+<div class="content">
+<pre>[ "Hello" ]</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>... we can simply write:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>"Hello"</pre>
+</div>
+</div>
+</li>
+<li>
+<p>The surrounding quotes can be omitted for numbers. Instead of &#8230;&#8203;</p>
+<div class="listingblock">
+<div class="content">
+<pre>[ "1" "2" "3" ]</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>... we can simply write:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>[ 1 2 3 ]</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Commas can optionally be inserted between list elements. Instead of &#8230;&#8203;</p>
+<div class="listingblock">
+<div class="content">
+<pre>[ 1 12.34 5 ]</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>... we can write:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>[ 1, 12.34, 5 ]</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Elements can appear on separate lines and white space is ignored. Instead of &#8230;&#8203;</p>
+<div class="listingblock">
+<div class="content">
+<pre>[ 7456.2345 76.23 83676.1223 ]</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>... we can write:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>[
+   7456.2345
+     76.23
+  83676.1223
+]</pre>
+</div>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Remember:</strong></p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Simplix has one data type: a tree of strings.</p>
+</div>
+<div class="paragraph">
+<p>Example: <code>[ "a" "b" [ 1 2 ] "c" ]</code></p>
+</div>
+</blockquote>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_code">Code</h3>
+<div class="sect3">
+<h4 id="_basic_syntax_rules">Basic Syntax Rules</h4>
+<div class="paragraph">
+<p>We need some basic syntax rules.</p>
+</div>
+<div class="sect4">
+<h5 id="_comments">Comments</h5>
+<div class="sect5">
+<h6 id="_single_line_comment">Single-Line Comment</h6>
+<div class="paragraph">
+<p><span class="image"><img src="images/single_line_comment.png" alt="single line comment"></span></p>
+</div>
+<div class="paragraph">
+<p>A single-line comment starts with <code>//</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>// a single line comment
+const pi = 3.1415926 // TODO: check if precision ok</pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_multi_line_comment">Multi-Line Comment</h6>
+<div class="paragraph">
+<p><span class="image"><img src="images/multi_line_comment.png" alt="multi line comment"></span></p>
+</div>
+<div class="paragraph">
+<p>A multi-line comment starts with <code>///</code> on the first line and ends with <code>.///</code> on the last line. Multi-line comments can be nested:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>///
+    multi
+    line
+    comment
+.///
+
+///
+    comment
+    ///
+        nested
+        comment
+    .///
+    blah blah blah
+.///</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_line_termination">Line Termination</h5>
+<div class="paragraph">
+<p><span class="image"><img src="images/line_terminator.png" alt="line terminator"></span></p>
+</div>
+<div class="paragraph">
+<p>An instruction ends with the end of line. There is no semicolon (<code>;</code>) at the end of an instruction:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>const max_index = 100
+var sum = 0</pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_line_continuation">Line Continuation</h5>
+<div class="paragraph">
+<p><span class="image"><img src="images/line_continuator.png" alt="line continuator"></span></p>
+</div>
+<div class="paragraph">
+<p>An instruction is continued on the next line if the current line ends with <code>\</code> or if the number of open brackets ( <code>(</code> or <code>[</code>) doesn&#8217;t match the number of closed brackets ( <code>)</code> or <code>]</code>):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>repeat for each long_variable_name \
+    in long_expression_denoting_a_list
+
+const cities = [ "London"
+    "New York"
+    "Paris" ]
+
+const foo = bar (
+    "long expression 1"
+    "long expression 2" )</pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_code_blocks">Code blocks</h5>
+<div class="paragraph">
+<p><span class="image"><img src="images/code_block.png" alt="code block"></span></p>
+</div>
+<div class="paragraph">
+<p>A code block (a set of instructions) is indented and ends with a dot (<code>.</code>) on a separate line after the last instruction:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>if condition then
+    instruction
+    instruction
+.</pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_identifiers">Identifiers</h5>
+<div class="paragraph">
+<p><span class="image"><img src="images/identifier.png" alt="identifier"></span></p>
+</div>
+<div class="paragraph">
+<p>Identifiers start with a letter, followed by any number of letters, digits and underscores (_).</p>
+</div>
+<div class="paragraph">
+<p>Examples:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>color
+make_delicious_coffee
+XML_file_20</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As shown above, an underscore (<code>_</code>) is used as word separator in identifiers.</p>
+</div>
+<div class="paragraph">
+<p>Lowercase/uppercase letters are used as in the English language. For example, uppercase letters are used for acronyms (e.g. <code>HTML</code>). There are no rules or semantic meanings associated with uppercase/lowercase letters (such as 'variable names must start with a lowercase letter').</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_case_sensitivity">Case-sensitivity</h5>
+<div class="paragraph">
+<p><span class="image"><img src="images/case_sensitivity.png" alt="case sensitivity"></span></p>
+</div>
+<div class="paragraph">
+<p>Simplix is case-sensitive. The following identifiers are all distinct:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>happy
+Happy
+HAPPY</pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_string_literal">String literal</h5>
+<div class="paragraph">
+<p><span class="image"><img src="images/string_literal.png" alt="string literal"></span></p>
+</div>
+<div class="paragraph">
+<p>Simplix uses C-like string literals. Special characters in strings (tabs, new lines, etc.) must be escaped, e.g. <code>"line\t1\r\nline\t2"</code></p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_functions">Functions</h4>
+<div class="paragraph">
+<p>Every software application is based on a very simple, fundamental principle. It does some work composed of three steps:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>It takes some input data</p>
+</li>
+<li>
+<p>It makes a computation based on the input</p>
+</li>
+<li>
+<p>It produces some output data</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/function.png" alt="function"></span></p>
+</div>
+<div class="paragraph">
+<p>The smallest unit that accomplishes the above steps is a <em>function</em> (also called a method, procedure, sub-routine, depending on the language)</p>
+</div>
+<div class="paragraph">
+<p>There is no doubt: In Simplix, we need functions.</p>
+</div>
+<div class="paragraph">
+<p>A function is composed of:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>an identifier (a unique name)</p>
+</li>
+<li>
+<p>an optional list of input arguments</p>
+</li>
+<li>
+<p>an optional output argument</p>
+</li>
+<li>
+<p>a body (list of instructions)</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Functions in Simplix are not <em>pure</em> functions as in pure functional languages like Haskell. A Simplix function can have side effects, such as reading from or writing to OS devices. Therefore input/output arguments are <em>optional</em>.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Here is an example of a function definition:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>function add ( op1 op2 ) -&gt; sum</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Every function definition starts with the keyword <code>function</code>.</p>
+</div>
+<div class="paragraph">
+<p><code>add</code> is the function&#8217;s identifier.</p>
+</div>
+<div class="paragraph">
+<p>Input arguments are surrounded by parenthesis. In our case we have two input arguments: <code>op1</code> and <code>op2</code>.</p>
+</div>
+<div class="paragraph">
+<p><code>-&gt;</code> separates input and output</p>
+</div>
+<div class="paragraph">
+<p><code>sum</code> is an identifier that describes the value returned by the function.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>When I started to design Simplix, I wanted <em>every</em> function to have  exactly one input argument and one output argument (to make it as simple as possible). Multiple input values would simply be multiple elements of the input list. A function with no input could be called with an empty list. And a function with no output would just return an empty list.</p>
+</div>
+<div class="paragraph">
+<p>However, after playing around with some source code examples, I found this to be too simplistic and unpractical. Hence, I quickly abandoned this idea.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_services">Services</h4>
+<div class="paragraph">
+<p>A set of functions can be grouped together in a <em>service</em>, in order to keep all functions well organized. That is, a service is a container for functions that belong to the same group of functions. You can also think of a service as a <em>module</em>. For example, service <code>file_writer</code> contains functions related to file write operations. Its counterpart, service <code>file_reader</code>, contains functions for reading files.</p>
+</div>
+<div class="paragraph">
+<p>To select a function in a service, we use the syntax <code>service_id.file_id</code>. For example, service <code>out</code> contains function <code>write_line</code>, which is used to write to the standard output device. Thus, the syntax to select this function is <code>out.write_line</code>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_instructions">Instructions</h4>
+<div class="paragraph">
+<p>Simplix is an <em>imperative</em> language. Hence, a function&#8217;s body is composed of <em>instructions</em> (also called <em>statements</em> in other programming languages).</p>
+</div>
+<div class="paragraph">
+<p>Instructions are indented and terminated by a dot:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>function foo ( input_1 input_2 ) -&gt; result
+    instruction
+    instruction
+    instruction
+.</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As a bare minimum we just need 5 kinds of instructions:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Constant/variable declaration and variable re-assignment</p>
+<div class="ulist">
+<ul>
+<li>
+<p>variable declaration:</p>
+<div class="listingblock">
+<div class="content">
+<pre>var name = "Bob"
+var sum = 0</pre>
+</div>
+</div>
+</li>
+<li>
+<p>variable re-assignment:</p>
+<div class="listingblock">
+<div class="content">
+<pre>name = "Alice"</pre>
+</div>
+</div>
+</li>
+<li>
+<p>constant declaration:</p>
+<div class="listingblock">
+<div class="content">
+<pre>const some_planets = [ "Mercury" "Venus" "Earth" "Mars" "Jupiter" ]
+const tree = [ 1 2 [ 21 22 ] 3 [ 31 32 33 ] ]</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that a constant cannot be re-assigned. Note also that we could live without constants, and just use variables. But constants are a very simple addition that allows to write better code (because our intention to not change the value is clear, and we are shielded from accidentally changing the value).</p>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>function call</p>
+<div class="listingblock">
+<div class="content">
+<pre>say_hello()
+say_hello ( "Bob" )
+const result = number.add ( 1 2 )</pre>
+</div>
+</div>
+</li>
+<li>
+<p>if</p>
+<div class="listingblock">
+<div class="content">
+<pre>if the_sun_shines then
+    out.write_line ( "Antonio is very happy" )
+else
+    out.write_line ( "Antonio is happy" )
+.
+
+if string.matches_regexes ( value, "[a-z]+" ) then
+    message = "The value is composed of lowercase letters." )
+else if string.matches_regexes ( value, "[A-Z]+" ) then
+    message = "The value is composed of uppercase letters." )
+else if string.matches_regexes ( value, "[0-9]+" ) then
+    message = "The value is composed of digits." )
+else
+    message = "The value is empty or composed of different kinds of characters." )
+.</pre>
+</div>
+</div>
+</li>
+<li>
+<p>loops</p>
+<div class="ulist">
+<ul>
+<li>
+<p>while loop</p>
+<div class="listingblock">
+<div class="content">
+<pre>repeat while has_more_messages()
+    const message = get_next_message()
+    out.write_line ( message )
+.
+
+// infinite loop:
+repeat while "yes"
+    out.write_line ( "Please terminate the process to stop me!" )
+    time.wait_milli_seconds ( 3000 )
+.</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Iterating over a list</p>
+<div class="listingblock">
+<div class="content">
+<pre>repeat for each name in [ "Tim" "Tom" "Tam" ]
+    out.write_line ( [ "Hello " name ] )
+.</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Output:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Hello Tim
+Hello Tom
+Hello Tam</pre>
+</div>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>return</p>
+<div class="listingblock">
+<div class="content">
+<pre>function get_greeting ( name ) -&gt; greeting
+    return [ "Hello " name ]
+.</pre>
+</div>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Remember:</strong></p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>A Simplix application is composed of functions that are grouped in services.</p>
+</div>
+<div class="paragraph">
+<p>There are 5 kinds of instructions:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>constant/variable assignment</p>
+</li>
+<li>
+<p>function call</p>
+</li>
+<li>
+<p><code>if</code> instruction</p>
+</li>
+<li>
+<p><code>while</code> and <code>for each</code> loops</p>
+</li>
+<li>
+<p><code>return</code> instruction</p>
+</li>
+</ul>
+</div>
+</blockquote>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_libraries">Libraries</h3>
+<div class="paragraph">
+<p>The usefulness of any programming language largely depends on the set of readily available libraries and frameworks. If we are lucky then we can quickly create impressive applications by just writing some glue-code to make existing software components work together seamlessly. Good libraries leverage our power to write quality software in a minimum of time.</p>
+</div>
+<div class="paragraph">
+<p>Most programming languages are delivered with a standard library that provides very basic functionality needed for common tasks. The same must be done in Simplix. The standard library should provide useful functions for:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>working with strings and lists</p>
+</li>
+<li>
+<p>working with directories and files</p>
+</li>
+<li>
+<p>date/time functions</p>
+</li>
+<li>
+<p>input/output operations, such as reading from and writing to the OS&#8217;s standard input, output, and error devices, files, URLs, etc.</p>
+</li>
+<li>
+<p>interacting with the OS (running OS commands/scripts and external applications, getting command line arguments, getting and setting environment variables, exiting the OS process with success or with an error code)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Having a good standard library is important, but not enough. Depending on the application we want to write, we need much more: working with HTML, JSON, and XML documents, using network communications, creating and changing media files (images, sound, video), etc. etc. We do not want to re-invent the wheel and lose time writing this code ourselves. We want to use existing libraries.</p>
+</div>
+<div class="paragraph">
+<p>To achieve this, we just need to apply an important rule mentioned in <a href="http://www.practical-programming.org/blog/pragmatics-software-developers/index.html">Fundamental Pragmatics for Successful Programmers</a>:</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Use existing software whenever possible!</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>In the case of my proof-of-concept implementation of Simplix (more on this later) I decided to use <em>Java</em> as 'existing software'.</p>
+</div>
+<div class="paragraph">
+<p>To make Simplix and Java work together, we just have to add two simple features:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Allow Java source code to be embedded in Simplix code. Here is a simple example:</p>
+<div class="listingblock">
+<div class="content">
+<pre>function hello
+
+    out.write_line ( "Hello from Simplix." )
+
+    java
+        // This is Java code!
+        System.out.println ( "Hello from Java." );
+    end java
+.</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Output:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Hello from Simplix.
+Hello from Java.</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Allow any <code>.jar</code> file (Java package) to be used by a Simplix application, by just copying it into a <code>lib</code> directory.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>This increases the usefulness of Simplix tremendously. We can now:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>use any existing Java software in a Simplix application. The Java software can be written in any Java Virtual Machine (JVM) language, such as Java, Scala, Clojure, PPL, etc.</p>
+</li>
+<li>
+<p>call Java code from Simplix code, call Simplix code from Java code, and exchange in-memory data between Simplix and Java</p>
+</li>
+<li>
+<p>write parts of a Simplix application in another JVM language, or even in C, via Java&#8217;s native interface</p>
+</li>
+<li>
+<p>use a Simplix application or library in another JVM application</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>An additional advantage is that writing Simplix&#8217;s standard library now becomes very easy. In fact, the standard library is just a wrapper around existing Java code. Here is an example of a Simplix <code>matches_regex</code> function that takes a string and a regex as input, and tells us if the string matches the regex:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>function matches_regex ( string, regex ) -&gt; yes_no
+
+    java
+        String str = Conversions.listToString ( string );
+        String reg = Conversions.listToString ( regex );
+        return Conversions.booleanToList ( str.matches ( reg ) );
+    end java
+.</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note the <code>Conversions</code> class that acts as a Simplix/Java bridge. It contains methods to convert Simplix data to Java data and vice-versa.</p>
+</div>
+<div class="paragraph">
+<p>A nice side effect of using Java as target environment is that Java&#8217;s slogan  "write once, run anywhere" now becomes true for Simplix too: a Simplix application can run on any system that supports Java: Mac, Unix/Linux, Windows and embedded devices.</p>
+</div>
+<div class="paragraph">
+<p><strong>Remember:</strong></p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Simplix is delivered with a standard library.</p>
+</div>
+<div class="paragraph">
+<p>Java libraries (<code>.jar</code> files) can be used in a Simplix application.</p>
+</div>
+</blockquote>
+</div>
+</div>
+<div class="sect2">
+<h3 id="development_environment">Development Environment</h3>
+<div class="paragraph">
+<p>Let us now see how to create and run applications.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+If you want to try out the steps below, you must first <a href="http://practical-programming.org/simplix/downloads/install_Simplix.html">install</a> Simplix.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_create">Create</h4>
+<div class="paragraph">
+<p>To create a Simplix application, open an OS terminal in a directory of your choice and type:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>sim create_app test_app</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This command does nothing else than creating file <code>test_app/src/start.sim</code> under your current directory (you could also do this manually). The content of this file is:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>function start
+    out.write_line ( "Hello from test_app." )
+.</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_run">Run</h4>
+<div class="paragraph">
+<p>To run the application go to directory <code>test_app</code> (the application&#8217;s root directory) and type:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>sim run</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Simplix will compile and run the application. The output is displayed in your terminal:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Hello from test_app.</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here is a print-screen of a command line session in Windows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>C:\tests\simplix&gt;sim create_app test_app
+C:\tests\simplix&gt;cd test_app
+C:\tests\simplix\test_app&gt;sim run
+Hello from test_app.</pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+If you just want to re-run your application (without compiling it first), then you can execute the OS script <code>run\test_app.bat</code> on Windows or <code>run\test_app.sh</code> on Unix/Linux. This file is automatically created after successful compilation.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_develop">Develop</h4>
+<div class="paragraph">
+<p>To develop your application you can now:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Add more functions in file <code>start.sim</code>, e.g.</p>
+<div class="listingblock">
+<div class="content">
+<pre>function start
+    say_hello()
+.
+
+function say_hello
+    out.write_line ( "Hello" )
+.</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Create additional <code>.sim</code> files in directory <code>src</code>. You can store these files in sub-directories of <code>src</code>, in order to keep all source code files well organized in a hierarchy.</p>
+<div class="paragraph">
+<p>Every file contains one or more functions.</p>
+</div>
+<div class="paragraph">
+<p>The content of each file represents a Simplix <em>service</em>. As seen already, a <em>service</em> is simply a container for functions belonging to the same group of functions. For example, suppose we define functions <code>util_1</code>, <code>util_2</code>, and <code>util_3</code> in file <code>utilities.sim</code>. In that case we have defined a service named <code>utilities</code> that contains functions <code>util_1</code>, <code>util_2</code>, and <code>util_3</code>.</p>
+</div>
+<div class="paragraph">
+<p>To use a function defined in another service (i.e. located in another file), you must prefix the function&#8217;s name with the service identifier (i.e. the file name without extension), and a dot (<code>.</code>). For example, if function <code>f1</code> in file <code>my_app.sim</code> calls function <code>f2</code> in file <code>utils.sim</code>, then the syntax is: <code>utils.f2()</code></p>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>If you want to use Java packages in your Simplix application, then you just need to create a <code>lib</code> directory in your application&#8217;s root directory, and put any <code>.jar</code> file into that directory (or a sub-directory of it).</p>
+</div>
+<div class="paragraph">
+<p><strong>Remember:</strong></p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Use <code>sim create_app</code> to create a new application.</p>
+</div>
+<div class="paragraph">
+<p>Use <code>sim run</code> to run an application.</p>
+</div>
+<div class="paragraph">
+<p>Source code files are stored in directory <code>src</code>.</p>
+</div>
+</blockquote>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_deployment">Deployment</h3>
+<div class="paragraph">
+<p>The result of compiling a Simplix application is a standard Java <code>.jar</code> file in the application&#8217;s <code>run</code> directory (e.g. <code>run/my_app.jar</code>).</p>
+</div>
+<div class="paragraph">
+<p>You can use any existing Java deployment technique to deploy and distribute your Simplix application as a one-click installation procedure (not discussed here).</p>
+</div>
+<div class="paragraph">
+<p>Note that you don&#8217;t need to install Simplix on the user&#8217;s machine and you don&#8217;t need to distribute the Simplix source code. Only the standard Java Runtime Environment (JRE) needs to be installed (if not done already), and the <code>.jar</code> files produced by the Simplix compiler must be deployed.</p>
+</div>
+<div class="paragraph">
+<p>At the time of writing, the total size for a small application like those we will see later is about 50 kB (including Simplix&#8217;s standard library, but excluding the Java runtime).</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_examples">Examples</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>We now know the basics to create applications in Simplix. To get a feeling for how it all works in practice, let&#8217;s have a look at various examples.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>To try out any example (or write your own application), please follow the instructions in  <a href="#development_environment">Development Environment</a></p>
+</div>
+<div class="paragraph">
+<p>All examples in this chapter have been tested on Windows with the implementation we&#8217;ll describe in the next chapter. At the time of writing no tests have been done on Linux.</p>
+</div>
+<div class="paragraph">
+<p>You can download the examples <a href="http://practical-programming.org/simplix/downloads/examples/simplix_examples.zip">here</a>.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_hello_world">Hello World</h3>
+<div class="paragraph">
+<p>To write a simple 'Hello world' application, open a terminal in the directory of your choice, and type:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>sim create_app hello_app</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This command creates file <code>hello_app/src/start.sim</code>. Open this file with your preferred editor and modify it so that it looks like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>function start
+    out.write_line ( "Hello world" )
+.</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Explanations: <code>out.write_line</code> denotes function <code>write_line</code> that is defined in service <code>out</code>. Service <code>out</code> is part of Simplix&#8217;s standard library and contains functions to work with the OS&#8217;s standard output device. <code>"Hello world"</code> is the string that is passed as input to function <code>write_line</code>.</p>
+</div>
+<div class="paragraph">
+<p>To run the application, go to directory <code>hello_app</code> (the application&#8217;s root directory) and type:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>sim run</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Output in your terminal:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Hello world</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here is a print-screen of the terminal session on Windows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>C:\tests\simplix&gt;sim create_app hello_app
+C:\tests\simplix&gt;cd hello_app
+C:\tests\simplix\hello_app&gt;sim run
+Hello world</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you prefer a GUI version of the program, you can change the code to:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>function start
+    GUI_dialogs.info ( "Hello world" )
+.</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Running this code displays:</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/hello_world.png" alt="hello world"></span></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="count_lines_of_code">Count Lines of Code</h3>
+<div class="paragraph">
+<p>After writing the Simplix compiler (more on that later), I wanted to know how many lines of code were needed. So I wrote a tool to do that - in Simplix.</p>
+</div>
+<div class="paragraph">
+<p>I started with the following function that counts the lines of code in a single file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>function count_non_empty_lines_in_file ( file ) -&gt; line_count  // <b class="conum">(1)</b>
+
+    var line_count = 0                                         // <b class="conum">(2)</b>
+    repeat for each line in file_reader.read_lines ( file )    // <b class="conum">(3)</b>
+        if string.matches_regex ( line, ".*[^ \\t].*" ) then   // <b class="conum">(4)</b>
+            line_count = number.add ( line_count 1 )           // <b class="conum">(5)</b>
+        .
+    .
+    return line_count                                          // <b class="conum">(6)</b>
+.</pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>The function takes a file path as input and returns the number of non empty lines in the file.</p>
+</li>
+<li>
+<p>Variable <code>line_count</code> is initialized to zero.</p>
+</li>
+<li>
+<p><code>file_reader.read_lines</code> (i.e. function <code>read_lines</code> in service <code>file_reader</code>, part of Simplix&#8217;s standard library) reads the lines in file <code>file</code>. We use a loop to iterate over them. Each line will be contained in variable <code>line</code>.</p>
+</li>
+<li>
+<p>We use function <code>string.matches_regex</code> (part of Simplix&#8217;s standard library) to check if the line is not empty.</p>
+</li>
+<li>
+<p>In case of a non-empty line we increment <code>line_count</code>. Note that we cannot write <code>line_count = line_count + 1</code>, because Simplix doesn&#8217;t support operators (at least not in it&#8217;s current version).</p>
+</li>
+<li>
+<p>At the end of the loop, <code>line_count</code> contains the number of non-empty lines, which is returned as the function&#8217;s result.</p>
+</li>
+</ol>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>It is clear that more sophisticated languages allow the above code to be written more succinctly (or more 'elegantly'). In Java, for example, we can use streams and write a one-liner:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>public static long countNonEmptyLinesInFile ( File file ) throws IOException {
+
+    return Files.lines ( file.toPath() )
+        .filter ( line -&gt; line.matches ( ".*[^ \\t].*" ) )
+        .count();
+}</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In Simplix- and Java-world, the programmer must learn and understand functions (methods) and instructions - the very basics of any imperative language.</p>
+</div>
+<div class="paragraph">
+<p>However, to write the above small Java method, the programmer must also learn and understand a good number of additional, non-trivial concepts: the Java exception mechanism, streams, lambda expressions, method modifiers, types, classes and objects.</p>
+</div>
+<div class="paragraph">
+<p>In Simplix, we favor simplicity. We minimize the set of concepts to be mastered by the programmer. Source code understandability is more important than the number of keystrokes necessary to write the code.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The above function can be called like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>const num_lines = count_non_empty_lines_in_file ( "C:/tests/simplix/name.txt" )</pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+You can use Windows or Unix path separators (<code>\</code> or <code>/</code>) in directory paths. They are implicitly converted to the correct character, depending on the OS you are using. If you prefer to use the Windows backslash, then you must escape it (as in C, C#, Java, etc.): <code>"C:\\tests\\simplix\\name.txt"</code>.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The next step is to write function <code>count_non_empty_lines_in_files_of_directory</code>, which takes a directory path as input, and returns the total number of lines found in all files contained in the directory tree.</p>
+</div>
+<div class="paragraph">
+<p>We can then call this function from the <code>start</code> function. The whole code looks like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>function start
+
+    const directory = "C:/tests/simplix/count_lines_of_code/src"
+    const line_count = count_non_empty_lines_in_files_of_directory ( directory )
+    out.write_line ( [ "Non-empty lines in files of directory " directory ": " line_count ] )
+.
+
+function count_non_empty_lines_in_files_of_directory ( directory ) -&gt; line_count
+
+    var line_count = 0
+    repeat for each file in directory.files_in_tree ( directory )
+        const lines_in_file = count_non_empty_lines_in_file ( file )
+        line_count = number.add ( line_count lines_in_file )
+    .
+    return line_count
+.
+
+function count_non_empty_lines_in_file ( file ) -&gt; line_count
+
+    var line_count = 0
+    repeat for each line in file_reader.read_lines ( file )
+        if string.matches_regex ( line, ".*[^ \\t].*" ) then
+            line_count = number.add ( line_count 1 )
+        .
+    .
+    return line_count
+.</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In the above example we use the application to count the lines of code in itself (<code>C:/tests/simplix/count_lines_of_code/src</code>). The result looks like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Non-empty lines in files of directory C:/tests/simplix/count_lines_of_code/src: 22</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>An obvious improvement of the tool would be to allow the directory (or a list of directories) to be specified as a command line argument. To make the tool even more versatile, the regex could also be provided as an optional command line argument. The default value would be the one shown in the code above. We&#8217;ll see later how to work with command line arguments.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_interacting_with_the_os">Interacting With the OS</h3>
+<div class="paragraph">
+<p>It must be easy to interact with the operating system (OS). We need the following essential operations:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>read from the standard input device and write to the standard output and error devices.</p>
+</li>
+<li>
+<p>read command line arguments provided when the Simplix application is started.</p>
+</li>
+<li>
+<p>set the exit code when the Simplix application exits (0 = success, other integer values represent an error code).</p>
+</li>
+<li>
+<p>call OS commands and scripts, and execute other applications installed on the system.</p>
+</li>
+<li>
+<p>get and set environment variables.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s look at some examples.</p>
+</div>
+<div class="sect3">
+<h4 id="_standard_inputoutputerror">Standard input/output/error</h4>
+<div class="paragraph">
+<p>The following example is inspired from the article <a href="http://www.ariel.com.au/a/teaching-programming.html">A Very Quick Comparison of Popular Languages for Teaching Computer Programming</a>, written by Patrick Jordan, a CS teacher. The article compares different programming languages by analyzing the code necessary to "read two numbers from the user, add them together and print out the result".</p>
+</div>
+<div class="paragraph">
+<p>The simplest Simplix version could be written like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>function start
+
+    const n1 = in.read_line()                 // <b class="conum">(1)</b>
+    const n2 = in.read_line()
+    out.write_line ( number.add ( n1 n2 ) )   // <b class="conum">(2)</b>
+.</pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>read a string from standard input</p>
+</li>
+<li>
+<p>write to standard output</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Let us make this program more user-friendly and provide an appropriate error message if the user doesn&#8217;t enter a valid number:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>function start
+
+    const n1 = read_number()
+    const n2 = read_number()
+    const result = number.add ( n1 n2 )
+    out.write_line ( [ n1 " + " n2 " = " result ] )
+.
+
+function read_number -&gt; number
+
+    out.write_line ( "Please enter a number and type &lt;Enter&gt;:" )
+    const result = in.read_line()
+    if not check.is_number ( result ) then                           // <b class="conum">(1)</b>
+        err.write_line ( [ "ERROR: " result " is not a number!" ] )  // <b class="conum">(2)</b>
+        process.exit_with_error ( 1 )                                // <b class="conum">(3)</b>
+    .
+    return result
+.</pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>check if the string entered is a valid number</p>
+</li>
+<li>
+<p>write an error to the standard error device and &#8230;&#8203;</p>
+</li>
+<li>
+<p>exit with an error code</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Here is a print-screen of a running session:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Please enter a number and type &lt;Enter&gt;:
+12
+Please enter a number and type &lt;Enter&gt;:
+5
+12 + 5 = 17</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The program also works with decimals and negative values:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Please enter a number and type &lt;Enter&gt;:
+123.45
+Please enter a number and type &lt;Enter&gt;:
+-0.45
+123.45 + -0.45 = 123.00</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>There is no limit for the magnitude of numbers in Simplix (apart from the physical memory limits of the running system):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Please enter a number and type &lt;Enter&gt;:
+34598349857923847592345928345872398745
+Please enter a number and type &lt;Enter&gt;:
+9837459834959234957923748.983274598345987
+34598349857923847592345928345872398745 + 9837459834959234957923748.983274598345987 = 34598349857933685052180887580830322493.983274598345987</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>(Note: I didn&#8217;t check the result!)</p>
+</div>
+<div class="paragraph">
+<p>In case of an invalid entry, an error is displayed:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Please enter a number and type &lt;Enter&gt;:
+foo.12
+ERROR: foo.12 is not a number!</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The standard OS devices can be redirected. Hence, we could create the following Windows <code>.bat</code> file in the application&#8217;s root directory:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>cd run
+
+echo 10&gt; input.txt
+echo 20&gt;&gt; input.txt
+java -jar OS_in_out_err.jar &lt; input.txt &gt; output.txt 2&gt; errors.txt</pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The two <code>echo</code> commands create:</p>
+<div class="listingblock">
+<div class="title">File input.txt</div>
+<div class="content">
+<pre>10
+20</pre>
+</div>
+</div>
+</li>
+<li>
+<p><code>java -jar OS_in_out_err.jar</code> is the Java way to execute a <code>.jar</code> file. Note that in our example the application has been created in directory <code>OS_in_out_err</code>, which is also the name of the <code>.jar</code> file.</p>
+</li>
+<li>
+<p><code>&lt; input.txt</code> instructs the process to read data from file <code>input.txt</code></p>
+</li>
+<li>
+<p><code>&gt; output.txt</code>: output is redirected to file <code>output.txt</code></p>
+</li>
+<li>
+<p><code>2&gt; errors.txt</code>: error is redirected to file <code>errors.txt</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Executing the above <code>.bat</code> file creates:</p>
+</div>
+<div class="listingblock">
+<div class="title">File output.txt</div>
+<div class="content">
+<pre>Please enter a number and type &lt;Enter&gt;:
+Please enter a number and type &lt;Enter&gt;:
+10 + 20 = 30</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>On a Unix/Linux system we could do the same with a shell script (not shown here).</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_command_line_arguments">Command Line Arguments</h4>
+<div class="paragraph">
+<p>Command line arguments can be retrieved with the expression <code>process.arguments()</code>. Here is an example to illustrate this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>function start
+    display_arguments()                                                      // <b class="conum">(1)</b>
+.
+
+function display_arguments
+
+    const arguments = process.arguments()                                    // <b class="conum">(2)</b>
+    out.write_line ( [ "There are " list.size(arguments) " arguments." ] )
+
+    out.write_lines ( arguments )                                            // <b class="conum">(3)</b>
+
+    // alternative using a loop
+    repeat for each argument in arguments                                    // <b class="conum">(4)</b>
+        out.write_line ( argument )
+    .
+.</pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>function <code>start</code> calls function <code>display_arguments</code></p>
+</li>
+<li>
+<p>command line arguments can be retrieved with <code>process.arguments()</code> (i.e. function <code>arguments</code> in service <code>process</code>)</p>
+</li>
+<li>
+<p>function <code>out.write_lines</code> writes a separate line for each element of the input argument</p>
+</li>
+<li>
+<p>we can also iterate over the arguments and write them out one by one</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Executing this application with no command line arguments produces this output:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>There are 0 arguments.</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If we execute the application with the following <code>.bat</code> file located in the application&#8217;s root directory:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>@echo off
+cd run
+java -jar OS_CL_arguments.jar arg1 "C:\Program Files\Test" "" 123</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>... then this will be the output:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>There are 4 arguments.
+arg1
+C:\Program Files\Test
+
+123
+arg1
+C:\Program Files\Test
+
+123</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_process_exit_code">Process Exit Code</h4>
+<div class="paragraph">
+<p>The common way to exit a process in Unix and Windows is to return with an integer value that signals success or failure.</p>
+</div>
+<div class="paragraph">
+<p>Returning zero means success.</p>
+</div>
+<div class="paragraph">
+<p>Any other value represents an integer error code. Different values can be used to denote different kinds of errors.</p>
+</div>
+<div class="paragraph">
+<p>Here is a function that asks a yes/no question to the user and then exits with success or failure, depending on the user&#8217;s answer:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>function start
+
+    const ok = GUI_dialogs.ask_yes_no ( "Is everything ok?" )
+
+    if ok then
+        process.exit_with_success()
+    else
+        process.exit_with_error ( 2 )
+    .
+.</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The exit code can be tested from the code that calls the Simplix application. Here is an example of a Windows <code>.bat</code> file (located in the application root directory) that calls the above function and then checks the exit code:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>@echo off
+
+cd run
+
+java -jar OS_exit_code.jar
+set EXIT_CODE=%ERRORLEVEL%
+if %EXIT_CODE% EQU 0 goto success
+if %EXIT_CODE% NEQ 0 goto failure
+
+:success
+echo Success
+goto end
+
+:failure
+echo Failure code %EXIT_CODE%
+goto end
+
+:end</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Executing the above OS script displays a GUI dialog:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/question_everything_ok.png" alt="Simplix question GUI">
+</div>
+</div>
+<div class="paragraph">
+<p>If the user clicks 'Yes' then the application returns with exit code 0, and the OS script echoes:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Success</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If the user clicks 'No', then the error code 2 is returned to the OS and the OS script echoes:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Failure code 2</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_calling_external_programs">Calling External Programs</h4>
+<div class="paragraph">
+<p>We can call external programs in two ways:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>just start the program and immediately continue execution</p>
+</li>
+<li>
+<p>run the program, wait until execution is finished, and retrieve its exit code</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Here is an example of opening an OS text editor (Windows Notepad in this case) to edit a file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>function start
+
+    OS_command.start_and_continue ( [
+        "notepad.exe"
+        "C:/tests/Simplix/config.txt" ] )
+.</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To write the list of files in the current working directory to the standard output device we can use Windows' <code>dir</code> command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>OS_command.run_and_wait ( [ "cmd" "/c" "dir" ] )</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We can also execute the task in parallel, without waiting for it to finish. And store the result in file <code>dir.txt</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>OS_command.start_and_contine ( [ "cmd" "/c" "dir" "&gt;" "dir.txt" ] )</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We can execute OS script files (e.g. <code>.bat</code> files on Windows or <code>.sh</code> files on Unix/Linux) by simply providing the path to the script file. If we use <code>run_and_wait</code> (instead of <code>start_and_continue</code>) we can also check the script&#8217;s exit code. Example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>function start
+
+    const result = OS_command.run_and_wait ( "C:/tests/Simplix/my_backup.bat" )
+    if number.equals ( result 0 ) then
+        out.write_line ( "Backup ok." )
+    else
+        const message = [ "ERROR: Backup could not be done (error " result ")." ]
+        err.write_line ( message )
+        GUI_dialogs.error ( message )
+    .
+.</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To test if the code works we can create a mock file <code>C:\tests\Simplix\my_backup.bat</code> with the following content:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>@echo off
+echo Doing backup
+exit 3</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The outcome looks like this:</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/backup_error.png" alt="backup error"></span></p>
+</div>
+<div class="paragraph">
+<p>We can also provide parameters to the script file, simply by adding them after the file path, e.g.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>OS_command.run_and_wait ( [ "file.bat", "p1", "p 2" "" 123 ] )</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_interacting_with_java">Interacting With Java</h3>
+<div class="paragraph">
+<p>Besides interacting with the OS, being able to use and interact with Java software is one of the most useful and powerful features of Simplix, because now a huge set of battle-proven software is ready to be used in any Simplix application.</p>
+</div>
+<div class="paragraph">
+<p>Suppose we need a web server. We can use Tomcat, one of the best web servers available. Let&#8217;s quickly see how to do this, without digging into details.</p>
+</div>
+<div class="paragraph">
+<p>After create a new application, create directory <code>lib</code> in your application&#8217;s root directory. This directory can contain any number of <code>.jar</code> files to be used in the Simplix application.</p>
+</div>
+<div class="paragraph">
+<p>The <code>.jar</code> files for Tomcat are available <a href="https://tomcat.apache.org/download-80.cgi">here</a>. Download the 'embedded' version, and extract all files into directory <code>lib</code> (or a sub-directory of <code>lib</code>). Here is the list of files:</p>
+</div>
+<div class="paragraph thumb">
+<p><span class="image"><img src="images/Tomcat_files.png" alt="Tomcat files"></span></p>
+</div>
+<div class="paragraph">
+<p>Now modify file <code>src/start.sim</code> so that it looks like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>java_header
+    import org.apache.catalina.startup.Tomcat;
+end java_header
+
+function start
+    start_Tomcat_web_server ( "C:/tests/Simplix/web_app", 8080 )
+    process.wait_until_killed()
+.
+
+function start_Tomcat_web_server ( web_app_root_directory, port_number )
+
+    java
+        Tomcat tomcat = new Tomcat();
+
+        int port = Conversions.listToInt ( port_number );
+        tomcat.setPort ( port );
+
+        try {
+            String context = "";
+            String rootDir = Conversions.listToString ( web_app_root_directory );
+            tomcat.addWebapp ( context, rootDir );
+            tomcat.start();
+
+        } catch ( Exception e ) {
+            e.printStackTrace();
+        }
+    end java
+.</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Directory <code>C:\tests\Simplix\web_app</code> contains the web application files. Create at least one <code>index.html</code> file with the following content:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>&lt;!doctype html&gt;
+
+&lt;html lang="en"&gt;
+   &lt;head&gt;
+      &lt;meta charset="utf-8"&gt;
+      &lt;title&gt;Test&lt;/title&gt;
+   &lt;/head&gt;
+   &lt;body&gt;
+      &lt;p&gt;Hello from Tomcat&lt;/p&gt;
+   &lt;/body&gt;
+&lt;/html&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Run the Simplix application, open a browser, and go to <a href="http://localhost:8080/" class="bare">http://localhost:8080/</a>:</p>
+</div>
+<div class="paragraph thumb">
+<p><span class="image"><img src="images/hello_from_Tomcat.png" alt="hello from Tomcat"></span></p>
+</div>
+<div class="paragraph">
+<p>You can now use the full power of Tomcat (Java Server Pages, servlets, etc.) to create whatever you want.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_miscellaneous">Miscellaneous</h3>
+<div class="paragraph">
+<p>Let&#8217;s close this chapter with some code snippets showing other useful features.</p>
+</div>
+<div class="sect3">
+<h4 id="_text_file_operations">Text File Operations</h4>
+<div class="paragraph">
+<p>Service <code>file_writer</code> provides simple functions to write or append data to text files. And <code>file_reader</code> can be used to read the whole content into a single string or to read the lines into a list of strings.</p>
+</div>
+<div class="paragraph">
+<p>Example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>function demo
+
+    const file = "test.txt"
+    const data = [ "line_1", "line_2" ]
+    file_writer.write_lines ( file, data )
+    file_writer.append_line ( file, "line_3" )
+
+    const lines = file_reader.read_lines ( file )
+    repeat for each line in lines
+        out.write_line ( line )
+    .
+.</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Output:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>line_1
+line_2
+line_3</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_data_persistence">Data Persistence</h4>
+<div class="paragraph">
+<p>Any data structure can be stored to a text file with function <code>storage.store_to_file</code>. Later, the data can be restored with <code>storage.restore_from_file</code>.</p>
+</div>
+<div class="paragraph">
+<p>The following script demonstrates how configuration data (a map of key/value pairs) can be persisted into a file, and later be loaded.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>function storage_test
+
+    const config = [
+        [ "address"      "127.0.0.1" ]
+        [ "port"         "8080" ]
+        [ "default_page" "index.html" ]
+    ]
+
+    // store config to file config.txt
+    const file = "config.txt"
+    storage.store_to_file ( config, file )
+
+    // load config from config.txt
+    const restored_config = storage.restore_from_file ( file )
+
+    assert.is_equal ( config, restored_config )
+.</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="structures_example">Structures</h4>
+<div class="paragraph">
+<p>As we have seen already, every object in Simplix is just a tree of strings. There is no embedded support for structures (record types). However, we can make it easy and straightforward to work with data structures. For each structure, we can create a service with specific helper functions.</p>
+</div>
+<div class="paragraph">
+<p>Suppose we write a bookstore application. We want to represent a book as a simple structure composed of three fields: <code>ISBN</code>, <code>title</code>, and <code>author</code>. In this case it is useful to create a <code>book</code> service with specific functions to create a book, retrieve its fields by name, and create a nice string representation for a book:</p>
+</div>
+<div class="listingblock">
+<div class="title">file book.sim</div>
+<div class="content">
+<pre>// create a new book
+function create ( ISBN, title, author ) -&gt; book
+    return [ ISBN, title, author ]
+.
+
+// get a book's ISBN
+function ISBN ( book ) -&gt; ISBN
+    return list.get ( book, 1 ) // get the first element stored in book
+.
+
+// get a book's title
+function title ( book ) -&gt; title
+    return list.get ( book, 2 )
+.
+
+// get a book's author
+function author ( book ) -&gt; author
+    return list.get ( book, 3 )
+.
+
+function to_string ( book ) -&gt; string
+    return [ "Book "
+             title ( book )
+             " by "
+             author ( book ) ]
+.</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now we can write code like this:</p>
+</div>
+<div class="listingblock">
+<div class="title">file test_book.sim</div>
+<div class="content">
+<pre>function test
+    const Effective_Java = book.create ( "978-0134685991", "Effective Java", "Joshua Bloch" )
+    const ISBN = book.ISBN ( Effective_Java )
+    assert.is_equal ( ISBN, "978-0134685991" )
+    out.write_line ( book.to_string ( Effective_Java ) )
+.</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Output:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Book Effective Java by Joshua Bloch</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_data_inspection">Data inspection</h4>
+<div class="paragraph">
+<p>Simplix&#8217;s standard library provides some functions to visualize data and to convert data into different text formats, including HTML, XML and JSON. This can be useful for data visualization, data exchange with other applications, and for debugging purposes.</p>
+</div>
+<div class="paragraph">
+<p>Service <code>tree</code> provides functions to convert data to different string representations. Here is an example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>function demo
+    const data = [ "a" "b" [ "b1" "b2" [ "b21" ] ] "c" ]
+    out.write ( tree.to_string_tree ( data ) )
+.</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Output:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>a
+b
+    b1
+    b2
+        b21
+c</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Besides <code>to_string_tree</code>, the following conversion functions are available:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>to_string</code></p>
+</li>
+<li>
+<p><code>to_string_lines</code></p>
+</li>
+<li>
+<p><code>to_string_with_separator</code></p>
+</li>
+<li>
+<p><code>to_canonical_string</code></p>
+</li>
+<li>
+<p><code>to_HTML</code></p>
+</li>
+<li>
+<p><code>to_XML</code></p>
+</li>
+<li>
+<p><code>to_JSON</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Service <code>tree_GUI</code> provides functions to visualize data in a GUI. Each of the above mentioned <code>to_&#8230;&#8203;</code> function in service <code>tree</code> has a corresponding <code>show_as&#8230;&#8203;</code> function in service <code>tree_GUI</code>.</p>
+</div>
+<div class="paragraph">
+<p>For example, the following code:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>function demo
+    const data = [ "a" "b" [ "b1" "b2" [ "b21" ] ] "c" ]
+    tree_GUI.show_as_string_tree ( data )
+.</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>... opens the default text editor with the data displayed as a tree:</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/tree_GUI_demo_1.png" alt="tree GUI demo 1"></span></p>
+</div>
+<div class="paragraph">
+<p>Replacing <code>show_as_string_tree</code> with <code>show_as_HTML</code> produces HTML code and opens the default browser:</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/tree_GUI_demo_2.png" alt="tree GUI demo 2"></span></p>
+</div>
+<div class="paragraph">
+<p>We can also simply write <code>tree_GUI.show ( data )</code> to open a collapsable tree GUI in an OS window:</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/tree_GUI_demo_3.png" alt="tree GUI demo 3"></span></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_implementation">Implementation</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>After brainstorming basic ideas and scribbling down a few source code examples, I was quickly convinced it was worth it to spend some more time and create a <em>proof-of-concept</em> implementation of Simplix. I wanted to play with it, see what works, what doesn&#8217;t work, and ascertain its limitations.</p>
+</div>
+<div class="paragraph">
+<p>You can have a look at the source code <a href="https://github.com/simplix/simplix_dev">here</a>, and <a href="http://practical-programming.org/simplix/downloads/install_Simplix.html">download</a> the executable.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Please keep in mind that this is a <em>proof-of-concept (pre-alpha) version</em> with the following shortcomings:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The development environment has not yet been tested thoroughly. Things might not always work as they are supposed to work. However, I tested all examples shown in this article, and they should all work correctly.</p>
+</li>
+<li>
+<p>The standard library is very limited. You will probably miss a lot of functionality if you write a new application, and you have to use embedded Java for missing functions. For example, there are currently no date/time functions. The standard library&#8217;s API documentation is available <a href="http://practical-programming.org/simplix/docs/core_javadoc/index.html">here</a> as <em>Java</em> documentation.</p>
+</li>
+<li>
+<p>The compiler error messages are cryptic sometimes. The reason is that semantic errors (e.g. a function is defined twice) are currently not checked in the Simplix compiler. They are only checked in the Java compiler. Hence, the error message is related to the generated Java code (and not to the Simplix code).</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>If you encounter any problems then please send an email to the address displayed on Simplix&#8217;s <a href="http://practical-programming.org/simplix">web site</a>. Any kind of constructive feedback is of course also very welcome.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The following image illustrates the process of building a Simplix application from source code:</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/simplix_compilation.png" alt="simplix compilation"></span></p>
+</div>
+<div class="paragraph">
+<p>The Simplix compiler is itself composed of typical compilers components:</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/simplix_compiler.png" alt="simplix compiler"></span></p>
+</div>
+<div class="paragraph">
+<p>The Simplix compiler/builder is written in <a href="http://practical-programming.org">PPL</a> (another programming language under construction (a much more ambitious project)).</p>
+</div>
+<div class="paragraph">
+<p>To give you an example of how the compiler&#8217;s code looks like, the following is an excerpt of a parser function that parses a constant declaration, such as <code>const foo = "bar"</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>function accept_constant_instruction -&gt; SPL_constant_instruction_AST or null
+
+    if not accept_keyword ( SPL_keywords.const ) then
+        return null
+    .
+
+    const tokens = require_current_instruction_tokens
+    const id = require_id on_null: return null
+    require_symbol ( SPL_symbols.equal_sign )
+    const expression = require_expression on_null: return null
+
+    return SPL_constant_instruction_AST.create ( tokens, id, expression )
+.</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The compiler has been designed with the ability to target not only Java code. Instead of generating Java code, it could generate C code or code in another language. In that case the standard library would of course also need to be rewritten.</p>
+</div>
+<div class="paragraph">
+<p>To give you an idea of the size of code, here are some numbers at the time of writing (April 2018). The lines of code have been counted with the Simplix tool <a href="#count_lines_of_code">count_lines_of_code</a>, explained in a previous chapter.</p>
+</div>
+<table class="tableblock frame-all grid-all fit-content">
+<colgroup>
+<col>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Component</th>
+<th class="tableblock halign-right valign-top">Lines of code</th>
+<th class="tableblock halign-right valign-top">Size of <code>.jar</code> file</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Compiler/builder</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">3901</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">319 kB</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Standard library</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">1259</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">36 kB</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+If there is enough interest, I am more than willing to invest more time to eliminate Simplix&#8217;s current shortcomings, and produce a 1.0 version. Please help to spread the word and contact me if you want to participate in any way, or if you know somebody who is interested. Thank you.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="limitations">Limitations</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>So far we have seen that Simplix is a simple programming language and useful for writing small command line tools and mini-applications.</p>
+</div>
+<div class="paragraph">
+<p>Nevertheless, let us recall that the current proof-of-concept implementation has three major weaknesses:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The standard library is very limited. Missing functionality must be coded by embedding Java code in the Simplix application.</p>
+</li>
+<li>
+<p>Some compiler error messages are too cryptic, especially for inexperienced Java programmers.</p>
+</li>
+<li>
+<p>As the implementation is a pre-alpha version, it is still buggy and not yet ready to write production code.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>However, these three weaknesses could easily be eliminated by spending a bit more time to polish the compiler and make the standard library more complete. The hard part is done already. What remains to be done is easy, but requires a bit more time.</p>
+</div>
+<div class="paragraph">
+<p>There is, however, an important question that still needs an answer:</p>
+</div>
+<div class="paragraph">
+<p><em>Could Simplix be used to develop <strong>big</strong> software applications (i.e. thousands of source code lines written by a team of programmers)?</em></p>
+</div>
+<div class="paragraph">
+<p>Theoretically: yes.</p>
+</div>
+<div class="paragraph">
+<p>Practically: no!</p>
+</div>
+<div class="paragraph">
+<p>In Simplix there are no limits as to the number of source code files, number of functions, size of strings etc., apart from those imposed by the OS and the Java Virtual Machine (JVM). Parts of the application can be written in other JVM languages (Java, Scala, Clojure, etc.), and Java&#8217;s native interface even allows us to call C code if needed. The vast set of existing Java libraries can be used in a Simplix application, as demonstrated in previous chapters.</p>
+</div>
+<div class="paragraph">
+<p>Hence, we <em>could</em> use Simplix to create big software applications.</p>
+</div>
+<div class="paragraph">
+<p>However, there are a number of serious limitations we have to be aware of. Simplix is inappropriate, and other programming languages much better suited to develop big, mission-critical enterprise applications.</p>
+</div>
+<div class="paragraph">
+<p>Let us just look at <em>a few</em> main reasons, without attempting to be comprehensive.</p>
+</div>
+<div class="paragraph">
+<p>Again, let&#8217;s start talking about data, before talking about code.</p>
+</div>
+<div class="sect2">
+<h3 id="_data_2">Data</h3>
+<div class="paragraph">
+<p>While Simplix&#8217;s type system is incredibly simple and very easy to learn and understand, it also has a number of serious drawbacks:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>It lacks expressiveness</p>
+<div class="paragraph">
+<p>Every object in Simplix is potentially a tree of strings. Because there is just one type, there is no specific type information associated with an object reference (input/output argument, constant, variable). Hence, the kind of data stored in an object reference is only expressed by its name, not by its type.</p>
+</div>
+<div class="paragraph">
+<p>For example, look at the following function definition in Simplix:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>function make_coffee ( size, milk, sugar ) -&gt; cup_of_coffee</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now let&#8217;s look at a similar method definition in a C#/Java-like language:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>public CupOfCoffee makeCoffee ( CupOfCoffeeSize size, boolean milk, boolean sugar )</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>There are a number of questions that arise only in the Simplix version. For example:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>What are valid values for input argument <code>size</code>? Is it the amount of coffee in centi-liters? In the C#/Java version, we can lookup type <code>CupOfCoffeeSize</code> and see (for example) that it is an enumerated type with values <code>small</code>, <code>medium</code>, and <code>large</code>.</p>
+</li>
+<li>
+<p>What are valid values for input arguments <code>milk</code> and <code>sugar</code>? Is it an amount or a boolean?</p>
+</li>
+<li>
+<p>What is the data structure of the result returned? In Simplix, <code>cup_of_coffee</code> is just a tree of strings. The best we can do is to provide a service for structure <code>cup_of_coffee</code>, as demonstrated in a <a href="#structures_example">previous example</a>. In the C#/Java version, the data structure can be looked up in the API of <code>CupOfCoffee</code>.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>It is error-prone</p>
+<div class="paragraph">
+<p>As there is just one data type, the compiler cannot detect type incompatibility errors. For example, calling the above function <code>make_coffee</code> with the title of a movie assigned to input argument <code>milk</code> doesn&#8217;t produce a compiler error. The best we can do is to check the input argument in the function&#8217;s body (e.g. <code>assert.is_yes_no ( milk )</code>), so that at least a runtime error will be generated as soon as possible.</p>
+</div>
+</li>
+<li>
+<p>In some cases, Simplix&#8217;s data structures are space- and time-inefficient</p>
+<div class="paragraph">
+<p>Here are two striking examples:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Space-inefficiency:</p>
+<div class="paragraph">
+<p>Storing a boolean value as a list that contains the string "yes" or "no" is a shameful waste of memory.</p>
+</div>
+</li>
+<li>
+<p>Time-inefficiency:</p>
+<div class="paragraph">
+<p>Adding two numbers (e.g. <code>number.add ( 2 3  )</code>) involves three cumbersome steps:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The two numbers, stored as strings, must be parsed and converted into internal number representations</p>
+</li>
+<li>
+<p>The numbers are added</p>
+</li>
+<li>
+<p>The result is converted into a string that is inserted into a new list.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>There is no specific support for the 'absence of a value'</p>
+<div class="paragraph">
+<p>The 'absence of a value' can be represented with an empty list in Simplix. But there is no distinction between nullable and non-nullable types. There is no language support to ensure that the 'absence of a value' is handled explicitly. Other languages provide compile-time null-safety, or the <code>Maybe</code>/<code>Optional</code> pattern to achieve this. In Simplix it is the programmer&#8217;s responsibility to handle the 'absence of a value' correctly.</p>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>If we write small applications not involving big data then the above limitations are often irrelevant. However, their relevance increases with the size of code, data, and the number of programmers working on the code base. Simplistic type systems are a bad fit for developing big applications. A well designed, powerful type system helps a lot and can dramatically improve productivity, maintainability, and reliability in a software development project.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_code_2">Code</h3>
+<div class="paragraph">
+<p>To keep it simple, Simplix just provides the basic building blocks to write code: functions and instructions.</p>
+</div>
+<div class="paragraph">
+<p>Hence, there are a number of features that experienced programmers will miss. Here are some examples:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>There are no operators (and hence no operator precedence rules). Instead of writing <code>a = b + c</code>, we have to write <code>a = number.add ( b c )</code></p>
+</li>
+<li>
+<p>There are no higher-order functions. Functions in Simplix cannot receive functions as input values or return a function as result. Hence, there are no anonymous functions (lambdas) and no closures. This limits the ability to write generic, reusable code.</p>
+</li>
+<li>
+<p>There are no object oriented concepts like interfaces, classes, type inheritance and polymorphism.</p>
+</li>
+<li>
+<p>There are no advanced functional programming concepts supported, such as pattern matching, currying, etc.</p>
+</li>
+<li>
+<p>There is no built-in support for concurrent/parallel processing. These features require the use of Java libraries (standard or 3th party) or OS processes.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_development_environment">Development environment</h3>
+<div class="paragraph">
+<p>It goes without saying that the current proof-of-concept version of Simplix lacks a lot of features found in professional development environments: IDE support, unit testing, build tools, etc. etc.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_summary">Summary</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Here is a brief summary of all concepts:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Simplix has one data type: a tree of strings.</p>
+<div class="paragraph">
+<p>Example: [ "a" "b" [ 1 2 ] "c" ]</p>
+</div>
+</li>
+<li>
+<p>An application is composed of functions that are grouped in services (<code>.sim</code> files).</p>
+</li>
+<li>
+<p>There are 5 kinds of instructions:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>constant/variable assignment</p>
+</li>
+<li>
+<p>function call</p>
+</li>
+<li>
+<p><code>if</code> instruction</p>
+</li>
+<li>
+<p><code>while</code> and <code>for each</code> loops</p>
+</li>
+<li>
+<p><code>return</code> instruction</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Example showing all features:</p>
+<div class="listingblock">
+<div class="title">file src/start.sim</div>
+<div class="content">
+<pre>function start
+    const count = count_numbers_in_list ( [ "a" 1 2 "b" ] )
+    assert.is_equal ( count 2 )
+.
+
+function count_numbers_in_list ( list ) -&gt; result
+
+    var result = 0
+    repeat for each element in list
+        if check.is_number ( element ) then
+            result = number.add ( result 1 )
+        .
+    .
+    return result
+.</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Simplix is delivered with a standard library. Additional Java libraries (.jar) can be used in a Simplix application.</p>
+</li>
+<li>
+<p>To create and run an application:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Use <code>sim create_app {app_name}</code> to create a new application.</p>
+</li>
+<li>
+<p>Source code files (<code>.sim</code> files) are stored in directory <code>src</code>.</p>
+</li>
+<li>
+<p>Use <code>sim run</code> in the root directory to run an application.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>There is also a more complete <a href="http://practical-programming.org/simplix/docs/manuals/abridged_user_manual/abridged_user_manual.html">Abridged User Manual</a> available.</p>
+</div>
+<div class="paragraph">
+<p>Simplix is free, open source, portable, compiled.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_final_thoughts">Final Thoughts</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>What is the most important lesson to take away from this experiment?</p>
+</div>
+<div class="paragraph">
+<p>If somebody asked me this question I would promptly reply: It is fascinating and enlightening to see the level of simplicity that can be achieved without making the language useless.</p>
+</div>
+<div class="paragraph">
+<p>An <a href="http://practical-programming.org/simplix/docs/manuals/abridged_user_manual/abridged_user_manual.html">Abridged User Manual</a> can easily be printed on two DIN A4 pages. It&#8217;s probably fair to say that an experienced programmer can learn Simplix in a couple of hours or less. People who can use a computer but never wrote a line of code will possibly be able to write or adapt small tools after a few days of learning Simplix. Yet, despite its simplicity, the language is still practical and useful for small, real-life applications, as seen in the above examples.</p>
+</div>
+<div class="paragraph">
+<p>However, this utmost simplicity comes at a price. As we saw in chapter <a href="#limitations">Limitations</a>, Simplix is not well suited for developing <em>big</em> software applications. This doesn&#8217;t come as a surprise. Simplix is simplistic (oversimple) for many use cases. It violates the "but not simpler" part of Einstein&#8217;s famous quote:</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Everything should be as simple as possible, but not simpler!</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>Yet another compelling question pops up if we look at Einstein’s excellent advice: Isn&#8217;t it true that most popular programming languages violate the <em>first</em> part of the quote?</p>
+</div>
+<div class="paragraph">
+<p>Fact is: There is a lot of <strong><em>unneeded</em></strong> complexity that is omnipresent and appears in numerous variations. Here are just a few examples: Undefined behavior in C and C++ ("anything at all can happen"); oddities like truthy and falsy values; implicit type coercion; the notorious difficulty for many people (including myself) to understand monads; the increasing complexity and constant change of the Javascript ecosystem; the frustrating lack of null-safety in the majority of popular programming languages.</p>
+</div>
+<div class="paragraph">
+<p>Bjarne Stroustrup was right when he said: "&#8230;&#8203; you could design a language about a tenth of the size of C++ &#8230;&#8203; providing roughly what C++ does."</p>
+</div>
+<div class="paragraph">
+<p>We want simplicity, don&#8217;t we? A simple (but not too simple) development environment not only makes coding more enjoyable. It also makes us more productive. It makes our software more reliable. We can deliver better software faster to the users. At the end, everyone wins.</p>
+</div>
+<div class="paragraph">
+<p>Edsger W. Dijkstra put it like this:</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Simplicity is prerequisite for reliability.</p>
+</div>
+<div class="paragraph">
+<p>Simplicity and clarity decide between success and failure.</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>Our mission is clear: We must simplify the craft of creating software.</p>
+</div>
+<div class="paragraph">
+<p>The next challenge in our quest for simplicity is to find an answer to the same question we asked at the beginning of this article. But this time, we have to ask it in the context of <strong>BIG</strong> software applications:</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>What is the simplest thing that could possibly work?</p>
+</div>
+</blockquote>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_links">Links</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Simplix <a href="http://practical-programming.org/simplix/downloads/install_Simplix.html">download</a></p>
+</li>
+<li>
+<p>Documentation:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="http://practical-programming.org/simplix/docs/manuals/abridged_user_manual/abridged_user_manual.html">Abridged User Manual</a></p>
+</li>
+<li>
+<p><a href="http://practical-programming.org/simplix/downloads/examples/simplix_examples.zip">Examples</a> shown in this article</p>
+</li>
+<li>
+<p><a href="http://practical-programming.org/simplix/docs/core_javadoc/index.html">Standard library API</a> (Java version)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Source code:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://github.com/simplix/simplix_core">Standard library</a> (written in Java)</p>
+</li>
+<li>
+<p><a href="https://github.com/simplix/simplix_dev">Development environment</a> (compiler, builder, etc., written in PPL)</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>
