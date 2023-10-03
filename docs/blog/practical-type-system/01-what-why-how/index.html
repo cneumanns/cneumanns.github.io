@@ -19,15 +19,15 @@
                         <h2 class="pml-toc-title">Table of Contents</h2>
                         <div class="pml-toc-tree" id="TOCTree">
                             <ul>
-                                <li class="pml-toc-leaf-node"><a href="#ch__1">Introduction</a></li>
+                                <li class="pml-toc-leaf-node"><a href="#introduction">Introduction</a></li>
                                 <li class="pml-toc-branch-node">
                                     <details>
-                                        <summary><a href="#ch__2">What's a Practical Type System?</a></summary>
+                                        <summary><a href="#what">What's a Practical Type System?</a></summary>
                                         <ul>
-                                            <li class="pml-toc-leaf-node"><a href="#ch__3">Type</a></li>
-                                            <li class="pml-toc-leaf-node"><a href="#ch__4">Cardinality</a></li>
-                                            <li class="pml-toc-leaf-node"><a href="#ch__5">Type System</a></li>
-                                            <li class="pml-toc-leaf-node"><a href="#ch__6">Practical Type System</a></li>
+                                            <li class="pml-toc-leaf-node"><a href="#type_def">Type</a></li>
+                                            <li class="pml-toc-leaf-node"><a href="#cardinality_def">Cardinality</a></li>
+                                            <li class="pml-toc-leaf-node"><a href="#type_system_def">Type System</a></li>
+                                            <li class="pml-toc-leaf-node"><a href="#practical_type_system_def">Practical Type System</a></li>
                                         </ul>
                                     </details>
                                 </li>
@@ -49,8 +49,8 @@
                                         <summary><a href="#how_does_it_work">How Does it Work?</a></summary>
                                         <ul>
                                             <li class="pml-toc-leaf-node"><a href="#ch__15">Example</a></li>
-                                            <li class="pml-toc-leaf-node"><a href="#ch__16">Fail Fast!</a></li>
-                                            <li class="pml-toc-leaf-node"><a href="#PTS_coding_rule">The PTS Coding Rule</a></li>
+                                            <li class="pml-toc-leaf-node"><a href="#fail_fast">Fail Fast!</a></li>
+                                            <li class="pml-toc-leaf-node"><a href="#coding_rule">The PTS Coding Rule</a></li>
                                         </ul>
                                     </details>
                                 </li>
@@ -116,7 +116,7 @@
                         <img class="pml-image" src="images/PTS_Integer_Color_Shape.svg" width="600">
                     </figure>
                     <div class="pml-caption" style="text-align:center;">Three types</div>
-                    <section id="ch__1" class="pml-chapter">
+                    <section id="introduction" class="pml-chapter">
                         <h2 class="pml-chapter-title">Introduction</h2>
                         <p class="pml-paragraph">A <i class="pml-italic">type system</i> is a fundamental and essential part of every programming language, and profoundly determines how code is written and maintained.</p>
                         <p class="pml-paragraph">A well designed type system empowers developers to write code that is succinct, easy to understand, reliable, maintainable, and safe.</p>
@@ -147,23 +147,23 @@
                         <p class="pml-paragraph">The target audience of this series of articles consists of software developers interested in writing reliable, maintainable, and safe code, as well as programming language engineers. </p>
 
                     </section>
-                    <section id="ch__2" class="pml-chapter">
+                    <section id="what" class="pml-chapter">
                         <h2 class="pml-chapter-title">What's a <i class="pml-italic">Practical</i> Type System?</h2>
                         <p class="pml-paragraph">We'll have a look at many source examples demonstrating how a type system helps to write better code. But first we need to define the following terminology, which is used throughout the article: <i class="pml-italic">type</i>, <i class="pml-italic">cardinality</i>, <i class="pml-italic">type system</i>, and <i class="pml-italic">practical type system</i>.</p>
-                        <section id="ch__3" class="pml-chapter">
+                        <section id="type_def" class="pml-chapter">
                             <h3 class="pml-chapter-title">Type</h3>
                             <p class="pml-paragraph">A <i class="pml-italic">type</i> is a name for a set of values.</p>
                             <p class="pml-paragraph">For example, many programming languages support a type named <code class="pml-inline-code">boolean</code>. This type can hold two values: <code class="pml-inline-code">true</code>, and <code class="pml-inline-code">false</code>. Using the mathematical notation for sets, the <i class="pml-italic">set of elements</i> is: <code class="pml-inline-code">{true, false}</code>.</p>
 
                         </section>
-                        <section id="ch__4" class="pml-chapter">
+                        <section id="cardinality_def" class="pml-chapter">
                             <h3 class="pml-chapter-title">Cardinality</h3>
                             <p class="pml-paragraph">The <a class="pml-link" href="https://en.wikipedia.org/wiki/Cardinality"><i class="pml-italic">cardinality</i></a> of a type is the number of distinct values in its set of values.</p>
                             <p class="pml-paragraph">For example, type <code class="pml-inline-code">boolean</code> has a cardinality of 2, because there are two values: <code class="pml-inline-code">true</code> and <code class="pml-inline-code">false</code>.</p>
                             <p class="pml-paragraph">As we'll see soon, <i class="pml-italic">cardinality</i> plays a pivotal role in the design of a practical type system. </p>
 
                         </section>
-                        <section id="ch__5" class="pml-chapter">
+                        <section id="type_system_def" class="pml-chapter">
                             <h3 class="pml-chapter-title">Type System</h3>
                             <p class="pml-paragraph">The role of a <i class="pml-italic">type system</i> is to:</p>
                             <ul class="pml-list">
@@ -184,7 +184,7 @@
                             </ul>
 
                         </section>
-                        <section id="ch__6" class="pml-chapter">
+                        <section id="practical_type_system_def" class="pml-chapter">
                             <h3 class="pml-chapter-title"><i class="pml-italic">Practical</i> Type System</h3>
                             <p class="pml-paragraph">Here is my definition of a <i class="pml-italic">practical</i> type system:</p>
                             <div id="pts_design_rule" class="pml-division" style="margin-left:5em; margin-right:5em;background-color:#F0FFF0;padding:1em;border-radius:1em;">
@@ -224,8 +224,8 @@
                                 </div>
 
                             </div>
-                            <p class="pml-paragraph">Henceforth, I will refer to the above definition as the <a class="pml-link" href="https://www.TODO.com#pts_design_rule"><i class="pml-italic">PTS Design Rule</i></a>, where <i class="pml-italic">PTS</i> is an acronym for <i class="pml-italic">Practical Type System</i>.</p>
-                            <p class="pml-paragraph">At first sight, the above definition might seem overly simplistic, because I am not mentioning important features such as static typing, semantic types, null-safety, error handling, immutability by default, etc. However, as we'll see later, the above definition is indeed all we need. In the following articles, we will simply apply the <a class="pml-link" href="https://www.TODO.com#pts_design_rule"><i class="pml-italic">PTS Design Rule</i></a> again and again, in order to discover the whole set of features and rules needed in a practical type system.</p>
+                            <p class="pml-paragraph">Henceforth, I will refer to the above definition as the <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/01-what-why-how/index.html#pts_design_rule"><i class="pml-italic">PTS Design Rule</i></a>, where <i class="pml-italic">PTS</i> is an acronym for <i class="pml-italic">Practical Type System</i>.</p>
+                            <p class="pml-paragraph">At first sight, the above definition might seem overly simplistic, because I am not mentioning important features such as static typing, semantic types, null-safety, error handling, immutability by default, etc. However, as we'll see later, the above definition is indeed all we need. In the following articles, we will simply apply the <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/01-what-why-how/index.html#pts_design_rule"><i class="pml-italic">PTS Design Rule</i></a> again and again, in order to discover the whole set of features and rules needed in a practical type system.</p>
                             <p class="pml-paragraph">The flow chart below illustrates the process:</p>
                             <figure style="text-align: left">
                                 <img class="pml-image" src="images/PTS_process.png">
@@ -543,7 +543,7 @@
                     <section id="how_does_it_work" class="pml-chapter">
                         <h2 class="pml-chapter-title">How Does it Work?</h2>
                         <p class="pml-paragraph">To get the gist of PTS, let us first look at a real-life example to clearly demonstrate what we want to achieve.</p>
-                        <p class="pml-paragraph">Then we'll have a closer look at the essential <i class="pml-italic">Fail Fast!</i> condition of the <a class="pml-link" href="https://www.TODO.com#pts_design_rule"><i class="pml-italic">PTS Design Rule</i></a>.</p>
+                        <p class="pml-paragraph">Then we'll have a closer look at the essential <i class="pml-italic">Fail Fast!</i> condition of the <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/01-what-why-how/index.html#pts_design_rule"><i class="pml-italic">PTS Design Rule</i></a>.</p>
                         <section id="ch__15" class="pml-chapter">
                             <h3 class="pml-chapter-title">Example</h3>
                             <p class="pml-paragraph">Suppose we want to assign quality levels to products. There are 5 levels:<br /> <code class="pml-inline-code">worst</code>, <code class="pml-inline-code">bad</code>, <code class="pml-inline-code">medium</code>, <code class="pml-inline-code">good</code>, and <code class="pml-inline-code">best</code>.</p>
@@ -554,7 +554,7 @@
 }
 </code></pre>
                             <p class="pml-paragraph">We can immediately agree that it's easy to define type <code class="pml-inline-code">Quality</code>. We are able to express what we want with a minimum of succinct code.</p>
-                            <p class="pml-paragraph">Hence the first condition (the <i class="pml-italic">Easy!</i> condition) of the <a class="pml-link" href="https://www.TODO.com#pts_design_rule"><i class="pml-italic">PTS Design Rule</i></a> is fulfilled: It is <i class="pml-italic">easy</i> to define, understand, and maintain our type.</p>
+                            <p class="pml-paragraph">Hence the first condition (the <i class="pml-italic">Easy!</i> condition) of the <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/01-what-why-how/index.html#pts_design_rule"><i class="pml-italic">PTS Design Rule</i></a> is fulfilled: It is <i class="pml-italic">easy</i> to define, understand, and maintain our type.</p>
                             <p class="pml-paragraph">Now let's verify the second condition (the <i class="pml-italic">Fail Fast!</i> condition): &quot;Invalid values, type incompatibilities, and other type-related errors are detected immediately at compile-time, whenever possible.&quot;</p>
                             <p class="pml-paragraph">A valid value can be assigned to a variable of type <code class="pml-inline-code">Quality</code> as follows:</p>
                             <pre class="pml-code"><code>        Quality productQuality = Quality.GOOD;
@@ -579,12 +579,12 @@ location: class Quality</pre>
                             <p class="pml-paragraph">Again, the compiler immediately reports an error, because we are trying to assign a value of type <code class="pml-inline-code">String</code> to a variable of type <code class="pml-inline-code">Quality</code>.</p>
                             <p class="pml-paragraph">The <i class="pml-italic">Fail Fast!</i> condition is clearly fulfilled too.</p>
                             <p class="pml-paragraph">We can conclude that type <code class="pml-inline-code">Quality</code> is a good example to demonstrate how a practical type system should work. It's easy to define, understand, and maintain the type (condition 1), and the compiler catches all type errors (condition 2). Moreover, if we use an intelligent IDE, all bugs are immediately reported at <i class="pml-italic">edit</i>-time, and the IDE displays helpful messages to fix the bug. Awesome!</p>
-                            <p class="pml-paragraph">Type <code class="pml-inline-code">Quality</code> is fully compliant with the <a class="pml-link" href="https://www.TODO.com#pts_design_rule"><i class="pml-italic">PTS Design Rule</i></a>.</p>
+                            <p class="pml-paragraph">Type <code class="pml-inline-code">Quality</code> is fully compliant with the <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/01-what-why-how/index.html#pts_design_rule"><i class="pml-italic">PTS Design Rule</i></a>.</p>
                             <p class="pml-paragraph">This is exactly what we want to achieve for <i class="pml-italic">all</i> types.</p>
                             <p class="pml-paragraph">However, achieving this level of excellence for <i class="pml-italic">all</i> types is challenging, as we'll see in the subsequent articles of this series.</p>
 
                         </section>
-                        <section id="ch__16" class="pml-chapter">
+                        <section id="fail_fast" class="pml-chapter">
                             <h3 class="pml-chapter-title">Fail Fast!</h3>
                             <div class="pml-admonition">
                                 <div class="pml-admonition-label">
@@ -592,10 +592,10 @@ location: class Quality</pre>
 
                                 </div>
                                 <div class="pml-admonition-content">
-                                    <p class="pml-paragraph">Readers familiar with the important <i class="pml-italic">Fail Fast!</i> principle can <a class="pml-xref" href="#PTS_coding_rule">skip</a> this section.</p>
+                                    <p class="pml-paragraph">Readers familiar with the important <i class="pml-italic">Fail Fast!</i> principle can <a class="pml-xref" href="#coding_rule">skip</a> this section.</p>
                                 </div>
                             </div>
-                            <p class="pml-paragraph">While the <b class="pml-bold"><i class="pml-italic">Easy!</i></b> condition (the first condition of the <a class="pml-link" href="https://www.TODO.com#pts_design_rule"><i class="pml-italic">PTS Design Rule</i></a>) is easy to grasp, let's look at a simple example illustrating the full meaning of the <b class="pml-bold"><i class="pml-italic">Fail Fast!</i></b> condition (the second condition of the <a class="pml-link" href="https://www.TODO.com#pts_design_rule"><i class="pml-italic">PTS Design Rule</i></a>):</p>
+                            <p class="pml-paragraph">While the <b class="pml-bold"><i class="pml-italic">Easy!</i></b> condition (the first condition of the <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/01-what-why-how/index.html#pts_design_rule"><i class="pml-italic">PTS Design Rule</i></a>) is easy to grasp, let's look at a simple example illustrating the full meaning of the <b class="pml-bold"><i class="pml-italic">Fail Fast!</i></b> condition (the second condition of the <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/01-what-why-how/index.html#pts_design_rule"><i class="pml-italic">PTS Design Rule</i></a>):</p>
                             <blockquote class="pml-quote">
                                 <div class="pml-quote-text-block">
                                     <div class="pml-quote-text-prefix"></div>
@@ -671,14 +671,14 @@ location: class Quality</pre>
                             </div>
 
                         </section>
-                        <section id="PTS_coding_rule" class="pml-chapter">
+                        <section id="coding_rule" class="pml-chapter">
                             <h3 class="pml-chapter-title">The <i class="pml-italic">PTS Coding Rule</i></h3>
                             <p class="pml-paragraph">Pretty much all programming languages <i class="pml-italic">allow</i> us to write reliable code.</p>
                             <p class="pml-paragraph">But practice shows that writing reliable code is challenging in many programming languages, and often requires boilerplate code (as will be shown in subsequent articles). It largely depends on the type system.</p>
                             <p class="pml-paragraph">As seen already, an essential role of a practical type system is to <i class="pml-italic">facilitate</i> (as far as possible) the process of writing and maintaining reliable code.</p>
                             <p class="pml-paragraph">However, a type system cannot <i class="pml-italic">force</i> us to write reliable code in all cases. It can only do so to a certain extent.</p>
                             <p class="pml-paragraph">For example, a type system cannot force us to create a dedicated type <code class="pml-inline-code">ISBN</code> that only allows valid values according to the ISBN standard. If we decide to use a simple string for ISBNs, thereby allowing nonsense values like <code class="pml-inline-code">@#$</code>, malicious values like <code class="pml-inline-code">&lt;script&gt;alert(&quot;Hi! You've been hacked&quot;)&lt;/script&gt;</code>, and other wicked values, then there is nothing the type system can do about it.</p>
-                            <p class="pml-paragraph">Maximum reliability can only be achieved if the programmer actually <i class="pml-italic">uses</i> the available type system mechanisms to define safe types. Therefore, besides the <a class="pml-link" href="https://www.TODO.com#pts_design_rule"><i class="pml-italic">PTS Design Rule</i></a>, we also need the following simple <i class="pml-italic">PTS Coding Rule</i>:</p>
+                            <p class="pml-paragraph">Maximum reliability can only be achieved if the programmer actually <i class="pml-italic">uses</i> the available type system mechanisms to define safe types. Therefore, besides the <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/01-what-why-how/index.html#pts_design_rule"><i class="pml-italic">PTS Design Rule</i></a>, we also need the following simple <i class="pml-italic">PTS Coding Rule</i>:</p>
                             <div id="pts_coding_rule" class="pml-division" style="margin-left:5em; margin-right:5em;background-color:#F0FFF0;padding:1em;border-radius:1em;">
                                 <p class="pml-paragraph">All data types in a software project should have the lowest possible cardinality.</p>
                                 <div class="pml-division" style="text-align:right;">
@@ -713,7 +713,7 @@ var book_ISBN ISBN = message
                                     <p class="pml-paragraph">An article published at a later date will explain how safe types like <code class="pml-inline-code">ISBN</code> are created and handled in PTS.</p>
                                 </div>
                             </div>
-                            <p class="pml-paragraph">We can conclude that we need both, the <i class="pml-italic"><a class="pml-link" href="https://www.TODO.com#pts_design_rule"><i class="pml-italic">PTS Design Rule</i></a></i> and the <i class="pml-italic">PTS Coding Rule</i>. They go hand in hand. The <i class="pml-italic">Design</i> rule is meant to be applied by language designers/implementors, while the <i class="pml-italic">Coding</i> rule is for software developers.</p>
+                            <p class="pml-paragraph">We can conclude that we need both, the <i class="pml-italic"><a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/01-what-why-how/index.html#pts_design_rule"><i class="pml-italic">PTS Design Rule</i></a></i> and the <i class="pml-italic">PTS Coding Rule</i>. They go hand in hand. The <i class="pml-italic">Design</i> rule is meant to be applied by language designers/implementors, while the <i class="pml-italic">Coding</i> rule is for software developers.</p>
 
                         </section>
 
@@ -726,7 +726,7 @@ var book_ISBN ISBN = message
                     <section id="ch__19" class="pml-chapter">
                         <h2 class="pml-chapter-title">What's Next?</h2>
                         <p class="pml-paragraph">In the next article we'll have a look at PTS goals and non-goals, the history of PTS, core types, and 'features' that should <i class="pml-italic">not</i> be supported in a practical type system.</p>
-                        <p class="pml-paragraph">Then, we'll apply the <a class="pml-link" href="https://www.TODO.com#pts_design_rule"><i class="pml-italic">PTS Design Rule</i></a> again and again, in order to discover all PTS features and rules needed to help writing reliable, maintainable, and safe code in less time.</p>
+                        <p class="pml-paragraph">Then, we'll apply the <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/01-what-why-how/index.html#pts_design_rule"><i class="pml-italic">PTS Design Rule</i></a> again and again, in order to discover all PTS features and rules needed to help writing reliable, maintainable, and safe code in less time.</p>
                         <p class="pml-paragraph">We'll also have a look at many source code examples to illustrate how source code could look like in a language that implements PTS. </p>
 
                     </section>
