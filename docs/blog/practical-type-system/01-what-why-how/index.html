@@ -370,7 +370,7 @@
                             <div class="pml-header">A Note on 'Silly Code'</div>
                             <p class="pml-paragraph">One could argue that the above sample code is just a funny toy example, only useful to entertain readers, and that nobody would write <i class="pml-italic">silly</i> code like this. However, fact is that silly mistakes <i class="pml-italic">do</i> happen in the real world. Practice shows that they happen all the time. Their probability increases significantly with the size and complexity of a project, and can be influenced by various factors such as domain complexity, expertise of the managers and developers, the amount of code to be written and maintained, the tools and processes used to detect and resolve bugs, and more.</p>
                             <p class="pml-paragraph">For the sake of exercise, just <i class="pml-italic">imagine</i> a bug like the above one in a complex software application that manages the manufacturing process of drugs. Producing a drug with the wrong ingredients isn't funny anymore. The bug can cause fatalities that could have been prevented by using a programming language with a better type system suited to write reliable code.</p>
-                            <p class="pml-paragraph">Here is my personal experience: Although I've been coding for a few decades now (and still love it), I'm still doing silly mistakes. I do less mistakes than when I started to write code, but I'm still unable to write bug-free code. Some of my coding mistakes were not just 'silly' — they were 'very silly'. I need a type system that protects me (as far as possible) from shooting myself in my foot.</p>
+                            <p class="pml-paragraph">Here is my personal experience: Although I've been coding for a few decades now (and still love it), I'm still making silly mistakes. I make less mistakes than when I started to write code, but I'm still unable to write bug-free code. Some of my coding mistakes were not just 'silly' — they were 'very silly'. I need a type system that protects me (as far as possible) from shooting myself in my foot.</p>
                             <p class="pml-paragraph">I guess I'm not alone.</p>
                             <p class="pml-paragraph">Maybe there are some geniuses out there who are capable of writing code that is entirely free of bugs, but I'm not a member of such an elite group. I suspect that such individuals would be very rare outliers.</p>
                             <p class="pml-paragraph">Consider, for example, a highly qualified software developer working on a space mission project. He or she would never force a 64-bit floating point number into a 16-bit signed integer value, without checking first if the value isn't to high, because that would be silly, right? Right, but that's exactly what caused the Ariane 5 rocket to explode in 1996. This is just one example in the Wikipedia entry <a class="pml-link" href="https://en.wikipedia.org/wiki/List_of_software_bugs"><i class="pml-italic">List of software bugs</i></a> with extremely serious consequences.</p>
@@ -520,7 +520,7 @@
                             </div>
                             <p class="pml-paragraph">Recognizing that defining data is the first step, we need to ask:</p>
                             <p class="pml-paragraph">What do we use to define data?</p>
-                            <p class="pml-paragraph">The answer depends of course on the software architecture and development environment, but more often than not we use the <i class="pml-italic">type system</i> of the programming language to define the data structures and their relationships. A well suited type system is therefore an essential instrument that allows us to define the data in a succinct, expressive, precise, reliable, and maintainable way. Hence, the type system often plays an important role at the <i class="pml-italic">start</i> of a new software project, especially if many different data structures are involved.</p>
+                            <p class="pml-paragraph">The answer depends, of course, on the software architecture and development environment, but more often than not, we use the <i class="pml-italic">type system</i> of the programming language to define the data structures and their relationships. A well suited type system is therefore an essential instrument that allows us to define the data in a succinct, expressive, precise, reliable, and maintainable way. Hence, the type system often plays an important role at the <i class="pml-italic">start</i> of a new software project, especially if many different data structures are involved.</p>
                             <p class="pml-paragraph">What's more, well designed and maintainable data plays an important role <i class="pml-italic">during</i> the software development and maintenance cycle. For example, new software developers joining the team at a later stage will be able to understand the internal workings of the application faster if they can look at type definitions that are succinct, expressive, and precise, so that they can quickly understand which values are allowed.</p>
                             <p class="pml-paragraph">Fred Brooks puts it this way (text within brackets added for clarification):</p>
                             <blockquote class="pml-quote">
@@ -546,7 +546,7 @@
                         <p class="pml-paragraph">Then we'll have a closer look at the essential <i class="pml-italic">Fail Fast!</i> condition of the <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/01-what-why-how/index.html#pts_design_rule"><i class="pml-italic">PTS Design Rule</i></a>.</p>
                         <section id="ch__15" class="pml-chapter">
                             <h3 class="pml-chapter-title">Example</h3>
-                            <p class="pml-paragraph">Suppose we want to assign quality levels to products. There are 5 levels:<br /> <code class="pml-inline-code">worst</code>, <code class="pml-inline-code">bad</code>, <code class="pml-inline-code">medium</code>, <code class="pml-inline-code">good</code>, and <code class="pml-inline-code">best</code>.</p>
+                            <p class="pml-paragraph">Suppose we want to assign quality levels to products. There are five levels:<br /> <code class="pml-inline-code">worst</code>, <code class="pml-inline-code">bad</code>, <code class="pml-inline-code">medium</code>, <code class="pml-inline-code">good</code>, and <code class="pml-inline-code">best</code>.</p>
                             <p class="pml-paragraph">In Java, we can define an <code class="pml-inline-code">enum</code> type <code class="pml-inline-code">Quality</code> as follows:</p>
                             <pre class="pml-code"><code>public enum Quality {
     WORST, BAD, MEDIUM, GOOD, BEST  // Note: In idiomatic Java,
@@ -624,12 +624,12 @@ location: class Quality</pre>
                             </div>
                             <p class="pml-paragraph">An interesting question arises: What will happen?</p>
                             <p class="pml-paragraph">Answer: <b class="pml-bold">It depends on the type system</b>!</p>
-                            <p class="pml-paragraph">In a primitive type system, IO errors can be ignored. If the source code doesn't explicitly test for an IO error then no error is generated, neither at compile-time, nor at run-time. File <code class="pml-inline-code">temp/secret/passwords.txt</code> will simply not be deleted, and the application will happily continue execution, as if exposing passwords in a plain text file is not a big deal, and everything is OK.</p>
-                            <p class="pml-paragraph">In many programming languages this bug would lead to a &quot;file not found&quot; run-time error later when the application tries to access the file. However, &quot;later&quot; in this context might mean &quot;much later.&quot; Hence, if the application crashes or is interrupted before executing the instruction that is supposed to delete the file, then the file will not be deleted and no error will be generated.</p>
+                            <p class="pml-paragraph">In a primitive type system, IO errors can be ignored. If the source code doesn't explicitly test for an IO error, then no error is generated, neither at compile-time, nor at run-time. File <code class="pml-inline-code">temp/secret/passwords.txt</code> will simply not be deleted, and the application will happily continue execution, as if exposing passwords in a plain text file is not a big deal, and everything is OK.</p>
+                            <p class="pml-paragraph">In many programming languages, this bug would lead to a &quot;file not found&quot; run-time error later when the application tries to access the file. However, &quot;later&quot; in this context might mean &quot;much later.&quot; Hence, if the application crashes or is interrupted before executing the instruction that is supposed to delete the file, then the file will not be deleted and no error will be generated.</p>
                             <p class="pml-paragraph">In a better type system, an &quot;invalid file path&quot; <i class="pml-italic">run</i>-time error occurs as soon as the assignment <code class="pml-inline-code">fileToDelete = &quot;temp/secret:passwords.txt&quot;</code> is executed (i.e. <i class="pml-italic">before</i> accessing the file on the OS).</p>
                             <p class="pml-paragraph">An ideal type system reports the bug at <i class="pml-italic">compile</i>-time.</p>
                             <p class="pml-paragraph">Even better, if a modern IDE is used to write the code, the bug is reported at <i class="pml-italic">edit</i>-time, and can immediately be fixed within seconds!</p>
-                            <p class="pml-paragraph">In a perfect world this immediate feedback would exist for <i class="pml-italic">all</i> bugs.</p>
+                            <p class="pml-paragraph">In a perfect world, this immediate feedback would exist for <i class="pml-italic">all</i> bugs.</p>
                             <p class="pml-paragraph">But we are not there yet. The best we can achieve with a practical type system is to auto-detect as many bugs as technically possible.</p>
                             <p class="pml-paragraph">Here are the times at which a bug can be detected, listed from best to worst:</p>
                             <ul class="pml-list" style="list-style-type:decimal">
@@ -655,10 +655,10 @@ location: class Quality</pre>
                                 </li>
 
                             </ul>
-                            <p class="pml-paragraph">By now it should be clear that the goal of PTS is to catch as many bugs as possible at compile-time (or edit-time if an intelligent IDE is used).</p>
+                            <p class="pml-paragraph">By now, it should be clear that the goal of PTS is to catch as many bugs as possible at compile-time (or edit-time if an intelligent IDE is used).</p>
                             <p class="pml-paragraph">If a bug cannot be detected at compile-time, it should be detected as soon as possible at run-time.</p>
                             <p class="pml-paragraph">Let's now suppose that the buggy file path (<code class="pml-inline-code">temp/secret:passwords.txt</code>) is not hard-coded, but read from a config file. In that case, the compiler can't report a bug. The error in the config file should therefore be caught immediately when the path is read from the file (and not just later when the file is deleted). A subsequent article will show data input validation can be facilitated by the type system.</p>
-                            <p class="pml-paragraph">Note that bugs detected at <i class="pml-italic">run</i>-time can be caught by unit tests. This helps to eliminate bugs before the application goes into production. Therefore good support for unit tests (beyond the scope of this article) is an essential feature in any programming language, even if the language has an advanced type system. A good type system doesn't make unit tests dispensable. The slogan &quot;If it compiles it works!&quot; is just wishful dreaming. No compiler in the world can detect bugs like using the wrong formula to compute the area of a circle. We need unit tests to detect bugs like that.</p>
+                            <p class="pml-paragraph">Note that bugs detected at <i class="pml-italic">run</i>-time can be caught by unit tests. This helps to eliminate bugs before the application goes into production. Therefore, good support for unit tests (beyond the scope of this article) is an essential feature in any programming language, even if the language has an advanced type system. A good type system doesn't make unit tests dispensable. The slogan &quot;If it compiles, it works!&quot; is just wishful dreaming. No compiler in the world can detect bugs like using the wrong formula to compute the area of a circle. We need unit tests to detect bugs like that.</p>
                             <div class="pml-admonition">
                                 <div class="pml-admonition-label">
                                     <p class="pml-paragraph">Note</p>
@@ -689,20 +689,20 @@ location: class Quality</pre>
                             <p class="pml-paragraph">The above rule is especially important for library/framework developers, since these packages are typically used by lots of other developers who use the API like a black box. Users of standard libraries and third-party libraries should be protected against accidental misuses as far as possible.</p>
                             <p class="pml-paragraph">Whole classes of bugs can easily be prevented if a package uses safe types with the lowest possible cardinality.</p>
                             <p class="pml-paragraph">Besides disallowing invalid values, dedicated safe types also provide protection against semantic type errors.</p>
-                            <p class="pml-paragraph">Consider this code:</p>
-                            <pre class="pml-code"><code>var s1 string = &quot;Hello&quot;  // declare 's1' of type 'string', with value &quot;Hello&quot;
-var s2 string = s1       // declare 's2' of type 'string', with value stored in 's1'</code></pre>
+                            <p class="pml-paragraph">Consider the following Java code:</p>
+                            <pre class="pml-code"><code>String s1 = &quot;Hello&quot;  // declare 's1' of type 'String', with value &quot;Hello&quot;
+String s2 = s1       // declare 's2' of type 'String', with same value as 's1'</code></pre>
                             <p class="pml-paragraph">Is there a bug in this code?</p>
                             <p class="pml-paragraph">Well, there is no obvious bug, and the code is surely correct for the compiler.</p>
                             <p class="pml-paragraph">Now let's just change the variable names:</p>
-                            <pre class="pml-code"><code>var message string = &quot;Hello&quot;
-var book_ISBN string = message</code></pre>
+                            <pre class="pml-code"><code>String message = &quot;Hello&quot;
+String book_ISBN = message</code></pre>
                             <p class="pml-paragraph">The code is now <i class="pml-italic">obviously</i> wrong (<code class="pml-inline-code">&quot;Hello&quot;</code> is an invalid ISBN), but the bug can't be detected by the compiler.</p>
-                            <p class="pml-paragraph">However, the bug can easily be prevented by using a dedicated and safe type <code class="pml-inline-code">ISBN</code>, instead of a <code class="pml-inline-code">string</code>:</p>
-                            <pre class="pml-code"><code>var message string = &quot;Hello&quot;
-var book_ISBN ISBN = message
-              ^^^^</code></pre>
-                            <p class="pml-paragraph">Much better! The compiler can immediately report the bug, because type <code class="pml-inline-code">string</code> is not compatible to type <code class="pml-inline-code">ISBN</code>. But even if the types <i class="pml-italic">were</i> compatible, the compiler would still generate an error, because &quot;Hello&quot; is an invalid ISBN.</p>
+                            <p class="pml-paragraph">However, the bug can easily be prevented by using a dedicated and safe type <code class="pml-inline-code">ISBN</code>, instead of a <code class="pml-inline-code">String</code>:</p>
+                            <pre class="pml-code"><code>String message = &quot;Hello&quot;
+ISBN book_ISBN = message
+^^^^</code></pre>
+                            <p class="pml-paragraph">Much better! The compiler can immediately report the bug, because type <code class="pml-inline-code">String</code> is not compatible to type <code class="pml-inline-code">ISBN</code>. Moreover, the compiler of an advanced type system would generate an error for an assignment like <code class="pml-inline-code">book_ISBN = &quot;Hello&quot;</code>, because &quot;Hello&quot; is an invalid ISBN.</p>
                             <div class="pml-admonition">
                                 <div class="pml-admonition-label">
                                     <p class="pml-paragraph">Note</p>
@@ -724,7 +724,7 @@ var book_ISBN ISBN = message
                     </section>
                     <section id="ch__19" class="pml-chapter">
                         <h2 class="pml-chapter-title">What's Next?</h2>
-                        <p class="pml-paragraph">In the next article we'll have a look at PTS goals and non-goals, the history of PTS, core types, and 'features' that should <i class="pml-italic">not</i> be supported in a practical type system.</p>
+                        <p class="pml-paragraph">In the next article, we'll have a look at PTS goals and non-goals, the history of PTS, core types, and 'features' that should <i class="pml-italic">not</i> be supported in a practical type system.</p>
                         <p class="pml-paragraph">Then, we'll apply the <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/01-what-why-how/index.html#pts_design_rule"><i class="pml-italic">PTS Design Rule</i></a> again and again, in order to discover all PTS features and rules needed to help writing reliable, maintainable, and safe code in less time.</p>
                         <p class="pml-paragraph">We'll also have a look at many source code examples to illustrate how source code could look like in a language that implements PTS. </p>
 
