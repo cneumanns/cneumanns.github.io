@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="generator" content="PML 4.0.0 (www.pml-lang.dev)" />
+        <title>Summary of the Practical Type System (PTS) Article Series</title>
+        <link rel="stylesheet" href="css/pml-default.css">
+        <link rel="stylesheet" href="css/pml-print-default.css" media="print">
+
+    </head>
+    <body>
+
+        <div class="pml-doc-wrapper">
+            <header class="pml-doc-header">
+            </header>
+            <div class="pml-doc-content">
+                <aside class="pml-doc-left">
+                    <nav class="pml-toc">
+                        <h2 class="pml-toc-title">Table of Contents</h2>
+                        <div class="pml-toc-tree" id="TOCTree">
+                            <ul>
+                                <li class="pml-toc-leaf-node"><a href="#ch__1">Introduction</a></li>
+                                <li class="pml-toc-leaf-node"><a href="#ch__2">1. What, Why, and How?</a></li>
+                            </ul>
+                        </div>
+                    </nav>
+                </aside>
+                <article id="doc__" class="pml-doc-text">
+                    <h1 class="pml-doc-title">Summary of the <i class="pml-italic">Practical Type System </i>(<i class="pml-italic">PTS</i>) Article Series</h1>
+                    <table class="pml-table">
+                        <tr class="pml-table-body-row">
+                            <td class="pml-table-body-cell">
+                                <p class="pml-paragraph"><b class="pml-bold">First Published</b></p>
+
+                            </td>
+                            <td class="pml-table-body-cell">
+                                <p class="pml-paragraph">2023-10-17</p>
+
+                            </td>
+
+                        </tr>
+                        <tr class="pml-table-body-row">
+                            <td class="pml-table-body-cell">
+                                <p class="pml-paragraph"><b class="pml-bold">Author</b></p>
+
+                            </td>
+                            <td class="pml-table-body-cell">
+                                <p class="pml-paragraph">Christian Neumanns</p>
+
+                            </td>
+
+                        </tr>
+                        <tr class="pml-table-body-row">
+                            <td class="pml-table-body-cell">
+                                <p class="pml-paragraph"><b class="pml-bold">Editor</b></p>
+
+                            </td>
+                            <td class="pml-table-body-cell">
+                                <p class="pml-paragraph">Tristano Ajmone</p>
+
+                            </td>
+
+                        </tr>
+                        <tr class="pml-table-body-row">
+                            <td class="pml-table-body-cell">
+                                <p class="pml-paragraph"><b class="pml-bold">License</b></p>
+
+                            </td>
+                            <td class="pml-table-body-cell">
+                                <p class="pml-paragraph"><a class="pml-link" href="https://creativecommons.org/licenses/by-nd/4.0/">CC BY-ND 4.0</a></p>
+
+                            </td>
+
+                        </tr>
+
+                    </table>
+                    <p class="pml-paragraph"><br /></p>
+                    <figure style="text-align: center">
+                        <img class="pml-image" src="images/PTS_Integer_Color_Shape.svg" width="600">
+                    </figure>
+                    <div class="pml-caption" style="text-align:center;">Three types</div>
+                    <section id="ch__1" class="pml-chapter">
+                        <h2 class="pml-chapter-title">Introduction</h2>
+                        <p class="pml-paragraph">This article provides a brief summary of the article series <i class="pml-italic">How to Design a Practical Type System to Maximize Reliability, Maintainability, and Productivity in Software Development Projects</i>.</p>
+                        <div class="pml-admonition">
+                            <div class="pml-admonition-label">
+                                <p class="pml-paragraph">Note</p>
+
+                            </div>
+                            <div class="pml-admonition-content">
+                                <p class="pml-paragraph">This article is updated each time a new article in the series has been published.</p>
+                            </div>
+                        </div>
+
+                    </section>
+                    <section id="ch__2" class="pml-chapter">
+                        <h2 class="pml-chapter-title">1. <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/01-what-why-how/index.html">What, Why, and How?</a></h2>
+                        <p class="pml-paragraph"><a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/01-what-why-how/index.html#why">Benefits</a> of a practical type system:</p>
+                        <ul class="pml-list">
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">increased expressiveness</p>
+
+                            </li>
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">more reliable and maintainable code</p>
+
+                            </li>
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">better support in IDEs and tools</p>
+
+                            </li>
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">more generic, reusable code</p>
+
+                            </li>
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">more efficient code</p>
+
+                            </li>
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">support for the <i class="pml-italic">First data, then code!</i> approach</p>
+
+                            </li>
+
+                        </ul>
+                        <p class="pml-paragraph">The <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/01-what-why-how/index.html#cardinality_def">cardinality</a> of a type is the number of distinct values in its set of values. For example, type <code class="pml-inline-code">boolean</code> has a cardinality of 2, because there are two values: <code class="pml-inline-code">true</code> and <code class="pml-inline-code">false</code>.</p>
+                        <p class="pml-paragraph">To achieve its goal (reliability, maintainability and productivity), PTS is founded on two important rules:</p>
+                        <ul class="pml-list" style="list-style-type:decimal">
+                            <li class="pml-list-element">
+                                <div class="pml-header">The <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/01-what-why-how/index.html#practical_type_system_def">PTS Design Rule</a></div>
+                                <p class="pml-paragraph">A <b class="pml-bold">practical type system</b> must fulfill two conditions:</p>
+                                <ul class="pml-list" style="list-style-type:decimal">
+                                    <li class="pml-list-element">
+                                        <p class="pml-paragraph">The <b class="pml-bold">Easy!</b> Condition</p>
+                                        <p class="pml-paragraph">It is easy to:</p>
+                                        <ul class="pml-list">
+                                            <li class="pml-list-element">
+                                                <p class="pml-paragraph">Define new types with the lowest possible cardinality.</p>
+
+                                            </li>
+                                            <li class="pml-list-element">
+                                                <p class="pml-paragraph">Quickly understand types by looking at their definition in the source code.</p>
+
+                                            </li>
+                                            <li class="pml-list-element">
+                                                <p class="pml-paragraph">Change and maintain types.</p>
+
+                                            </li>
+
+                                        </ul>
+
+                                    </li>
+                                    <li class="pml-list-element">
+                                        <p class="pml-paragraph">The <b class="pml-bold">Fail Fast!</b> Condition</p>
+                                        <p class="pml-paragraph">Invalid values, type incompatibilities, and other type-related errors are detected immediately at compile-time, whenever possible.</p>
+                                        <p class="pml-paragraph">If it's impossible to detect an error at <i class="pml-italic">compile</i>-time then it must be detected as soon as possible at <i class="pml-italic">run</i>-time.</p>
+
+                                    </li>
+
+                                </ul>
+
+                            </li>
+                            <li class="pml-list-element">
+                                <div class="pml-header">The <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/01-what-why-how/index.html#coding_rule">PTS Coding Rule</a></div>
+                                <p class="pml-paragraph">All data types in a software project should have the lowest possible cardinality.</p>
+
+                            </li>
+
+                        </ul>
+
+                    </section>
+                </article>
+                <aside class="pml-doc-right">
+                </aside>
+            </div>
+            <footer class="pml-doc-footer">
+            </footer>
+        </div>
+
+    </body>
+</html>
