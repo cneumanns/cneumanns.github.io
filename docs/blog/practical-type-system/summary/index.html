@@ -21,6 +21,8 @@
                             <ul>
                                 <li class="pml-toc-leaf-node"><a href="#ch__1">Introduction</a></li>
                                 <li class="pml-toc-leaf-node"><a href="#ch__2">1. What, Why, and How?</a></li>
+                                <li class="pml-toc-leaf-node"><a href="#ch__3">2. Essence and Foundation</a></li>
+                                <li class="pml-toc-leaf-node"><a href="#ch__4">3. Record Types</a></li>
                             </ul>
                         </div>
                     </nav>
@@ -88,7 +90,7 @@
 
                             </div>
                             <div class="pml-admonition-content">
-                                <p class="pml-paragraph">This article is updated each time a new article in the series has been published.</p>
+                                <p class="pml-paragraph">This summary is updated each time a new article in the series has been published.</p>
                             </div>
                         </div>
 
@@ -167,6 +169,137 @@
                             </li>
 
                         </ul>
+
+                    </section>
+                    <section id="ch__3" class="pml-chapter">
+                        <h2 class="pml-chapter-title">2. <a class="pml-link" href="https://www.TODO.com">Essence and Foundation</a></h2>
+                        <figure style="text-align: center">
+                            <img class="pml-image" src="images/PTS_essence_foundation.svg" width="600">
+                        </figure>
+                        <div class="pml-caption" style="text-align:center;">PTS foundation</div>
+                        <p class="pml-paragraph">PTS is designed to maximize reliability, maintainability, and productivity in software development projects.</p>
+                        <p class="pml-paragraph">The <i class="pml-italic">Practical Type System </i>(<i class="pml-italic">PTS</i>) originated in the <a class="pml-link" href="https://www.ppl-lang.dev/"><i class="pml-italic">Practical Programming Language</i> (<i class="pml-italic">PPL</i>)</a> — a compiled, high-level, object-oriented and functional programming language designed for application programming. PPL is a currently unmaintained prototype.</p>
+                        <p class="pml-paragraph">PTS is a set of ideas which I tried out and improved in PPL (a proof-of-concept implementation of PTS), found to be useful, and now want to share and discuss.</p>
+                        <p class="pml-paragraph">We need to differentiate between the PTS <i class="pml-italic">paradigm</i> (set of features) and the PTS <i class="pml-italic">syntax</i>. Both emerged from PPL, but they do not depend on each other. A programming language implementing the PTS paradigm could use a syntax which is very different from the PTS syntax shown in this article series.</p>
+                        <p class="pml-paragraph">PTS is not bound to a certain programming language paradigm. Most PTS concepts could be used, for example, in a procedural or functional programming language, or in a language designed for systems programming.</p>
+                        <p class="pml-paragraph">To maximize reliability and maintainability, a selected set of features is deliberately <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/essence-foundation/index.html#no_go_features">not supported</a> in PTS. Some examples are:</p>
+                        <ul class="pml-list">
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">Undefined state and undefined behavior</p>
+
+                            </li>
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">Silently ignored errors</p>
+
+                            </li>
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">Unsafe null-handling</p>
+
+                            </li>
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">Mutable data by default</p>
+
+                            </li>
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">Shared mutable data</p>
+
+                            </li>
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">Implicit type conversions/coercions</p>
+
+                            </li>
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">Truthy, falsy, and nullish values</p>
+
+                            </li>
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">Dynamic typing</p>
+
+                            </li>
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">Buffer overflows</p>
+
+                            </li>
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">Pointer arithmetics.</p>
+
+                            </li>
+
+                        </ul>
+                        <p class="pml-paragraph">PTS provides the following <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/essence-foundation/index.html#core_types">core types</a>:</p>
+                        <ul class="pml-list">
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">Scalar types: <code class="pml-inline-code">character</code>, <code class="pml-inline-code">string</code>, <code class="pml-inline-code">number</code> (<code class="pml-inline-code">integer</code> and <code class="pml-inline-code">decimal</code>), and <code class="pml-inline-code">boolean</code></p>
+
+                            </li>
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">Collections: <code class="pml-inline-code">list</code>, <code class="pml-inline-code">set</code>, and <code class="pml-inline-code">map</code></p>
+
+                            </li>
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph"><code class="pml-inline-code">null</code> (not <code class="pml-inline-code">Maybe</code> / <code class="pml-inline-code">Option</code>)</p>
+
+                            </li>
+
+                        </ul>
+
+                    </section>
+                    <section id="ch__4" class="pml-chapter">
+                        <h2 class="pml-chapter-title">3. <a class="pml-link" href="https://www.TODO.com">Record Types</a></h2>
+                        <figure style="text-align: center">
+                            <img class="pml-image" src="images/PTS_record.svg" width="500">
+                        </figure>
+                        <div class="pml-caption" style="text-align:center;">Record example</div>
+                        <p class="pml-paragraph">PTS provides the following key features for <i class="pml-italic">record types</i> (aka <i class="pml-italic">structure</i>, <i class="pml-italic">struct</i>, or <i class="pml-italic">compound data</i>):</p>
+                        <ul class="pml-list">
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">Concise and clear syntax — without noise or code duplication</p>
+
+                            </li>
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">Immutability by default</p>
+
+                            </li>
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">Built-in support for easy and flexible data validation, both for individual attributes and for the whole record</p>
+
+                            </li>
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">Default values for attributes</p>
+
+                            </li>
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">Named attribute assignments to improve readability, reliability, and maintainability</p>
+
+                            </li>
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">Type parameters to write generic, type-safe code</p>
+
+                            </li>
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">Type inheritance</p>
+
+                            </li>
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">A <code class="pml-inline-code">with</code> operator to facilitate creating record copies with some values modified</p>
+
+                            </li>
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">A <code class="pml-inline-code">to_string</code> function for generating short, human-readable descriptions of record objects</p>
+
+                            </li>
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">Structured documentation</p>
+
+                            </li>
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">Support for serializing/deserializing record objects.</p>
+
+                            </li>
+
+                        </ul>
+                        <p class="pml-paragraph">These features aim to simplify and streamline working with record types, while also increasing reliability, maintainability, and safety.</p>
+                        <p class="pml-paragraph">In particular, the combination of easy and flexible <i class="pml-italic">data validation</i> and <i class="pml-italic">immutability by default</i> make PTS record types very robust. </p>
 
                     </section>
                 </article>
