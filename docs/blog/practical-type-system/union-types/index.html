@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="generator" content="PML 4.0.0 (www.pml-lang.dev)" />
+        <title>Union Types in the Practical Type System (PTS)</title>
+        <link rel="stylesheet" href="css/pml-default.css">
+        <link rel="stylesheet" href="css/pml-print-default.css" media="print">
+
+    </head>
+    <body>
+
+        <div class="pml-doc-wrapper">
+            <header class="pml-doc-header">
+            </header>
+            <div class="pml-doc-content">
+                <aside class="pml-doc-left">
+                    <nav class="pml-toc">
+                        <h2 class="pml-toc-title">Table of Contents</h2>
+                        <div class="pml-toc-tree" id="TOCTree">
+                            <ul>
+                                <li class="pml-toc-leaf-node"><a href="#introduction">Introduction</a></li>
+                                <li class="pml-toc-branch-node">
+                                    <details>
+                                        <summary><a href="#why">Why Do We Need Union Types?</a></summary>
+                                        <ul>
+                                            <li class="pml-toc-branch-node">
+                                                <details>
+                                                    <summary><a href="#existing_solutions">Existing Solutions</a></summary>
+                                                    <ul>
+                                                        <li class="pml-toc-leaf-node"><a href="#javascript_example">JavaScript</a></li>
+                                                        <li class="pml-toc-leaf-node"><a href="#java_example">Java</a></li>
+                                                        <li class="pml-toc-leaf-node"><a href="#kotlin_example">Kotlin</a></li>
+                                                        <li class="pml-toc-leaf-node"><a href="#rust_example">Rust</a></li>
+                                                        <li class="pml-toc-leaf-node"><a href="#wrap_up">Wrap-up</a></li>
+                                                    </ul>
+                                                </details>
+                                            </li>
+                                            <li class="pml-toc-leaf-node"><a href="#better_solution">A Better Solution</a></li>
+                                        </ul>
+                                    </details>
+                                </li>
+                                <li class="pml-toc-branch-node">
+                                    <details>
+                                        <summary><a href="#how">How Does It Work?</a></summary>
+                                        <ul>
+                                            <li class="pml-toc-leaf-node"><a href="#basic_idea">Basic Idea</a></li>
+                                            <li class="pml-toc-branch-node">
+                                                <details>
+                                                    <summary><a href="#syntax_support">Helpful Syntax Constructs</a></summary>
+                                                    <ul>
+                                                        <li class="pml-toc-leaf-node"><a href="#operator_is">Operator is</a></li>
+                                                        <li class="pml-toc-leaf-node"><a href="#case_type_of_statement">case type of Statement</a></li>
+                                                        <li class="pml-toc-leaf-node"><a href="#case_type_of_expression">case type of Expression</a></li>
+                                                        <li class="pml-toc-leaf-node"><a href="#if_type_of_expression">if type of Expression</a></li>
+                                                    </ul>
+                                                </details>
+                                            </li>
+                                            <li class="pml-toc-branch-node">
+                                                <details>
+                                                    <summary><a href="#behind_scenes">Behind the Scenes</a></summary>
+                                                    <ul>
+                                                        <li class="pml-toc-leaf-node"><a href="#union_type_declaration">Union Type Declaration</a></li>
+                                                        <li class="pml-toc-leaf-node"><a href="#type_checks">Type Compatibility Checks</a></li>
+                                                        <li class="pml-toc-leaf-node"><a href="#type_inference">Type Inference</a></li>
+                                                    </ul>
+                                                </details>
+                                            </li>
+                                        </ul>
+                                    </details>
+                                </li>
+                                <li class="pml-toc-branch-node">
+                                    <details>
+                                        <summary><a href="#examples">Further Examples and Benefits</a></summary>
+                                        <ul>
+                                            <li class="pml-toc-leaf-node"><a href="#simpler_APIs">Simpler APIs</a></li>
+                                            <li class="pml-toc-leaf-node"><a href="#record_types_example">Union Types in Record Types</a></li>
+                                            <li class="pml-toc-leaf-node"><a href="#collection_type_example">Type-Safety</a></li>
+                                            <li class="pml-toc-leaf-node"><a href="#eager_or_lazy_example">Eager vs Lazy Evaluation</a></li>
+                                        </ul>
+                                    </details>
+                                </li>
+                                <li class="pml-toc-leaf-node"><a href="#summary">Summary</a></li>
+                                <li class="pml-toc-leaf-node"><a href="#whats_next">What's Next?</a></li>
+                                <li class="pml-toc-leaf-node"><a href="#ch__28">Acknowledgment</a></li>
+                            </ul>
+                        </div>
+                    </nav>
+                </aside>
+                <article id="doc__" class="pml-doc-text">
+                    <h1 class="pml-doc-title">Union Types in the Practical Type System (PTS)</h1>
+                    <table class="pml-table">
+                        <tr class="pml-table-body-row">
+                            <td class="pml-table-body-cell">
+                                <p class="pml-paragraph"><b class="pml-bold">First Published</b></p>
+
+                            </td>
+                            <td class="pml-table-body-cell">
+                                <p class="pml-paragraph">2023-11-28</p>
+
+                            </td>
+
+                        </tr>
+                        <tr class="pml-table-body-row">
+                            <td class="pml-table-body-cell">
+                                <p class="pml-paragraph"><b class="pml-bold">Author</b></p>
+
+                            </td>
+                            <td class="pml-table-body-cell">
+                                <p class="pml-paragraph">Christian Neumanns</p>
+
+                            </td>
+
+                        </tr>
+                        <tr class="pml-table-body-row">
+                            <td class="pml-table-body-cell">
+                                <p class="pml-paragraph"><b class="pml-bold">Editor</b></p>
+
+                            </td>
+                            <td class="pml-table-body-cell">
+                                <p class="pml-paragraph">Tristano Ajmone</p>
+
+                            </td>
+
+                        </tr>
+                        <tr class="pml-table-body-row">
+                            <td class="pml-table-body-cell">
+                                <p class="pml-paragraph"><b class="pml-bold">License</b></p>
+
+                            </td>
+                            <td class="pml-table-body-cell">
+                                <p class="pml-paragraph"><a class="pml-link" href="https://creativecommons.org/licenses/by-nd/4.0/">CC BY-ND 4.0</a></p>
+
+                            </td>
+
+                        </tr>
+
+                    </table>
+                    <p class="pml-paragraph"><br /></p>
+                    <div class="pml-admonition">
+                        <div class="pml-admonition-label">
+                            <p class="pml-paragraph">Note</p>
+
+                        </div>
+                        <div class="pml-admonition-content">
+                            <p class="pml-paragraph">This is part 4 in a series of articles titled <i class="pml-italic">How to Design a Practical Type System to Maximize Reliability, Maintainability, and Productivity in Software Development Projects</i>.</p>
+                            <p class="pml-paragraph">It is recommended (but not required for experienced programmers) to read the articles in their order of publication, starting with <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/01-what-why-how/index.html"><i class="pml-italic">Part 1: What? Why? How?</i></a>.</p>
+                            <p class="pml-paragraph">For a quick summary of previous articles you can read <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/summary/index.html"><i class="pml-italic">Summary of the Practical Type System </i>(<i class="pml-italic">PTS</i>) <i class="pml-italic">Article Series</i></a>. </p>
+                        </div>
+                    </div>
+                    <p class="pml-paragraph"><br /></p>
+                    <figure style="text-align: center">
+                        <img class="pml-image" src="images/PTS_Color_or_Shape.svg" width="500">
+                    </figure>
+                    <div class="pml-caption" style="text-align:center;">Union type example</div>
+                    <section id="introduction" class="pml-chapter">
+                        <h2 class="pml-chapter-title">Introduction</h2>
+                        <p class="pml-paragraph"><a class="pml-link" href="https://en.wikipedia.org/wiki/Union_type"><i class="pml-italic">Union types</i></a> (aka <i class="pml-italic">sum types</i>, <i class="pml-italic">variants</i>, <i class="pml-italic">choice types</i>) are a prime feature in a modern type system. </p>
+                        <p class="pml-paragraph">This article explains why union types are essential, how they are supported in PTS, and which benefits they offer.</p>
+                        <p class="pml-paragraph">As you'll see, union types are surprisingly useful and versatile, despite their simplicity. For example, they provide an elegant foundation for two critical, recurring, but often problematic aspects of software development: null- and error-handling. </p>
+
+                    </section>
+                    <section id="why" class="pml-chapter">
+                        <h2 class="pml-chapter-title">Why Do We Need Union Types?</h2>
+                        <p class="pml-paragraph">Consider a function that reads text stored in a file. The function takes a file path as input and returns one of the following:</p>
+                        <ul class="pml-list">
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">a string representing the text in the file</p>
+
+                            </li>
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph"><code class="pml-inline-code">null</code> if the file is empty</p>
+
+                            </li>
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">an error if the file doesn't exist or if there was any other I/O error</p>
+
+                            </li>
+
+                        </ul>
+                        <div class="pml-admonition">
+                            <div class="pml-admonition-label">
+                                <p class="pml-paragraph">Note</p>
+
+                            </div>
+                            <div class="pml-admonition-content">
+                                <p class="pml-paragraph">In most software libraries, a function like this would return an empty string if the text file is empty.</p>
+                                <p class="pml-paragraph">However, our example function does not return an empty string if the file is empty, it returns <code class="pml-inline-code">null</code> — for reasons explained in a subsequent article.</p>
+                            </div>
+                        </div>
+                        <p class="pml-paragraph">The above specification evokes a compelling question: How should the three output alternatives (&quot;text&quot;, &quot;no text&quot;, and &quot;error&quot;) be expressed in the function signature?</p>
+                        <p class="pml-paragraph">Let's see!</p>
+                        <section id="existing_solutions" class="pml-chapter">
+                            <h3 class="pml-chapter-title">Existing Solutions</h3>
+                            <p class="pml-paragraph">To get an overview of different approaches used in popular programming languages, let's have a look at the signature of this function in JavaScript, Java, Kotlin, and Rust.</p>
+                            <div class="pml-admonition">
+                                <div class="pml-admonition-label">
+                                    <p class="pml-paragraph">Note</p>
+
+                                </div>
+                                <div class="pml-admonition-content">
+                                    <p class="pml-paragraph">Readers only interested in the PTS solution can <a class="pml-xref" href="#better_solution">skip the following sections</a>.</p>
+                                </div>
+                            </div>
+                            <section id="javascript_example" class="pml-chapter">
+                                <h4 class="pml-chapter-title">JavaScript</h4>
+                                <p class="pml-paragraph">Here's the JavaScript code of our example function:</p>
+                                <pre class="pml-code"><code>function readTextFile ( filePath ) {
+    return &quot;dummy&quot;;
+}
+</code></pre>
+                                <div class="pml-admonition">
+                                    <div class="pml-admonition-label">
+                                        <p class="pml-paragraph">Note</p>
+
+                                    </div>
+                                    <div class="pml-admonition-content">
+                                        <p class="pml-paragraph">We're not interested in the function body, just its signature — that's why <code class="pml-inline-code">&quot;dummy&quot;</code> is returned.</p>
+                                    </div>
+                                </div>
+                                <p class="pml-paragraph">In JavaScript, the return type of a function is not specified in the function signature.</p>
+                                <p class="pml-paragraph">Every JavaScript function can return <i class="pml-italic">anything</i> (including <code class="pml-inline-code">null</code> and <code class="pml-inline-code">undefined</code>).</p>
+                                <p class="pml-paragraph">Section <a class="pml-link" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions#return_value"><i class="pml-italic">Return value</i></a> on MNDN states:</p>
+                                <div class="pml-division" style="margin-left:3em;">
+                                    <p class="pml-paragraph">By default, if a function's execution doesn't end at a <code class="pml-inline-code">return</code> statement, or if the <code class="pml-inline-code">return</code> keyword doesn't have an expression after it, then the return value is <code class="pml-inline-code">undefined</code>. The <code class="pml-inline-code">return</code> statement allows you to return an arbitrary value from the function.</p>
+
+                                </div>
+                                <p class="pml-paragraph">This means that the only reliable way to know what the function returns is to look at its body — if we have access to it. Worse, if the function calls other functions, we might also need to inspect the body of all these other functions involved in its call tree.</p>
+                                <p class="pml-paragraph">If we're lucky, the developer(s) left behind a comment annotating the function and its return type. Furthermore, if the function underwent changes later on, the developer(s) hopefully were kind enough to also update its comment.</p>
+                                <p class="pml-paragraph">If the return type is changed later on, and we (or other developers) forget to update one or more function calls, then the application is at risk of breaking in undefined and unanticipated ways.</p>
+                                <p class="pml-paragraph">Surely, we want a better solution.</p>
+                                <p class="pml-paragraph">Let's move on.</p>
+
+                            </section>
+                            <section id="java_example" class="pml-chapter">
+                                <h4 class="pml-chapter-title">Java</h4>
+                                <p class="pml-paragraph">Our example function looks like this in Java:</p>
+                                <pre class="pml-code"><code>    public static String readTextFile ( Path filePath ) throws IOException {
+        return &quot;dummy&quot;;
+    }
+</code></pre>
+                                <p class="pml-paragraph">The method clearly states that it returns a <code class="pml-inline-code">String</code> or throws an <code class="pml-inline-code">IOException</code>. However, we don't know if <code class="pml-inline-code">null</code> might be returned, because reference types in Java are all <i class="pml-italic">nullable</i>.</p>
+                                <div class="pml-admonition">
+                                    <div class="pml-admonition-label">
+                                        <p class="pml-paragraph">Note</p>
+
+                                    </div>
+                                    <div class="pml-admonition-content">
+                                        <p class="pml-paragraph">To state that the function might return <code class="pml-inline-code">null</code> (in case of an empty file), we could add a <code class="pml-inline-code">Nullable</code> <a class="pml-link" href="https://en.wikipedia.org/wiki/Java_annotation"><i class="pml-italic">annotation</i></a> (metadata added to Java source code):</p>
+                                        <pre class="pml-code"><code>    public static @Nullable String readTextFile2 ( Path filePath ) throws IOException {
+        return &quot;dummy&quot;;
+    }
+</code></pre>
+                                        <p class="pml-paragraph">However, <code class="pml-inline-code">Nullable</code> is a non-standard Java annotation. We need to create it ourselves, or use a third-party library that provides it. Therefore a <code class="pml-inline-code">Nullable</code> annotation results in non-idiomatic Java code.</p>
+                                        <p class="pml-paragraph">Moreover, the Java compiler doesn't take into consideration this annotation, and doesn't check for potential null pointer errors (because Java is not a null-safe language). There are, however, very useful tools and IDE plugins that report potential null pointer errors, by leveraging annotations.</p>
+                                        <p class="pml-paragraph">Unfortunately, we would be using three different techniques now for the three outcomes:</p>
+                                        <ul class="pml-list">
+                                            <li class="pml-list-element">
+                                                <p class="pml-paragraph">a <i class="pml-italic">return type</i> for <code class="pml-inline-code">String</code></p>
+
+                                            </li>
+                                            <li class="pml-list-element">
+                                                <p class="pml-paragraph">an <i class="pml-italic">annotation</i> for <code class="pml-inline-code">null</code></p>
+
+                                            </li>
+                                            <li class="pml-list-element">
+                                                <p class="pml-paragraph">an <i class="pml-italic">exception</i> for <code class="pml-inline-code">IOException</code></p>
+
+                                            </li>
+
+                                        </ul>
+                                        <p class="pml-paragraph">What's more, the <code class="pml-inline-code">Nullable</code> annotation is just a workaround for an important concept (i.e. the absence of a value) that should be supported natively in the language.</p>
+                                    </div>
+                                </div>
+                                <p class="pml-paragraph">Conclusion: A function signature in idiomatic Java doesn't tell us if <code class="pml-inline-code">null</code> might be returned.</p>
+
+                            </section>
+                            <section id="kotlin_example" class="pml-chapter">
+                                <h4 class="pml-chapter-title">Kotlin</h4>
+                                <p class="pml-paragraph">This is the code written in Kotlin, a modern JVM language:</p>
+                                <pre class="pml-code"><code>    fun readTextFile(filePath: Path): String? {
+        return &quot;dummy&quot;
+    }
+</code></pre>
+                                <p class="pml-paragraph">While reference types in Java are <i class="pml-italic">nullable</i>, they are <i class="pml-italic">non-null</i> in Kotlin. The <code class="pml-inline-code">?</code> suffix after a type name must be used to state that a type is <i class="pml-italic">nullable</i>. Hence the <code class="pml-inline-code">String?</code> return type clearly states that the function returns a <code class="pml-inline-code">String</code> object or <code class="pml-inline-code">null</code>. Moreover, Kotlin is null-safe (no null-pointer errors in idiomatic Kotlin code), which is possibly the prevalent reason for some people to prefer Kotlin over Java.</p>
+                                <p class="pml-paragraph">Java uses <i class="pml-italic">checked</i> exceptions for anticipated runtime errors. On the other hand, Kotlin doesn't support <i class="pml-italic">checked</i> exceptions — it only supports <i class="pml-italic">unchecked</i> exceptions (for a quick explanation of the differences, read <a class="pml-link" href="https://www.theserverside.com/answer/What-are-checked-vs-unchecked-exceptions-in-Java"><i class="pml-italic">What are checked vs. unchecked exceptions in Java?</i></a>). Therefore, a Kotlin function signature doesn't tell us if an exception might be thrown. To understand why the creators of Kotlin decided against <i class="pml-italic">checked</i> exceptions, you can read section <a class="pml-link" href="https://kotlinlang.org/docs/exceptions.html#checked-exceptions"><i class="pml-italic">Checked exceptions</i></a> in the official Kotlin documentation.</p>
+                                <div class="pml-admonition">
+                                    <div class="pml-admonition-label">
+                                        <p class="pml-paragraph">Note</p>
+
+                                    </div>
+                                    <div class="pml-admonition-content">
+                                        <p class="pml-paragraph">Kotlin provides a <code class="pml-inline-code">Throws</code> <i class="pml-italic">annotation</i> in its standard library to state exceptions that might be thrown:</p>
+                                        <pre class="pml-code"><code>    @Throws(IOException::class)
+    fun readTextFile2(filePath: Path): String? {
+        return &quot;dummy&quot;
+    }
+</code></pre>
+                                        <p class="pml-paragraph">However, this annotation targets the Java environment and is not used in idiomatic Kotlin code. The official Kotlin documentation <a class="pml-link" href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.jvm/-throws/">states</a>: &quot;This annotation indicates what exceptions should be declared by a function when compiled to a JVM method.&quot;</p>
+                                    </div>
+                                </div>
+                                <p class="pml-paragraph">Conclusion: A function signature in idiomatic Kotlin doesn't tell us if a function call might fail.</p>
+                                <div class="pml-admonition">
+                                    <div class="pml-admonition-label">
+                                        <p class="pml-paragraph">Note</p>
+
+                                    </div>
+                                    <div class="pml-admonition-content">
+                                        <p class="pml-paragraph">The same is true in C# and a few other languages: exceptions are not declared in function signatures.</p>
+                                    </div>
+                                </div>
+
+                            </section>
+                            <section id="rust_example" class="pml-chapter">
+                                <h4 class="pml-chapter-title">Rust</h4>
+                                <p class="pml-paragraph">In Rust, our function looks like this:</p>
+                                <pre class="pml-code"><code>fn read_text_file(_file_path: String) -&gt; Result&lt;Option&lt;String&gt;, io::Error&gt; {
+    Ok(Some(String::from(&quot;dummy&quot;)))
+}
+</code></pre>
+                                <p class="pml-paragraph">Rust doesn't support <code class="pml-inline-code">null</code>. To handle <i class="pml-italic">the absence of a value</i>, Rust uses the <a class="pml-link" href="https://doc.rust-lang.org/std/option/"><code class="pml-inline-code">Option</code></a> type. We can think of an <code class="pml-inline-code">Option</code> instance as a container that is either empty or contains a value: it is either an instance of <code class="pml-inline-code">Some</code>, containing a value, or an instance of <code class="pml-inline-code">None</code>, which has no content. A few other languages adopt a similar concept: for example, F# uses an <code class="pml-inline-code">Option</code> monad, and Haskell uses a <code class="pml-inline-code">Maybe</code> monad.</p>
+                                <p class="pml-paragraph">Furthermore, Rust doesn't <i class="pml-italic">throw exceptions</i> if functions fail. <i class="pml-italic">The Rust Programming Language</i> <a class="pml-link" href="https://doc.rust-lang.org/book/ch09-00-error-handling.html">states</a>:</p>
+                                <div class="pml-division" style="margin-left:2em;">
+                                    <p class="pml-paragraph">Rust doesn't have exceptions. Instead, it has the type <code class="pml-inline-code">Result&lt;T, E&gt;</code> for recoverable errors and the <code class="pml-inline-code">panic!</code> macro that stops execution when the program encounters an unrecoverable error.</p>
+
+                                </div>
+                                <p class="pml-paragraph">Thus, the function returns a <a class="pml-link" href="https://doc.rust-lang.org/std/result/"><code class="pml-inline-code">Result</code></a> type, which is either an instance of <code class="pml-inline-code">Ok</code>, containing a valid return value, or an instance of <code class="pml-inline-code">Err</code> containing an error object. This construct is similar to the <code class="pml-inline-code">Result</code> monad in F#, or the <code class="pml-inline-code">Either</code> monad in Haskell and other languages.</p>
+                                <p class="pml-paragraph">It's nice to see that:</p>
+                                <ul class="pml-list">
+                                    <li class="pml-list-element">
+                                        <p class="pml-paragraph">All three outcomes are clearly stated in the function signature: the function returns <code class="pml-inline-code">Some</code>, <code class="pml-inline-code">None</code>, or <code class="pml-inline-code">Err</code>.</p>
+
+                                    </li>
+                                    <li class="pml-list-element">
+                                        <p class="pml-paragraph">A single technique is used for all outcomes: a return type (<code class="pml-inline-code">Result&lt;Option&lt;String&gt;, io::Error&gt;</code>) that expresses the three alternatives.</p>
+
+                                    </li>
+
+                                </ul>
+
+                            </section>
+                            <section id="wrap_up" class="pml-chapter">
+                                <h4 class="pml-chapter-title">Wrap-up</h4>
+                                <p class="pml-paragraph">The following table summarizes the outcomes stated in the function signatures:</p>
+                                <table class="pml-table">
+                                    <thead class="pml-table-header">
+                                        <th class="pml-table-header-cell">
+
+                                        </th>
+                                        <th class="pml-table-header-cell">
+                                            <p class="pml-paragraph">Text</p>
+
+                                        </th>
+                                        <th class="pml-table-header-cell">
+                                            <p class="pml-paragraph">No text<br />(empty file)</p>
+
+                                        </th>
+                                        <th class="pml-table-header-cell">
+                                            <p class="pml-paragraph">Error</p>
+
+                                        </th>
+
+                                    </thead>
+                                    <tr class="pml-table-body-row">
+                                        <td class="pml-table-body-cell">
+                                            <p class="pml-paragraph">JavaScript</p>
+
+                                        </td>
+                                        <td class="pml-table-body-cell" style="text-align: center; font-size: 2em; color:red">
+                                            <p class="pml-paragraph">⨯</p>
+
+                                        </td>
+                                        <td class="pml-table-body-cell" style="text-align: center; font-size: 2em; color:red">
+                                            <p class="pml-paragraph">⨯</p>
+
+                                        </td>
+                                        <td class="pml-table-body-cell" style="text-align: center; font-size: 2em; color:red">
+                                            <p class="pml-paragraph">⨯</p>
+
+                                        </td>
+
+                                    </tr>
+                                    <tr class="pml-table-body-row">
+                                        <td class="pml-table-body-cell">
+                                            <p class="pml-paragraph">Java</p>
+
+                                        </td>
+                                        <td class="pml-table-body-cell" style="text-align: center; font-size: 1.5em; color:green">
+                                            <p class="pml-paragraph">✔</p>
+
+                                        </td>
+                                        <td class="pml-table-body-cell" style="text-align: center; font-size: 2em; color:red">
+                                            <p class="pml-paragraph">⨯</p>
+
+                                        </td>
+                                        <td class="pml-table-body-cell" style="text-align: center; font-size: 1.5em; color:green">
+                                            <p class="pml-paragraph">✔</p>
+
+                                        </td>
+
+                                    </tr>
+                                    <tr class="pml-table-body-row">
+                                        <td class="pml-table-body-cell">
+                                            <p class="pml-paragraph">Kotin</p>
+
+                                        </td>
+                                        <td class="pml-table-body-cell" style="text-align: center; font-size: 1.5em; color:green">
+                                            <p class="pml-paragraph">✔</p>
+
+                                        </td>
+                                        <td class="pml-table-body-cell" style="text-align: center; font-size: 1.5em; color:green">
+                                            <p class="pml-paragraph">✔</p>
+
+                                        </td>
+                                        <td class="pml-table-body-cell" style="text-align: center; font-size: 2em; color:red">
+                                            <p class="pml-paragraph">⨯</p>
+
+                                        </td>
+
+                                    </tr>
+                                    <tr class="pml-table-body-row">
+                                        <td class="pml-table-body-cell">
+                                            <p class="pml-paragraph">Rust</p>
+
+                                        </td>
+                                        <td class="pml-table-body-cell" style="text-align: center; font-size: 1.5em; color:green">
+                                            <p class="pml-paragraph">✔</p>
+
+                                        </td>
+                                        <td class="pml-table-body-cell" style="text-align: center; font-size: 1.5em; color:green">
+                                            <p class="pml-paragraph">✔</p>
+
+                                        </td>
+                                        <td class="pml-table-body-cell" style="text-align: center; font-size: 1.5em; color:green">
+                                            <p class="pml-paragraph">✔</p>
+
+                                        </td>
+
+                                    </tr>
+
+                                </table>
+                                <p class="pml-paragraph">Rust is clearly the winner, because all three possible outcomes are covered in its function signature.</p>
+                                <p class="pml-paragraph">The Rust compiler also ensures that all three outcomes are being handled by the code that calls the function. If we forget to handle a case, the compiler gently reminds us to do so. Even better, if the return type of the function is changed later on, the compiler also checks that all function calls are updated accordingly. The advantages are obvious: more reliable and maintainable code; less time wasted finding and fixing bugs.</p>
+                                <p class="pml-paragraph">Here is an example of calling the function in Rust, using a <code class="pml-inline-code">match</code> expression to handle the three outcomes:</p>
+                                <pre class="pml-code"><code>    match read_text_file(String::from(&quot;file.txt&quot;)) {
+        Ok(Some(string)) =&gt; println! ( &quot;{}&quot;, string ),
+        Ok(None) =&gt; println! ( &quot;Empty&quot; ),
+        Err(_) =&gt; println! ( &quot;Error&quot; ),
+    };
+</code></pre>
+
+                            </section>
+
+                        </section>
+                        <section id="better_solution" class="pml-chapter">
+                            <h3 class="pml-chapter-title">A Better Solution</h3>
+                            <p class="pml-paragraph">Rust <code class="pml-inline-code">Option</code> and <code class="pml-inline-code">Result</code> types are <i class="pml-italic">wrappers</i>. Instances of these types <i class="pml-italic">contain</i> a value — except <code class="pml-inline-code">None</code> (an instance of <code class="pml-inline-code">Option</code>), which doesn't contain a value. For example, if the function returns a string (the most common case for this function), then the string is wrapped in an <code class="pml-inline-code">Option</code> instance, which is itself wrapped in a <code class="pml-inline-code">Result</code> instance.  The wrapping becomes obvious when we look at the dummy body of the function: <code class="pml-inline-code">Ok(Some(String::from(&quot;dummy&quot;)))</code>. We can't simply write <code class="pml-inline-code">&quot;dummy&quot;</code>, or <code class="pml-inline-code">return &quot;dummy&quot;</code>, as in other languages.</p>
+                            <div class="pml-admonition">
+                                <div class="pml-admonition-label">
+                                    <p class="pml-paragraph">Note</p>
+
+                                </div>
+                                <div class="pml-admonition-content">
+                                    <p class="pml-paragraph">The need to write <code class="pml-inline-code">String::from(&quot;dummy&quot;)</code> instead of just <code class="pml-inline-code">&quot;dummy&quot;</code> is irrelevant to the topic at hand (but you can read <a class="pml-link" href="https://www.tutorialspoint.com/rust/rust_string.htm"><i class="pml-italic">Rust - String</i></a> for an explanation).</p>
+                                </div>
+                            </div>
+                            <p class="pml-paragraph">Looking at these examples in different languages begs the question: Why can't we simply state what we want, i.e. a function that returns a string <i class="pml-italic">or</i> null <i class="pml-italic">or</i> an error?</p>
+                            <p class="pml-paragraph">Well, we <i class="pml-italic">could</i> — <i class="pml-italic">if</i> the type system supported <i class="pml-italic">union types</i>.</p>
+                            <p class="pml-paragraph">And that's one of the reasons why union types are supported in PTS. Here's a preview of the function in PTS:</p>
+                            <pre class="pml-code"><code>fn read_text_file ( file file_path ) -&gt; <b class="pml-bold">string or null or file_error</b>
+    return &quot;dummy&quot;
+.</code></pre>
+                            <p class="pml-paragraph">The output type <code class="pml-inline-code">string or null or file_error</code> is a key point. Null-handling (or, more generally, handling the <i class="pml-italic">absence of a value</i>) and error-handling are both crucial aspects in pretty much all software development projects. And now we have a straightforward and elegant solution that utilizes a single, simple concept (union types) for both aspects. This is a solid foundation that allows us to simplify null- and error-handling, ultimately leading to increased reliability, maintainability, and productivity.</p>
+                            <p class="pml-paragraph">What's more, union types have other interesting use cases, as we'll see soon.</p>
+                            <div class="pml-admonition">
+                                <div class="pml-admonition-label">
+                                    <p class="pml-paragraph">Note</p>
+
+                                </div>
+                                <div class="pml-admonition-content">
+                                    <p class="pml-paragraph">Given the preponderance of null- and error-handling, these topics will be covered extensively in the next two PTS articles.</p>
+                                </div>
+                            </div>
+
+                        </section>
+
+                    </section>
+                    <section id="how" class="pml-chapter">
+                        <h2 class="pml-chapter-title">How Does It Work?</h2>
+                        <p class="pml-paragraph">In this section we'll explore PTS union types, and illustrate each point via simple source code examples.</p>
+                        <div class="pml-admonition">
+                            <div class="pml-admonition-label">
+                                <p class="pml-paragraph">Note</p>
+
+                            </div>
+                            <div class="pml-admonition-content">
+                                <p class="pml-paragraph">The basic idea of <a class="pml-link" href="https://en.wikipedia.org/wiki/Union_type"><i class="pml-italic">union types</i></a> (aka <i class="pml-italic">sum types</i>, <i class="pml-italic">variants</i>, <i class="pml-italic">choice types</i>) is roughly the same in different programming languages. However, the implementation and usage of union types vary largely. The following description only applies to union types in PTS.</p>
+                            </div>
+                        </div>
+                        <section id="basic_idea" class="pml-chapter">
+                            <h3 class="pml-chapter-title">Basic Idea</h3>
+                            <p class="pml-paragraph">In a statically typed programming language, an object reference (variable, input parameter, etc.) is restricted to a single type. For example, input parameter <code class="pml-inline-code">name</code> being of type <code class="pml-inline-code">string</code>.</p>
+                            <p class="pml-paragraph">The basic idea of a <i class="pml-italic">union type</i> is amazingly simple: Instead of restricting an object reference to a single type, any type among a defined <i class="pml-italic">set of types</i> is allowed — <code class="pml-inline-code">type_1 or type_2 or type_3 or ...</code>. We are all familiar with this concept in daily life: Your birthday present will be a dog, a bicycle, or a violin (i.e. a dog <i class="pml-italic">or</i> a bicycle <i class="pml-italic">or</i> a violin). Next weekend we'll go to the beach, the mountains, or the city.</p>
+                            <p class="pml-paragraph">Here is an example of a PTS function that uses union types:</p>
+                            <pre class="pml-code"><code>fn foo ( item <b class="pml-bold">string or character or number</b> ) -&gt; <b class="pml-bold">boolean or null or error</b>
+    // function body
+.</code></pre>
+                            <p class="pml-paragraph">This function has a single input parameter named <code class="pml-inline-code">item</code>, whose type can be <code class="pml-inline-code">string</code>, <code class="pml-inline-code">character</code>, or <code class="pml-inline-code">number</code>. Hence, the following function calls are all valid: <code class="pml-inline-code">foo ( &quot;abc&quot; )</code>, <code class="pml-inline-code">foo ( 'a' )</code>, and <code class="pml-inline-code">foo ( 123 )</code>.</p>
+                            <p class="pml-paragraph">Moreover, the function can return a <code class="pml-inline-code">boolean</code>, <code class="pml-inline-code">null</code>, or an <code class="pml-inline-code">error</code>. Thus, the following statements in the function body are all valid: <code class="pml-inline-code">return true</code>, <code class="pml-inline-code">return null</code>, and <code class="pml-inline-code">return error.create(...)</code>. In a subsequent section we'll see how to handle the returned value in the code that called the function.</p>
+                            <p class="pml-paragraph">The individual types declared in a union type are its <i class="pml-italic">member types</i>. Thus, union type <code class="pml-inline-code">string or character or number</code> has three member types: <code class="pml-inline-code">string</code>, <code class="pml-inline-code">character</code>, and <code class="pml-inline-code">number</code>.</p>
+                            <div class="pml-admonition">
+                                <div class="pml-admonition-label">
+                                    <p class="pml-paragraph">Note</p>
+
+                                </div>
+                                <div class="pml-admonition-content">
+                                    <p class="pml-paragraph"> A PTS <i class="pml-italic">union type</i> is conceptually similar to a <i class="pml-italic">sum type</i>, and a PTS <i class="pml-italic">record type</i> is similar to a <i class="pml-italic">product type</i>. The terms <i class="pml-italic">sum</i> and <i class="pml-italic">product</i> (predominant in functional programming) are rooted in the cardinality of these types. (Remember: the cardinality of a type is the number of allowed values.)</p>
+                                    <p class="pml-paragraph">The cardinality of a union type is the <i class="pml-italic">sum</i> of the cardinalities of its member types. For example, type <code class="pml-inline-code">boolean or null</code> has a cardinality of 3, because type <code class="pml-inline-code">boolean</code> has a cardinality of 2 (<code class="pml-inline-code">true</code>, <code class="pml-inline-code">false</code>), and type <code class="pml-inline-code">null</code> has a cardinality of 1 (<code class="pml-inline-code">null</code>). Hence, <code class="pml-inline-code">boolean or null</code> has a cardinality of 2 <b class="pml-bold">+</b> 1 = 3.</p>
+                                    <p class="pml-paragraph">The cardinality of a record type is the <i class="pml-italic">product</i> of the cardinalities of its attribute/field types. For example, a record type with an attribute of type <code class="pml-inline-code">boolean or null</code> and another attribute of type <code class="pml-inline-code">boolean</code> has a cardinality of 3 <b class="pml-bold">*</b> 2 = 6.</p>
+                                    <p class="pml-paragraph">PTS adopts the term <a class="pml-link" href="https://en.wikipedia.org/wiki/Union_(set_theory)"><i class="pml-italic">union</i></a>, borrowed from set theory, a branch of mathematical logic.</p>
+                                </div>
+                            </div>
+
+                        </section>
+                        <section id="syntax_support" class="pml-chapter">
+                            <h3 class="pml-chapter-title">Helpful Syntax Constructs</h3>
+                            <p class="pml-paragraph">PTS provides three syntax constructs to handle union types in source code:</p>
+                            <ul class="pml-list">
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">operator <code class="pml-inline-code">is</code>, to check the type of a value</p>
+
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">a <code class="pml-inline-code">case type of</code> <i class="pml-italic">statement</i>, to execute code that depends on the type of a given value</p>
+
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">a <code class="pml-inline-code">case type of</code> <i class="pml-italic">expression</i>, to compute a value that depends on the type of another value</p>
+
+                                </li>
+
+                            </ul>
+                            <p class="pml-paragraph">Let's look at examples.</p>
+                            <section id="operator_is" class="pml-chapter">
+                                <h4 class="pml-chapter-title">Operator <code class="pml-inline-code">is</code></h4>
+                                <p class="pml-paragraph">In section <a class="pml-xref" href="#better_solution"><i class="pml-italic">A Better Solution</i></a> we introduced the following function which returns a <code class="pml-inline-code">string</code>, <code class="pml-inline-code">null</code>, or a <code class="pml-inline-code">file_error</code>:</p>
+                                <pre class="pml-code"><code>fn read_text_file ( file file_path ) -&gt; <b class="pml-bold">string or null or file_error</b>
+    // function body
+.</code></pre>
+                                <p class="pml-paragraph">After calling <code class="pml-inline-code">read_text_file</code>, we first need to check the type returned by this function, and then execute code that depends on this type.</p>
+                                <p class="pml-paragraph">To check the type of a value, PTS provides the infix operator <code class="pml-inline-code">is</code>. The syntax is:</p>
+                                <pre class="pml-code"><code>&lt;expression&gt; &quot;is&quot; &lt;type&gt;</code></pre>
+                                <p class="pml-paragraph">Operator <code class="pml-inline-code">is</code> evaluates to a <code class="pml-inline-code">boolean</code> value which is <code class="pml-inline-code">true</code> if the type of the expression on the left-hand side is equal to the type specified on the right-hand side.</p>
+                                <p class="pml-paragraph">Suppose we call <code class="pml-inline-code">read_text_file</code>, and store its returned value in constant <code class="pml-inline-code">result</code>:</p>
+                                <pre class="pml-code"><code>const result string or null or file_error = read_text_file ( file_path.create ( &quot;example.txt&quot; ) )</code></pre>
+                                <p class="pml-paragraph">We can then use the expression <code class="pml-inline-code">result is string</code> to check wether the function returned a value of type <code class="pml-inline-code">string</code>.</p>
+                                <p class="pml-paragraph">The <code class="pml-inline-code">is</code> operator can be used in a classic <code class="pml-inline-code">if then else</code> statement to handle the returned value:</p>
+                                <pre class="pml-code"><code>const result = read_text_file ( file_path.create ( &quot;example.txt&quot; ) )
+if <b class="pml-bold">result is string</b> then
+    write_line ( &quot;Content of file:&quot; )
+    write_line ( result )
+else if <b class="pml-bold">result is null</b> then
+    write_line ( &quot;The file is empty.&quot; )
+else
+    write_line ( &quot;&quot;&quot;The following error occurred: {{result.message}}&quot;&quot;&quot; )
+.</code></pre>
+                                <p class="pml-paragraph">In this code, we used operator <code class="pml-inline-code">is</code> to check the type of the value stored in constant <code class="pml-inline-code">result</code>. For example, <code class="pml-inline-code">result is string</code> evaluates to <code class="pml-inline-code">true</code> if the function returns a <code class="pml-inline-code">string</code>.</p>
+                                <p class="pml-paragraph">Note how the above code benefits from two helpful features:</p>
+                                <ul class="pml-list">
+                                    <li class="pml-list-element">
+                                        <div class="pml-header">Type inference</div>
+                                        <p class="pml-paragraph">The type of constant <code class="pml-inline-code">result</code> is inferred by the compiler to be <code class="pml-inline-code">string or null or file_error</code>, since that's the return type of function <code class="pml-inline-code">read_text_file</code>.</p>
+
+                                    </li>
+                                    <li class="pml-list-element">
+                                        <div class="pml-header">Flow-sensitive typing</div>
+                                        <p class="pml-paragraph">Within the three <code class="pml-inline-code">if</code> branches, the compiler adapts the type of <code class="pml-inline-code">result</code> as follows:</p>
+                                        <ul class="pml-list">
+                                            <li class="pml-list-element">
+                                                <p class="pml-paragraph">In the first <code class="pml-inline-code">then</code> branch, the compiler deduces the type of <code class="pml-inline-code">result</code> to be <code class="pml-inline-code">string</code>, because this branch is only executed if <code class="pml-inline-code">result is string</code> evaluates to <code class="pml-inline-code">true</code>.</p>
+
+                                            </li>
+                                            <li class="pml-list-element">
+                                                <p class="pml-paragraph">In the second branch (<code class="pml-inline-code">result is null</code>), the type of <code class="pml-inline-code">result</code> is deduced to be <code class="pml-inline-code">null</code>.</p>
+                                                <p class="pml-paragraph">Thus a compile-time error would occur if we accidentally used an expression like <code class="pml-inline-code">result.message</code> in this branch.</p>
+
+                                            </li>
+                                            <li class="pml-list-element">
+                                                <p class="pml-paragraph">In the final <code class="pml-inline-code">else</code> branch, the type of <code class="pml-inline-code">result</code> is deduced to be <code class="pml-inline-code">file_error</code>, because this is the remaining member type not yet covered in the previous branches.</p>
+                                                <p class="pml-paragraph">And that's the reason why we can write <code class="pml-inline-code">result.message</code> without first casting <code class="pml-inline-code">result</code> to type <code class="pml-inline-code">file_error</code>. The expression <code class="pml-inline-code">result.message</code> is valid because here <code class="pml-inline-code">result</code> is <i class="pml-italic">guaranteed</i> to be of type <code class="pml-inline-code">file_error</code>, and <code class="pml-inline-code">message</code> is an attribute defined in type <code class="pml-inline-code">file_error</code> (inherited from type <code class="pml-inline-code">error</code>, as will be explained in a subsequent article).</p>
+
+                                            </li>
+
+                                        </ul>
+                                        <p class="pml-paragraph"><a class="pml-link" href="https://en.wikipedia.org/wiki/Flow-sensitive_typing"><i class="pml-italic">Flow-sensitive typing</i></a> (also called <i class="pml-italic">flow typing</i> or <i class="pml-italic">occurrence typing</i>) is practical because it allows us to write succinct code that remains type-safe. We'll see more examples in subsequent articles.</p>
+
+                                    </li>
+
+                                </ul>
+                                <div class="pml-admonition">
+                                    <div class="pml-admonition-label">
+                                        <p class="pml-paragraph">Note</p>
+
+                                    </div>
+                                    <div class="pml-admonition-content">
+                                        <p class="pml-paragraph">Type inference should not be overused, because there is a risk of hiding information that would be useful to keep in the source code, especially for developers who didn't write the code but need to understand and maintain it (e.g. in case of open source libraries, large code bases, etc.).</p>
+                                        <p class="pml-paragraph">Obviously, a statement like this:</p>
+                                        <pre class="pml-code"><code>const name string = &quot;Albert&quot;</code></pre>
+                                        <p class="pml-paragraph">... can be shortened to:</p>
+                                        <pre class="pml-code"><code>const name = &quot;Albert&quot;</code></pre>
+                                        <p class="pml-paragraph">... without reducing readability.</p>
+                                        <p class="pml-paragraph">However, look at this code:</p>
+                                        <pre class="pml-code"><code>const price = get_product_price ( &quot;123&quot; )</code></pre>
+                                        <p class="pml-paragraph">What does the function return? An integer? A decimal? Something else? We simply can't know by just looking at this line of code. Ambiguities like this disappear, and readability increases if the type of <code class="pml-inline-code">price</code> is stated explicitly:</p>
+                                        <pre class="pml-code"><code>const price <b class="pml-bold">money_amount or inexistent_product_id_error</b> = get_product_price ( &quot;123&quot; )</code></pre>
+                                        <p class="pml-paragraph">Yes, the code is more verbose — but it's also more expressive. Now it clearly states that <code class="pml-inline-code">get_product_price</code> returns the union type <code class="pml-inline-code">money_amount or inexistent_product_id_error</code>.</p>
+                                    </div>
+                                </div>
+
+                            </section>
+                            <section id="case_type_of_statement" class="pml-chapter">
+                                <h4 class="pml-chapter-title"><code class="pml-inline-code">case type of</code> Statement</h4>
+                                <p class="pml-paragraph">Instead of using the <code class="pml-inline-code">is</code> operator in an <code class="pml-inline-code">if then else</code> statement for conditional execution, there is a <i class="pml-italic">much better</i> way to execute type-dependent code: <a class="pml-link" href="https://en.wikipedia.org/wiki/Pattern_matching"><i class="pml-italic">pattern matching</i></a>.</p>
+                                <p class="pml-paragraph">The idiomatic way to check the type returned by a function is to use pattern matching via a <code class="pml-inline-code">case type of</code> statement, as follows:</p>
+                                <pre class="pml-code"><code>case <b class="pml-bold">type of</b> read_text_file ( file_path.create ( &quot;example.txt&quot; ) )
+    <b class="pml-bold">is string as text</b> // the string is stored in constant 'text'
+        write_line ( &quot;Content of file:&quot; )
+        write_line ( text ) // the previously defined constant 'text' is now used
+    <b class="pml-bold">is null</b>
+        write_line ( &quot;The file is empty.&quot; )
+    <b class="pml-bold">is file_error as error</b>
+        write_line ( &quot;&quot;&quot;The following error occurred: {{error.message}}&quot;&quot;&quot; )
+.</code></pre>
+                                <p class="pml-paragraph">While the above code is semantically equivalent to the previous version that uses an <code class="pml-inline-code">if then else</code> statement, it has the following advantages:</p>
+                                <ul class="pml-list">
+                                    <li class="pml-list-element">
+                                        <p class="pml-paragraph">The code is shorter and easier to read.</p>
+
+                                    </li>
+                                    <li class="pml-list-element">
+                                        <p class="pml-paragraph">The compiler ensures that all members of the union type are covered in the branches of the <code class="pml-inline-code">case type of</code> statement: Leaving out any of the three <code class="pml-inline-code">is</code> branches of the above example results in a compile-time error.</p>
+                                        <p class="pml-paragraph">This feature is invaluable also when working with third party libraries. Furthermore, if the members of a union type change later on (e.g. a member is added or removed), the compiler ensures that all <code class="pml-inline-code">case type of</code> statements have been updated in the code — a most welcome aid in complex, multi-developer projects.</p>
+
+                                    </li>
+                                    <li class="pml-list-element">
+                                        <p class="pml-paragraph">The compiler can optimize the generated binary code to render it smaller and faster (depending on implementation details not covered here).</p>
+
+                                    </li>
+
+                                </ul>
+                                <p class="pml-paragraph">Instead of handling each member type individually (as shown above), sometimes only a few member types need individual handling, while all remaining member types can be handled in the same way. In such situations, the last branch of a <code class="pml-inline-code">case type of</code> statement can be an <code class="pml-inline-code">otherwise</code> branch, which covers all remaining member types not yet handled in preceding <code class="pml-inline-code">is</code> branches:</p>
+                                <pre class="pml-code"><code>case type of read_text_file ( file_path.create ( &quot;example.txt&quot; ) )
+    is file_error
+        write_line ( &quot;An error occurred!&quot; )
+    <b class="pml-bold">otherwise</b>
+        write_line ( &quot;Ok&quot; )
+.</code></pre>
+                                <p class="pml-paragraph">In the above code, member type <code class="pml-inline-code">file_error</code> is handled individually, and member types <code class="pml-inline-code">string</code> and <code class="pml-inline-code">null</code> are handled the same way in the <code class="pml-inline-code">otherwise</code> branch.</p>
+                                <p class="pml-paragraph">Instead of using an <code class="pml-inline-code">otherwise</code> branch, a better approach is to use a union type in an <code class="pml-inline-code">is</code> branch:</p>
+                                <pre class="pml-code"><code>case type of read_text_file ( file_path.create ( &quot;example.txt&quot; ) )
+    is file_error
+        write_line ( &quot;An error occurred!&quot; )
+    <b class="pml-bold">is string or null</b>
+        write_line ( &quot;Ok&quot; )
+.</code></pre>
+                                <p class="pml-paragraph">An advantage of this style is that the code explicitly and reliably mentions all types possibly returned by <code class="pml-inline-code">read_text_file</code> (which is not the case if an <code class="pml-inline-code">otherwise</code> branch is used).</p>
+                                <p class="pml-paragraph">Plus, if the members of the union type change later on, the compiler reminds us to adapt any <code class="pml-inline-code">case type of</code> statement if we forget to do so. This eliminates the risk of handling a new member type in the <code class="pml-inline-code">otherwise</code> branch, when it actually needs to be handled individually.</p>
+                                <p class="pml-paragraph">As a general rule, the <code class="pml-inline-code">otherwise</code> branch should be used sparingly — we should think twice and anticipate potential maintenance problems.</p>
+
+                            </section>
+                            <section id="case_type_of_expression" class="pml-chapter">
+                                <h4 class="pml-chapter-title"><code class="pml-inline-code">case type of</code> Expression</h4>
+                                <p class="pml-paragraph">Besides a <code class="pml-inline-code">case type of</code> <i class="pml-italic">statement</i> there is also a <code class="pml-inline-code">case type of</code> <i class="pml-italic">expression</i> available:</p>
+                                <pre class="pml-code"><code>const message = case type of read_text_file ( file_path.create ( &quot;example.txt&quot; ) )
+    is string: &quot;a string&quot;
+    is null: &quot;null&quot;
+    is error: &quot;an error&quot;
+write_line ( &quot;The result is &quot; + message )</code></pre>
+                                <p class="pml-paragraph">In this code, the value <code class="pml-inline-code">&quot;a string&quot;</code>, <code class="pml-inline-code">&quot;null&quot;</code>, or <code class="pml-inline-code">&quot;an error&quot;</code> is assigned to constant <code class="pml-inline-code">message</code> (inferred to be of type <code class="pml-inline-code">string</code>), depending on the type returned by function <code class="pml-inline-code">read_text_file</code>.</p>
+
+                            </section>
+                            <section id="if_type_of_expression" class="pml-chapter">
+                                <h4 class="pml-chapter-title"><code class="pml-inline-code">if type of</code> Expression</h4>
+                                <p class="pml-paragraph">PTS also provides an <code class="pml-inline-code">if type of</code> <i class="pml-italic">expression</i> that can be used as follows:</p>
+                                <pre class="pml-code"><code>const message = if type of read_text_file ( file_path.create ( &quot;example.txt&quot; ) ) is string \
+    then &quot;a string&quot; \
+    else &quot;null or an error&quot;
+write_line ( &quot;The result is &quot; + message )</code></pre>
+
+                            </section>
+
+                        </section>
+                        <section id="behind_scenes" class="pml-chapter">
+                            <h3 class="pml-chapter-title">Behind the Scenes</h3>
+                            <p class="pml-paragraph">Hopefully, the previous sections demonstrated that union types are simple to understand and easy to use.</p>
+                            <p class="pml-paragraph">That doesn't mean, however, that the compiler has an easy job too. On the contrary, the compiler needs to ensure type compatibility, infer types, deduce types in the branches of control flow statements, take into account type inheritance and type parameters, etc.</p>
+                            <p class="pml-paragraph">The compiler must prevent any misuses of types, and display helpful error messages whenever rules are violated.</p>
+                            <div class="pml-admonition">
+                                <div class="pml-admonition-label">
+                                    <p class="pml-paragraph">Note</p>
+
+                                </div>
+                                <div class="pml-admonition-content">
+                                    <p class="pml-paragraph">Readers not interested in this excursion can <a class="pml-xref" href="#examples">skip this section</a>.</p>
+                                </div>
+                            </div>
+                            <p class="pml-paragraph">In the previous section we already saw how the compiler ensures that all members of a union type are covered in pattern matching statements and expressions.</p>
+                            <p class="pml-paragraph">Now let's have a quick look at a few additional compiler tasks related to union types.</p>
+                            <p class="pml-paragraph">In the following examples we assume that types <code class="pml-inline-code">fruit</code> and <code class="pml-inline-code">vegetable</code> are child-types of <code class="pml-inline-code">product</code>.</p>
+                            <section id="union_type_declaration" class="pml-chapter">
+                                <h4 class="pml-chapter-title">Union Type Declaration</h4>
+                                <p class="pml-paragraph">The compiler checks the coherence of members declared in a union type. Suppose we declare union type <code class="pml-inline-code">product or fruit or null</code>. This declaration is invalid and reported by a comprehensible error message like this:</p>
+                                <pre class="pml-output">Union type 'product or fruit or null' is invalid.
+Reason: 'fruit' is a child-type of 'product', and therefore 'fruit' is already covered by member 'product' in the union type 'product or fruit or null'.
+Possible solution: Change to 'product or null'.</pre>
+
+                            </section>
+                            <section id="type_checks" class="pml-chapter">
+                                <h4 class="pml-chapter-title">Type Compatibility Checks</h4>
+                                <p class="pml-paragraph">Type <code class="pml-inline-code">string</code> is compatible with type <code class="pml-inline-code">string or null</code>.</p>
+                                <p class="pml-paragraph">But the inverse is not true — <code class="pml-inline-code">string or null</code> is not compatible with <code class="pml-inline-code">string</code>, because <code class="pml-inline-code">null</code> is valid for type <code class="pml-inline-code">string or null</code>, but not for type <code class="pml-inline-code">string</code>.</p>
+                                <p class="pml-paragraph">More generally:</p>
+                                <ul class="pml-list">
+                                    <li class="pml-list-element">
+                                        <p class="pml-paragraph"><code class="pml-inline-code">T</code> is always compatible with <code class="pml-inline-code">T or null</code>.</p>
+
+                                    </li>
+                                    <li class="pml-list-element">
+                                        <p class="pml-paragraph"><code class="pml-inline-code">T or null</code> is never compatible with <code class="pml-inline-code">T</code>.</p>
+
+                                    </li>
+
+                                </ul>
+                                <p class="pml-paragraph">Type compatibility checks can get complex when several factors need to be taken into account.</p>
+                                <p class="pml-paragraph">For example, <code class="pml-inline-code">fruit or vegetable or null</code> is compatible with <code class="pml-inline-code">product or null</code>. However, <code class="pml-inline-code">product or null</code> is compatible with <code class="pml-inline-code">fruit or vegetable or null</code> <i class="pml-italic">only if</i> the following two conditions are fulfilled:</p>
+                                <ul class="pml-list">
+                                    <li class="pml-list-element">
+                                        <p class="pml-paragraph"><code class="pml-inline-code">product</code> is an <i class="pml-italic">abstract type</i>, which means that no instances of <code class="pml-inline-code">product</code> can be created — i.e. only instances of child-types are allowed.</p>
+
+                                    </li>
+                                    <li class="pml-list-element">
+                                        <p class="pml-paragraph"><code class="pml-inline-code">fruit</code> and <code class="pml-inline-code">vegetable</code> are the only direct child-types of <code class="pml-inline-code">product</code>.</p>
+
+                                    </li>
+
+                                </ul>
+                                <div class="pml-admonition">
+                                    <div class="pml-admonition-label">
+                                        <p class="pml-paragraph">Note</p>
+
+                                    </div>
+                                    <div class="pml-admonition-content">
+                                        <p class="pml-paragraph">The above two conditions would be defined as follows in PTS code:</p>
+                                        <pre class="pml-code"><code>type product \
+    factories: none \
+    child_types: fruit, vegetable
+
+    // more code
+.</code></pre>
+                                    </div>
+                                </div>
+
+                            </section>
+                            <section id="type_inference" class="pml-chapter">
+                                <h4 class="pml-chapter-title">Type Inference</h4>
+                                <p class="pml-paragraph">Suppose that:</p>
+                                <ul class="pml-list">
+                                    <li class="pml-list-element">
+                                        <p class="pml-paragraph">Function <code class="pml-inline-code">foo</code> returns <code class="pml-inline-code">string</code>.</p>
+
+                                    </li>
+                                    <li class="pml-list-element">
+                                        <p class="pml-paragraph">Function <code class="pml-inline-code">bar</code> returns <code class="pml-inline-code">number or null</code>.</p>
+
+                                    </li>
+
+                                </ul>
+                                <p class="pml-paragraph">Now consider the following code that uses an <code class="pml-inline-code">if then else</code> expression:</p>
+                                <pre class="pml-code"><code>const c = if condition then foo else bar</code></pre>
+                                <p class="pml-paragraph">In this case the compiler infers the type of constant <code class="pml-inline-code">c</code> to be <code class="pml-inline-code">string or number or null</code> — the compiler merges the possible return types of <code class="pml-inline-code">foo</code> and <code class="pml-inline-code">bar</code>.</p>
+                                <p class="pml-paragraph">Now suppose that:</p>
+                                <ul class="pml-list">
+                                    <li class="pml-list-element">
+                                        <p class="pml-paragraph"><code class="pml-inline-code">foo</code> returns <code class="pml-inline-code">product or null</code>.</p>
+
+                                    </li>
+                                    <li class="pml-list-element">
+                                        <p class="pml-paragraph"><code class="pml-inline-code">bar</code> returns <code class="pml-inline-code">fruit or vegetable</code>.</p>
+
+                                    </li>
+
+                                </ul>
+                                <p class="pml-paragraph">The expression <code class="pml-inline-code">if condition then foo else bar</code> is then inferred to be of type <code class="pml-inline-code">product or null</code>, because <code class="pml-inline-code">fruit</code> and <code class="pml-inline-code">vegetable</code> are covered already by <code class="pml-inline-code">product</code>. The compiler first merges the output types of <code class="pml-inline-code">foo</code> and <code class="pml-inline-code">bar</code> to <code class="pml-inline-code">product or null or fruit or vegetable</code>, and then <i class="pml-italic">normalizes</i> the result to <code class="pml-inline-code">product or null</code>.</p>
+
+                            </section>
+
+                        </section>
+
+                    </section>
+                    <section id="examples" class="pml-chapter">
+                        <h2 class="pml-chapter-title">Further Examples and Benefits</h2>
+                        <p class="pml-paragraph">Besides being essential for null- and error-handling, union types have other interesting use cases. For instance, they can help to simplify APIs, provide type safety that couldn't be achieved without union types, and simplify eager/lazy evaluation.</p>
+                        <p class="pml-paragraph">Let's look at a few examples.</p>
+                        <section id="simpler_APIs" class="pml-chapter">
+                            <h3 class="pml-chapter-title">Simpler APIs</h3>
+                            <p class="pml-paragraph">Let's say we have a function that checks text. It should be possible to provide the text directly as a string or indirectly via a file path or an URL pointing to text content. Here is the function signature:</p>
+                            <pre class="pml-code"><code>fn check_text ( source <b class="pml-bold">string or file_path or URL</b> ) -&gt; text_error or null
+    // function body
+.</code></pre>
+                            <p class="pml-paragraph">If union types weren't supported for input parameters, we would need three functions to cover the three types for input parameter <code class="pml-inline-code">source</code>:</p>
+                            <pre class="pml-code"><code>fn check_text ( <b class="pml-bold">text string</b> ) -&gt; text_error or null
+    // function body
+.
+
+fn check_text_file ( <b class="pml-bold">file_path file_path</b> ) -&gt; text_error or null
+    // function body
+.
+
+fn check_text_URL ( <b class="pml-bold">URL URL</b> ) -&gt; text_error or null
+    // function body
+.</code></pre>
+                            <div class="pml-admonition">
+                                <div class="pml-admonition-label">
+                                    <p class="pml-paragraph">Note</p>
+
+                                </div>
+                                <div class="pml-admonition-content">
+                                    <p class="pml-paragraph">Various languages support function overloading (e.g. C++, C#, and Java), which allows all three functions to have the same name, differing only in their parameter type.</p>
+                                </div>
+                            </div>
+
+                        </section>
+                        <section id="record_types_example" class="pml-chapter">
+                            <h3 class="pml-chapter-title">Union Types in Record Types</h3>
+                            <p class="pml-paragraph">Since union types can be used wherever single (non-union) types can be used, they can also be used for attributes in record types. Here is a record type with two attributes using union types:</p>
+                            <pre class="pml-code"><code>record type text_source
+    
+    att name <b class="pml-bold">string or null</b> default:null
+    att source <b class="pml-bold">string or file_path or URL</b>
+.</code></pre>
+                            <p class="pml-paragraph">Now we could improve function <code class="pml-inline-code">check_text</code> to also accept a <code class="pml-inline-code">text_source</code> record as input:</p>
+                            <pre class="pml-code"><code>fn check_text ( source string or file_path or URL <b class="pml-bold">or text_source</b> ) -&gt; text_error or null
+    ...
+.</code></pre>
+                            <div class="pml-admonition">
+                                <div class="pml-admonition-label">
+                                    <p class="pml-paragraph">Note</p>
+
+                                </div>
+                                <div class="pml-admonition-content">
+                                    <p class="pml-paragraph">Union types should not be overused, because they require type-dependent code (e.g. <code class="pml-inline-code">case type of</code> statements) in function bodies. Besides increasing <a class="pml-link" href="https://en.wikipedia.org/wiki/Cyclomatic_complexity">cyclomatic complexity</a>, there is also a tiny performance penalty involved, which <i class="pml-italic">could</i> be an issue in performance-critical parts of an application.</p>
+                                    <p class="pml-paragraph">Hence, instead of having a single function <code class="pml-inline-code">check_text</code> that accepts four types as its input parameter (<code class="pml-inline-code">string or file_path or URL or text_source</code>), it <i class="pml-italic">might</i> be better (depending on the context) to use four individual functions to cover each case individually.</p>
+                                </div>
+                            </div>
+
+                        </section>
+                        <section id="collection_type_example" class="pml-chapter">
+                            <h3 class="pml-chapter-title">Type-Safety</h3>
+                            <p class="pml-paragraph">Suppose we need a type-safe list that contains only strings and characters, such as: <code class="pml-inline-code">[&quot;abc&quot;, 'a', &quot;hi&quot;, '!']</code>. In this context, <i class="pml-italic">type-safe</i> means that only objects of type <code class="pml-inline-code">string</code> or <code class="pml-inline-code">character</code> can be added to the list and retrieved from it. A compile-time error occurs whenever some code violates this rule.</p>
+                            <p class="pml-paragraph">Without union types we typically have two options:</p>
+                            <ul class="pml-list">
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">We use a heterogenous list (e.g. <code class="pml-inline-code">List&lt;Object&gt;</code> in Java).</p>
+
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">We create a special class with at least:</p>
+                                    <ul class="pml-list">
+                                        <li class="pml-list-element">
+                                            <p class="pml-paragraph">a method to add a string</p>
+
+                                        </li>
+                                        <li class="pml-list-element">
+                                            <p class="pml-paragraph">another method to add a character</p>
+
+                                        </li>
+                                        <li class="pml-list-element">
+                                            <p class="pml-paragraph">an iterator that returns the lowest common parent type for string and character (if such a type exists), otherwise the root type in the type hierarchy (e.g. <code class="pml-inline-code">Object</code> in Java)</p>
+
+                                        </li>
+
+                                    </ul>
+
+                                </li>
+
+                            </ul>
+                            <p class="pml-paragraph">The first solution is simple, but not type-safe, since objects of <i class="pml-italic">any</i> type can be added — neither a compile- nor a run-time error is generated if we accidentally add a number or a pink elephant.</p>
+                            <p class="pml-paragraph">The second solution requires boilerplate code to be written, tested, and maintained. Moreover, compile-time type safety is only guaranteed when elements are added, but not when they are retrieved (e.g. looped over), because they must be casted to <code class="pml-inline-code">string</code> or <code class="pml-inline-code">character</code>, and the compiler doesn't report an error if we accidentally cast to the wrong type (e.g. <code class="pml-inline-code">number</code>).</p>
+                            <p class="pml-paragraph">In practice, most developers (including myself) would therefore opt for the first solution, sacrificing type-safety at the altar of convenience.</p>
+                            <p class="pml-paragraph">A union type removes the quandary. We can use the standard syntax to declare the element type of the list, while keeping the list type-safe: <code class="pml-inline-code">list&lt;string or character&gt;</code>.</p>
+                            <p class="pml-paragraph">A type-safe list literal looks like this:</p>
+                            <pre class="pml-code"><code>[list&lt;string or character&gt; &quot;abc&quot; 'a' &quot;hi&quot; '!']</code></pre>
+                            <p class="pml-paragraph">Here is an example of how we could create a list programmatically and then iterate over its elements:</p>
+                            <pre class="pml-code"><code>const list = mutable_list&lt;string or character&gt;.create
+list.add ( &quot;abc&quot; )       // OK
+list.add ( 'a' )         // OK
+// list.add ( 123 )      &lt;- compile-time error !!!
+
+// Loop without type check
+repeat for each element in list
+    write_line ( element.to_string )
+.
+
+// Loop with type check
+repeat for each element in list
+    case type of element
+        is string
+            write_line ( &quot;&quot;&quot;String: {{element}}&quot;&quot;&quot; )
+        is character
+            write_line ( &quot;&quot;&quot;Char: {{element.to_string}}&quot;&quot;&quot; )
+    .
+.</code></pre>
+                            <p class="pml-paragraph">Output:</p>
+                            <pre class="pml-output">abc
+a
+String: abc
+Char: a</pre>
+
+                        </section>
+                        <section id="eager_or_lazy_example" class="pml-chapter">
+                            <h3 class="pml-chapter-title">Eager vs Lazy Evaluation</h3>
+                            <p class="pml-paragraph">Union types allow either eager or lazy (i.e. immediate or delayed) evaluation of input parameters.</p>
+                            <p class="pml-paragraph">Consider the <code class="pml-inline-code">error_message</code> input parameter in the following function, which defines a specific error message to be used whenever the function fails and returns a <code class="pml-inline-code">file_read_error</code> object:</p>
+                            <pre class="pml-code"><code>fn read_text_file (
+    file file_path
+    error_message string ) -&gt; string or null or file_read_error</code></pre>
+                            <p class="pml-paragraph">The point is that input parameter <code class="pml-inline-code">error_message</code> is used only when execution of the function fails.</p>
+                            <p class="pml-paragraph">Now consider an application serving an international audience that retrieves locale-dependent error messages from a database. The application executes function calls like this:</p>
+                            <pre class="pml-code"><code>const result = read_text_file (
+    file = &quot;example.txt&quot;
+    error_message = <b class="pml-bold">get_error_message_from_DB ( error_id = &quot;123&quot; )</b> )</code></pre>
+                            <p class="pml-paragraph">Obviously, function calls like this can cause serious performance penalties, because each time <code class="pml-inline-code">read_text_file</code> is called, the error message is retrieved from the database, although it is needed only if something goes wrong.</p>
+                            <p class="pml-paragraph">A simple solution is to use a union type for input parameter <code class="pml-inline-code">error_message</code>, as follows:</p>
+                            <pre class="pml-code"><code>fn read_text_file (
+    file file_path
+    error_message <b class="pml-bold">string or string_supplier</b> ) -&gt; string or null or file_read_error</code></pre>
+                            <p class="pml-paragraph">Type <code class="pml-inline-code">string_supplier</code> is defined as follows:</p>
+                            <pre class="pml-code"><code>type string_supplier
+    fn get -&gt; string
+.</code></pre>
+                            <p class="pml-paragraph">As we can see, type <code class="pml-inline-code">string_supplier</code> has a single function, named <code class="pml-inline-code">get</code>, which returns a <code class="pml-inline-code">string</code>.</p>
+                            <p class="pml-paragraph">Here's a simplified excerpt of the <code class="pml-inline-code">read_text_file</code> body:</p>
+                            <pre class="pml-code"><code>fn read_text_file (
+    file file_path
+    error_message <b class="pml-bold">string or string_supplier</b> ) -&gt; string or null or file_read_error
+
+    ...
+    if something_went_wrong then
+        <b class="pml-bold">const message string = if error_message is string then error_message else error_message.get</b>
+        // create and return file_read_error
+    .
+.</code></pre>
+                            <p class="pml-paragraph">The advantage is that <code class="pml-inline-code">error_message.get</code> is now evaluated only if something goes wrong.</p>
+                            <p class="pml-paragraph">Instead of providing a <code class="pml-inline-code">string</code>, the application must now provide a <code class="pml-inline-code">string_supplier</code>. This can easily be done with a closure:</p>
+                            <pre class="pml-code"><code>const result = read_text_file (
+    file = &quot;example.txt&quot;
+    error_message = <b class="pml-bold">{ get_error_message_from_DB ( error_id = &quot;123&quot; ) }</b> )</code></pre>
+                            <p class="pml-paragraph">Explaining PTS closures is beyond the scope of this article. However, as shown in the above code, eager evaluation can now easily be turned into lazy evaluation by just embedding an expression in a pair of curly braces ( <code class="pml-inline-code">{...}</code>). For general information about closures you can read the Wikipedia article <a class="pml-link" href="https://en.wikipedia.org/wiki/Closure_(computer_programming)"><i class="pml-italic">Closure (computer programming)</i></a>.</p>
+                            <p class="pml-paragraph">The performance bottleneck has been eliminated, since the error message is now retrieved from the database only if a file read error occurs.</p>
+
+                        </section>
+
+                    </section>
+                    <section id="summary" class="pml-chapter">
+                        <h2 class="pml-chapter-title">Summary</h2>
+                        <p class="pml-paragraph">Union types are simple to understand, easy to use, and they provide an elegant solution for frequent programming tasks.</p>
+                        <p class="pml-paragraph">They provide a sound foundation for uniform null- and error-handling — two critical aspects of a practical type system.</p>
+                        <p class="pml-paragraph">Moreover, union types help to simplify APIs, increase type-safety (by minimizing cardinality and thus supporting the <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/01-what-why-how/index.html#pts_coding_rule"><i class="pml-italic">PTS Coding Rule</i></a>), facilitate eager/lazy evaluation, and provide additional benefits.</p>
+
+                    </section>
+                    <section id="whats_next" class="pml-chapter">
+                        <h2 class="pml-chapter-title">What's Next?</h2>
+                        <p class="pml-paragraph">The next two PTS articles will be dedicated to null-handling and error-handling. </p>
+
+                    </section>
+                    <section id="ch__28" class="pml-chapter">
+                        <h2 class="pml-chapter-title">Acknowledgment</h2>
+                        <p class="pml-paragraph">Many thanks to Tristano Ajmone for his useful feedback to improve this article. </p>
+
+                    </section>
+                </article>
+                <aside class="pml-doc-right">
+                </aside>
+            </div>
+            <footer class="pml-doc-footer">
+            </footer>
+        </div>
+
+    </body>
+</html>
