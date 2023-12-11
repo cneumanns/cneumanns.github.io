@@ -236,7 +236,7 @@
                             <h3 class="pml-chapter-title">PTS Approach</h3>
                             <p class="pml-paragraph">PTS uses <code class="pml-inline-code">null</code>. Yes, <code class="pml-inline-code">null</code>!</p>
                             <p class="pml-paragraph">This might come as a surprise, because modern programming languages tend to adopt the <code class="pml-inline-code">Option</code>/<code class="pml-inline-code">Maybe</code> approach.</p>
-                            <p class="pml-paragraph">Discussing the pros and cons of <code class="pml-inline-code">null</code> vs <code class="pml-inline-code">Option</code>/<code class="pml-inline-code">Maybe</code> is beyond the scope of this article, but for an in-depth discussion you can read my article <a class="pml-link" href="https://www.TODO.com"><i class="pml-italic">Null-Safety vs Maybe/Option — A Thorough Comparison</i></a>. In a nutshell, that article shows:</p>
+                            <p class="pml-paragraph">Discussing the pros and cons of <code class="pml-inline-code">null</code> vs <code class="pml-inline-code">Option</code>/<code class="pml-inline-code">Maybe</code> is beyond the scope of this article, but for an in-depth discussion you can read my article <a class="pml-link" href="https://www.cnpp.dev/blog/null-safety-vs-maybe-option/index.html"><i class="pml-italic">Null-Safety vs Maybe/Option — A Thorough Comparison</i></a>. In a nutshell, that article shows:</p>
                             <ul class="pml-list">
                                 <li class="pml-list-element">
                                     <p class="pml-paragraph"><i class="pml-italic">Null-handling</i> (if well implemented) is more convenient and practical for software developers than <code class="pml-inline-code">Option</code>/<code class="pml-inline-code">Maybe</code>, but it's more challenging to implement as a native feature in the language.</p>
@@ -249,7 +249,7 @@
 
                             </ul>
                             <p class="pml-paragraph">If a choice must be made between easing the life of <i class="pml-italic">application developers</i> or that of <i class="pml-italic">language engineers and compiler developers</i> then, in the context of PTS, the preference goes to <i class="pml-italic">application developers</i>. Therefore embracing <code class="pml-inline-code">null</code> is a better approach in PTS.</p>
-                            <p class="pml-paragraph">Further reasons for choosing <code class="pml-inline-code">null</code> have already been revealed in the previous article, titled <a class="pml-link" href="https://www.TODO.com"><i class="pml-italic">Union Types in the Practical Type System</i></a>.</p>
+                            <p class="pml-paragraph">Further reasons for choosing <code class="pml-inline-code">null</code> have already been revealed in the previous article, titled <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/union-types/index.html"><i class="pml-italic">Union Types in the Practical Type System</i></a>.</p>
                             <p class="pml-paragraph">However, <code class="pml-inline-code">null</code> is a viable approach only if <i class="pml-italic">null-safety</i> is guaranteed, as explained in the following section.</p>
 
                         </section>
@@ -303,7 +303,7 @@
 
                                 </li>
                                 <li class="pml-list-element">
-                                    <p class="pml-paragraph"><i class="pml-italic">Union types</i> are used to declare <i class="pml-italic">nullable</i> object references (as covered already in the previous article titled <a class="pml-link" href="https://www.TODO.com"><i class="pml-italic">Union Types in the Practical Type System</i></a>). <code class="pml-inline-code">null</code> can be assigned to a <i class="pml-italic">nullable</i> object reference.</p>
+                                    <p class="pml-paragraph"><i class="pml-italic">Union types</i> are used to declare <i class="pml-italic">nullable</i> object references (as covered already in the previous article titled <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/union-types/index.html"><i class="pml-italic">Union Types in the Practical Type System</i></a>). <code class="pml-inline-code">null</code> can be assigned to a <i class="pml-italic">nullable</i> object reference.</p>
                                     <p class="pml-paragraph">For example, a function with an input parameter of type <code class="pml-inline-code">string or null</code> <i class="pml-italic">can</i> be called with <code class="pml-inline-code">null</code> as input.</p>
 
                                 </li>
@@ -363,7 +363,7 @@
 
                                 </div>
                                 <div class="pml-admonition-content">
-                                    <p class="pml-paragraph"><i class="pml-italic">Type inheritance</i> has been briefly introduced in section <a class="pml-link" href="https://www.TODO.com"><i class="pml-italic">Type Inheritance</i></a> of a previous PTS article, titled <a class="pml-link" href="https://www.TODO.com"><i class="pml-italic">Record Types in the Practical Type System</i></a>. This topic isn't covered here — it's assumed that readers of this article are familiar with the concept of type inheritance.</p>
+                                    <p class="pml-paragraph"><i class="pml-italic">Type inheritance</i> has been briefly introduced in section <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/record-types/index.html#type_inheritance"><i class="pml-italic">Type Inheritance</i></a> of a previous PTS article, titled <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/record-types/index.html"><i class="pml-italic">Record Types in the Practical Type System</i></a>. This topic isn't covered here — it's assumed that readers of this article are familiar with the concept of type inheritance.</p>
                                 </div>
                             </div>
                             <p class="pml-paragraph">Now let's have a closer look at these types.</p>
@@ -450,7 +450,7 @@
                         </section>
                         <section id="nullable_object_references" class="pml-chapter">
                             <h3 class="pml-chapter-title">Nullable Object References</h3>
-                            <p class="pml-paragraph">A union type (see <a class="pml-link" href="https://www.TODO.com"><i class="pml-italic">Union Types in the Practical Type System</i></a>) is used to declare a <i class="pml-italic">nullable</i> object reference. An object reference is <i class="pml-italic">nullable</i> if its type is a union type that contains member <code class="pml-inline-code">null</code> (e.g. <code class="pml-inline-code">string or null</code>). In that case the value <code class="pml-inline-code">null</code> is valid.</p>
+                            <p class="pml-paragraph">A union type (see <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/union-types/index.html"><i class="pml-italic">Union Types in the Practical Type System</i></a>) is used to declare a <i class="pml-italic">nullable</i> object reference. An object reference is <i class="pml-italic">nullable</i> if its type is a union type that contains member <code class="pml-inline-code">null</code> (e.g. <code class="pml-inline-code">string or null</code>). In that case the value <code class="pml-inline-code">null</code> is valid.</p>
                             <p class="pml-paragraph">For example, if function <code class="pml-inline-code">foo</code> has an input parameter of type <code class="pml-inline-code">string or null</code> then calling it with <code class="pml-inline-code">null</code> as input is valid, as shown in the following code:</p>
                             <pre class="pml-code"><code>function foo ( <b class="pml-bold">string or null</b> )
     // body
@@ -478,7 +478,7 @@ foo ( &quot;bar&quot; ) // ok
 
                                     </div>
                                     <div class="pml-admonition-content">
-                                        <p class="pml-paragraph">The <code class="pml-inline-code">is</code> operator has already been introduced in section <a class="pml-link" href="https://www.TODO.com"><i class="pml-italic">Operator <code class="pml-inline-code">is</code></i></a> of the previous PTS article titled <a class="pml-link" href="https://www.TODO.com"><i class="pml-italic">Union Types in the Practical Type System</i></a>.</p>
+                                        <p class="pml-paragraph">The <code class="pml-inline-code">is</code> operator has already been introduced in section <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/union-types/index.html#operator_is"><i class="pml-italic">Operator <code class="pml-inline-code">is</code></i></a> of the previous PTS article titled <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/union-types/index.html"><i class="pml-italic">Union Types in the Practical Type System</i></a>.</p>
                                         <p class="pml-paragraph">This section only covers its usage in the context of null-handling.</p>
                                     </div>
                                 </div>
@@ -663,7 +663,7 @@ else
                             </section>
                             <section id="case_type_of_statement" class="pml-chapter">
                                 <h4 class="pml-chapter-title"><code class="pml-inline-code">case type of</code> Statement</h4>
-                                <p class="pml-paragraph">The <code class="pml-inline-code">case type of</code> statement has already been introduced in section <a class="pml-link" href="https://www.TODO.com"><i class="pml-italic"><code class="pml-inline-code">case type of</code> Statement</i></a> of the previous PTS article, titled <a class="pml-link" href="https://www.TODO.com"><i class="pml-italic">Union Types in the Practical Type System</i></a>.</p>
+                                <p class="pml-paragraph">The <code class="pml-inline-code">case type of</code> statement has already been introduced in section <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/union-types/index.html#case_type_of_statement"><i class="pml-italic"><code class="pml-inline-code">case type of</code> Statement</i></a> of the previous PTS article, titled <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/union-types/index.html"><i class="pml-italic">Union Types in the Practical Type System</i></a>.</p>
                                 <p class="pml-paragraph">Here is a reiteration of an example shown in that section:</p>
                                 <pre class="pml-code"><code>case type of read_text_file ( file_path.create ( &quot;example.txt&quot; ) )
     
@@ -774,7 +774,7 @@ close_connections() ^error</code></pre>
                         <section id="flow_typing" class="pml-chapter">
                             <h3 class="pml-chapter-title">Flow-Sensitive Typing</h3>
                             <p class="pml-paragraph"><a class="pml-link" href="https://en.wikipedia.org/wiki/Flow-sensitive_typing"><i class="pml-italic">Flow-sensitive typing</i></a> (also called <i class="pml-italic">flow typing</i> or <i class="pml-italic">occurrence typing</i>) means that the compiler tracks and dynamically changes the type of object references (constants, variables, etc.), depending on where they are accessed in the code.</p>
-                            <p class="pml-paragraph"><i class="pml-italic">Flow typing</i> was already briefly introduced in section <a class="pml-link" href="https://www.TODO.com"><i class="pml-italic">Operator <code class="pml-inline-code">is</code></i></a> of the previous article, titled <a class="pml-link" href="https://www.TODO.com"><i class="pml-italic">Union Types in the Practical Type System</i></a>.</p>
+                            <p class="pml-paragraph"><i class="pml-italic">Flow typing</i> was already briefly introduced in section <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/union-types/index.html#operator_is"><i class="pml-italic">Operator <code class="pml-inline-code">is</code></i></a> of the previous article, titled <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/union-types/index.html"><i class="pml-italic">Union Types in the Practical Type System</i></a>.</p>
                             <p class="pml-paragraph">In the context of null-handling, <i class="pml-italic">flow typing</i> is convenient since it reduces the number of <code class="pml-inline-code">null</code> checks required in the code, which leads to smaller and faster code.</p>
                             <p class="pml-paragraph">For example, consider the following code (where <code class="pml-inline-code">size</code> is a method of type <code class="pml-inline-code">string</code>):</p>
                             <pre class="pml-code"><code>variable name string or null = null
