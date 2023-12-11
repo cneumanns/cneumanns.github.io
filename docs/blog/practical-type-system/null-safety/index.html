@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="generator" content="PML 4.0.0 (www.pml-lang.dev)" />
+        <title>Null-Safety in the Practical Type System (PTS)</title>
+        <link rel="stylesheet" href="css/pml-default.css">
+        <link rel="stylesheet" href="css/pml-print-default.css" media="print">
+
+    </head>
+    <body>
+
+        <div class="pml-doc-wrapper">
+            <header class="pml-doc-header">
+            </header>
+            <div class="pml-doc-content">
+                <aside class="pml-doc-left">
+                    <nav class="pml-toc">
+                        <h2 class="pml-toc-title">Table of Contents</h2>
+                        <div class="pml-toc-tree" id="TOCTree">
+                            <ul>
+                                <li class="pml-toc-leaf-node"><a href="#introduction">Introduction</a></li>
+                                <li class="pml-toc-branch-node">
+                                    <details>
+                                        <summary><a href="#approaches">Approaches to Handle the &quot;Absence of a Value&quot;</a></summary>
+                                        <ul>
+                                            <li class="pml-toc-leaf-node"><a href="#common_approaches">Common Approaches</a></li>
+                                            <li class="pml-toc-leaf-node"><a href="#PTS_approach">PTS Approach</a></li>
+                                        </ul>
+                                    </details>
+                                </li>
+                                <li class="pml-toc-leaf-node"><a href="#why">Why Do We Need Null-Safety?</a></li>
+                                <li class="pml-toc-branch-node">
+                                    <details>
+                                        <summary><a href="#how_does_it_work">How Does It Work?</a></summary>
+                                        <ul>
+                                            <li class="pml-toc-leaf-node"><a href="#principles">Fundamental Principles</a></li>
+                                            <li class="pml-toc-leaf-node"><a href="#null_type">The null Type</a></li>
+                                            <li class="pml-toc-branch-node">
+                                                <details>
+                                                    <summary><a href="#type_hierarchy">Type Hierarchy</a></summary>
+                                                    <ul>
+                                                        <li class="pml-toc-leaf-node"><a href="#type_any">Type any</a></li>
+                                                        <li class="pml-toc-leaf-node"><a href="#type_non_null">Type non_null</a></li>
+                                                        <li class="pml-toc-leaf-node"><a href="#type_null">Type null</a></li>
+                                                        <li class="pml-toc-leaf-node"><a href="#other_types">Other Types</a></li>
+                                                        <li class="pml-toc-leaf-node"><a href="#rules">Rules</a></li>
+                                                    </ul>
+                                                </details>
+                                            </li>
+                                            <li class="pml-toc-leaf-node"><a href="#nullable_object_references">Nullable Object References</a></li>
+                                            <li class="pml-toc-branch-node">
+                                                <details>
+                                                    <summary><a href="#operators">Helpful Operators</a></summary>
+                                                    <ul>
+                                                        <li class="pml-toc-leaf-node"><a href="#operator_is">Operator is</a></li>
+                                                        <li class="pml-toc-leaf-node"><a href="#safe_navigation_operator">The Safe Navigation Operator (?)</a></li>
+                                                        <li class="pml-toc-leaf-node"><a href="#operator_if_is">Operator if_is</a></li>
+                                                    </ul>
+                                                </details>
+                                            </li>
+                                            <li class="pml-toc-branch-node">
+                                                <details>
+                                                    <summary><a href="#statements">Helpful Statements</a></summary>
+                                                    <ul>
+                                                        <li class="pml-toc-leaf-node"><a href="#if_statement">if ... is null Statement</a></li>
+                                                        <li class="pml-toc-leaf-node"><a href="#case_type_of_statement">case type of Statement</a></li>
+                                                        <li class="pml-toc-leaf-node"><a href="#assert_statement">assert Statement</a></li>
+                                                        <li class="pml-toc-leaf-node"><a href="#clause_on">Clause on</a></li>
+                                                    </ul>
+                                                </details>
+                                            </li>
+                                            <li class="pml-toc-leaf-node"><a href="#flow_typing">Flow-Sensitive Typing</a></li>
+                                        </ul>
+                                    </details>
+                                </li>
+                                <li class="pml-toc-leaf-node"><a href="#summary">Summary</a></li>
+                                <li class="pml-toc-leaf-node"><a href="#closing_note">A Closing Note on null</a></li>
+                                <li class="pml-toc-leaf-node"><a href="#ch__28">Acknowledgment</a></li>
+                            </ul>
+                        </div>
+                    </nav>
+                </aside>
+                <article id="doc__" class="pml-doc-text">
+                    <h1 class="pml-doc-title">Null-Safety in the Practical Type System (PTS)</h1>
+                    <table class="pml-table">
+                        <tr class="pml-table-body-row">
+                            <td class="pml-table-body-cell">
+                                <p class="pml-paragraph"><b class="pml-bold">First Published</b></p>
+
+                            </td>
+                            <td class="pml-table-body-cell">
+                                <p class="pml-paragraph">2023-12-11</p>
+
+                            </td>
+
+                        </tr>
+                        <tr class="pml-table-body-row">
+                            <td class="pml-table-body-cell">
+                                <p class="pml-paragraph"><b class="pml-bold">Author</b></p>
+
+                            </td>
+                            <td class="pml-table-body-cell">
+                                <p class="pml-paragraph">Christian Neumanns</p>
+
+                            </td>
+
+                        </tr>
+                        <tr class="pml-table-body-row">
+                            <td class="pml-table-body-cell">
+                                <p class="pml-paragraph"><b class="pml-bold">Editor</b></p>
+
+                            </td>
+                            <td class="pml-table-body-cell">
+                                <p class="pml-paragraph">Tristano Ajmone</p>
+
+                            </td>
+
+                        </tr>
+                        <tr class="pml-table-body-row">
+                            <td class="pml-table-body-cell">
+                                <p class="pml-paragraph"><b class="pml-bold">License</b></p>
+
+                            </td>
+                            <td class="pml-table-body-cell">
+                                <p class="pml-paragraph"><a class="pml-link" href="https://creativecommons.org/licenses/by-nd/4.0/">CC BY-ND 4.0</a></p>
+
+                            </td>
+
+                        </tr>
+
+                    </table>
+                    <p class="pml-paragraph"><br /></p>
+                    <div class="pml-admonition">
+                        <div class="pml-admonition-label">
+                            <p class="pml-paragraph">Note</p>
+
+                        </div>
+                        <div class="pml-admonition-content">
+                            <p class="pml-paragraph">This is part 5 in a series of articles titled <i class="pml-italic">How to Design a Practical Type System to Maximize Reliability, Maintainability, and Productivity in Software Development Projects</i>.</p>
+                            <p class="pml-paragraph">It is recommended (but not required for experienced programmers) to read the articles in their order of publication, starting with <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/01-what-why-how/index.html"><i class="pml-italic">Part 1: What? Why? How?</i></a>.</p>
+                            <p class="pml-paragraph">Please be aware that PTS is a new, not-yet-implemented paradigm. As explained in section <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/essence-foundation/index.html#history"><i class="pml-italic">History</i></a> of the article <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/essence-foundation/index.html"><i class="pml-italic">Essence and Foundation of the Practical Type System (PTS)</i></a>, PTS has been implemented in a proof-of-concept project, but a public PTS implementation isn't available yet — you can't try out the PTS source code examples shown in this article.</p>
+                            <p class="pml-paragraph">For a quick summary of previous articles you can read <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/summary/index.html"><i class="pml-italic">Summary of the Practical Type System </i>(<i class="pml-italic">PTS</i>) <i class="pml-italic">Article Series</i></a>. </p>
+                        </div>
+                    </div>
+                    <p class="pml-paragraph"><br /></p>
+                    <figure style="text-align: center">
+                        <img class="pml-image pml-bordered" src="images/Bob_Alice_Null.png" width="400">
+                    </figure>
+                    <div class="pml-caption" style="text-align:center;font-size:smaller">Original by biggerthanpluto via <a class="pml-link" href="https://pixabay.com/vectors/couple-happy-retro-conversation-6711469/">Pixabay</a></div>
+                    <section id="introduction" class="pml-chapter">
+                        <h2 class="pml-chapter-title">Introduction</h2>
+                        <p class="pml-paragraph">The <i class="pml-italic">absence of a value</i> is among the most important concepts a type system has to deal with — in one way or another.</p>
+                        <p class="pml-paragraph">Consider the scenario where the delivery date of a given order is still unknown. In this case, we can't assign a date to <code class="pml-inline-code">delivery_date</code>, since there is no date available. We have to deal with the <i class="pml-italic">absence of a value</i>.</p>
+                        <p class="pml-paragraph">Most software applications have to deal with many similar situations where no value is available for some object references.</p>
+                        <p class="pml-paragraph">A practical type system should therefore provide first class support to handle all cases gracefully. Handling the <i class="pml-italic">absence of a value</i> should be easy, reliable, and maintainable.</p>
+                        <p class="pml-paragraph">This article explains how PTS aims to achieve this. </p>
+
+                    </section>
+                    <section id="approaches" class="pml-chapter">
+                        <h2 class="pml-chapter-title">Approaches to Handle the &quot;Absence of a Value&quot;</h2>
+                        <p class="pml-paragraph">Before showing how PTS handles the absence of a value, let's first look at common approaches.</p>
+                        <div class="pml-admonition">
+                            <div class="pml-admonition-label">
+                                <p class="pml-paragraph">Note</p>
+
+                            </div>
+                            <div class="pml-admonition-content">
+                                <p class="pml-paragraph">Readers only interested in the PTS approach can <a class="pml-xref" href="#PTS_approach">skip the next section</a>.</p>
+                            </div>
+                        </div>
+                        <section id="common_approaches" class="pml-chapter">
+                            <h3 class="pml-chapter-title">Common Approaches</h3>
+                            <p class="pml-paragraph">As far as I know, there are three common approaches to handle the absence of a value.</p>
+                            <ul class="pml-list">
+                                <li class="pml-list-element">
+                                    <div class="pml-header"><code class="pml-inline-code">null</code></div>
+                                    <p class="pml-paragraph">Many programming languages use the symbol <code class="pml-inline-code">null</code> to represent the absence of a value. Instead of <code class="pml-inline-code">null</code>, some languages use <code class="pml-inline-code">nil</code>, <code class="pml-inline-code">void</code>, <code class="pml-inline-code">nothing</code>, <code class="pml-inline-code">missing</code>, etc., but the basic idea is the same.</p>
+                                    <div class="pml-admonition">
+                                        <div class="pml-admonition-label">
+                                            <p class="pml-paragraph">Note</p>
+
+                                        </div>
+                                        <div class="pml-admonition-content">
+                                            <p class="pml-paragraph">For a basic introduction to <code class="pml-inline-code">null</code> you can read my article <a class="pml-link" href="https://www.TODO.com"><i class="pml-italic">A Quick and Thorough Guide to <code class="pml-inline-code">null</code></i></a>.</p>
+                                        </div>
+                                    </div>
+
+                                </li>
+                                <li class="pml-list-element">
+                                    <div class="pml-header">Null-Object Pattern</div>
+                                    <p class="pml-paragraph">In some languages there's no native support for handling the absence of a value.</p>
+                                    <p class="pml-paragraph">In such environments the <a class="pml-link" href="https://en.wikipedia.org/wiki/Null_object_pattern"><i class="pml-italic">null object pattern</i></a> might be used. Wikipedia states:</p>
+                                    <div class="pml-division" style="margin-left:2em">
+                                        <p class="pml-paragraph">Instead of using a null reference to convey absence of an object (for instance, a non-existent customer), one uses an object which implements the expected interface, but whose method body is empty. A key purpose of using a null object is to avoid conditionals of different kinds, resulting in code that is more focused, quicker to read and follow - i e [<i class="pml-italic">sic</i>] improved readability. One advantage of this approach over a working default implementation is that a null object is very predictable and has no side effects: it does <i class="pml-italic">nothing</i>.</p>
+
+                                    </div>
+                                    <p class="pml-paragraph">Simple examples of applying the <i class="pml-italic">null object pattern</i> would be to use zero for numbers, an empty string for object references of type string, and an empty collection for collection types.</p>
+                                    <p class="pml-paragraph">At first, this might seem to be a good solution, because not using <code class="pml-inline-code">null</code> also means to get rid of the dreaded <i class="pml-italic">null pointer error</i>.</p>
+                                    <p class="pml-paragraph">However, it turns out that the <i class="pml-italic">null object pattern</i> creates more problems than it solves, and renders debugging more difficult — it's a poor man's solution. For more information and examples, you can read sections <i class="pml-italic">Using Zero Instead of Null</i> and <i class="pml-italic">The Null Object Pattern</i> in my article <a class="pml-link" href="https://www.codeproject.com/Articles/787668/Why-We-Should-Love-null"><i class="pml-italic">Why We Should Love 'null'</i></a>.</p>
+
+                                </li>
+                                <li class="pml-list-element">
+                                    <div class="pml-header"><code class="pml-inline-code">Option</code>/<code class="pml-inline-code">Maybe</code> type</div>
+                                    <p class="pml-paragraph">This approach is based on the following premises:</p>
+                                    <ul class="pml-list">
+                                        <li class="pml-list-element">
+                                            <p class="pml-paragraph"><code class="pml-inline-code">null</code> is not supported in the type system.</p>
+
+                                        </li>
+                                        <li class="pml-list-element">
+                                            <p class="pml-paragraph">An <code class="pml-inline-code">Option</code> type is used to handle the absence of a value. This type is also named <code class="pml-inline-code">Maybe</code>, <code class="pml-inline-code">Optional</code>, etc., but the basic idea is the same.</p>
+
+                                        </li>
+
+                                    </ul>
+                                    <p class="pml-paragraph">One can think of <code class="pml-inline-code">Option</code>/<code class="pml-inline-code">Maybe</code> as a container that is either empty or contains a value.</p>
+                                    <p class="pml-paragraph">Most <code class="pml-inline-code">Option</code>/<code class="pml-inline-code">Maybe</code> implementations also provide specific functions/methods that are useful in the context of this type.</p>
+                                    <p class="pml-paragraph">In some languages the <code class="pml-inline-code">Option</code>/<code class="pml-inline-code">Maybe</code> type is also a <i class="pml-italic">monad</i>. For example, Haskell provides the <a class="pml-link" href="https://wiki.haskell.org/Maybe"><code class="pml-inline-code">Maybe</code></a> monad.</p>
+                                    <div class="pml-admonition">
+                                        <div class="pml-admonition-label">
+                                            <p class="pml-paragraph">Note</p>
+
+                                        </div>
+                                        <div class="pml-admonition-content">
+                                            <p class="pml-paragraph">For an introduction to monads (tailored to programmers who are unfamiliar with functional languages) you can read my article <a class="pml-link" href="https://www.codeproject.com/Articles/5290753/Simple-Introduction-to-Monads"><i class="pml-italic">Simple Introduction to Monads — With Java Examples</i></a>. </p>
+                                        </div>
+                                    </div>
+
+                                </li>
+
+                            </ul>
+
+                        </section>
+                        <section id="PTS_approach" class="pml-chapter">
+                            <h3 class="pml-chapter-title">PTS Approach</h3>
+                            <p class="pml-paragraph">PTS uses <code class="pml-inline-code">null</code>. Yes, <code class="pml-inline-code">null</code>!</p>
+                            <p class="pml-paragraph">This might come as a surprise, because modern programming languages tend to adopt the <code class="pml-inline-code">Option</code>/<code class="pml-inline-code">Maybe</code> approach.</p>
+                            <p class="pml-paragraph">Discussing the pros and cons of <code class="pml-inline-code">null</code> vs <code class="pml-inline-code">Option</code>/<code class="pml-inline-code">Maybe</code> is beyond the scope of this article, but for an in-depth discussion you can read my article <a class="pml-link" href="https://www.TODO.com"><i class="pml-italic">Null-Safety vs Maybe/Option — A Thorough Comparison</i></a>. In a nutshell, that article shows:</p>
+                            <ul class="pml-list">
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph"><i class="pml-italic">Null-handling</i> (if well implemented) is more convenient and practical for software developers than <code class="pml-inline-code">Option</code>/<code class="pml-inline-code">Maybe</code>, but it's more challenging to implement as a native feature in the language.</p>
+
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">The <code class="pml-inline-code">Option</code>/<code class="pml-inline-code">Maybe</code> type is relatively easy to implement in the standard library.</p>
+
+                                </li>
+
+                            </ul>
+                            <p class="pml-paragraph">If a choice must be made between easing the life of <i class="pml-italic">application developers</i> or that of <i class="pml-italic">language engineers and compiler developers</i> then, in the context of PTS, the preference goes to <i class="pml-italic">application developers</i>. Therefore embracing <code class="pml-inline-code">null</code> is a better approach in PTS.</p>
+                            <p class="pml-paragraph">Further reasons for choosing <code class="pml-inline-code">null</code> have already been revealed in the previous article, titled <a class="pml-link" href="https://www.TODO.com"><i class="pml-italic">Union Types in the Practical Type System</i></a>.</p>
+                            <p class="pml-paragraph">However, <code class="pml-inline-code">null</code> is a viable approach only if <i class="pml-italic">null-safety</i> is guaranteed, as explained in the following section.</p>
+
+                        </section>
+
+                    </section>
+                    <section id="why" class="pml-chapter">
+                        <h2 class="pml-chapter-title">Why Do We Need Null-Safety?</h2>
+                        <p class="pml-paragraph">History shows that the most frequent bug in many software applications is the infamous <i class="pml-italic">null pointer error</i>, nowadays synonym with &quot;the billion dollar mistake&quot;, a term coined by Sir Tony Hoare, Professor Emeritus, the inventor of <code class="pml-inline-code">null</code>.</p>
+                        <p class="pml-paragraph">Professor John Sargeant from the Department of Computer Science, University of Manchester, puts it like this in his article <a class="pml-link" href="http://www.cs.man.ac.uk/~johns/npe.html"><i class="pml-italic">Null pointer exceptions</i></a>:</p>
+                        <blockquote class="pml-quote">
+                            <div class="pml-quote-text-block">
+                                <div class="pml-quote-text-prefix"></div>
+                                <div class="pml-quote-text">
+                                    <p class="pml-paragraph">Of the things which can go wrong at runtime in Java programs, null pointer exceptions are by far the most common.</p>
+                                </div>
+                                <div class="pml-quote-text-suffix"></div>
+                            </div>
+                            <div class="pml-quote-source">
+                                <p class="pml-paragraph">— Prof. John Sargeant</p>
+
+                            </div>
+                        </blockquote>
+                        <p class="pml-paragraph">Here is an example of a null-pointer exception in Java:</p>
+                        <pre class="pml-code"><code>        String name = null;
+        int length = name.length();
+</code></pre>
+                        <p class="pml-paragraph">Running this code will report the following run-time error, because method <code class="pml-inline-code">length()</code> can't be executed on a <code class="pml-inline-code">null</code> object:</p>
+                        <pre class="pml-output">Exception in thread &quot;main&quot; java.lang.NullPointerException: Cannot invoke &quot;String.length()&quot; because &quot;name&quot; is null
+...</pre>
+                        <p class="pml-paragraph">After reporting the error, the application aborts immediately. The consequences in production are unpredictable — they vary from harmless to disastrous.</p>
+                        <p class="pml-paragraph">Besides Java, other popular programming languages are also vulnerable to null pointer errors, for example C, C++, Go, JavaScript, Python, and Ruby. While modern C# has non-null types and specific null-checking features (since version 8), it still allows the use of null references, which can lead to null pointer errors.</p>
+                        <p class="pml-paragraph">Practice shows:</p>
+                        <p class="pml-paragraph" style="text-align:center;"> Many software applications written in non-null-safe languages are<br /> copiously filled with null pointer bugs<br /> lurking in the code and<br /> waiting to hit at some unpredictable time in the future<br /> causing undefined outcomes<br /> ranging from harmless to very expensive disasters.<br /><br /> We need to eradicate the null pointer error.<br /> We need <i class="pml-italic">null-safety</i>. </p>
+                        <p class="pml-paragraph">Think about it: Null-safety <b class="pml-bold">eradicates the most common bug</b> in languages that support <code class="pml-inline-code">null</code>. Therefore null-safety is a most welcome feature — a crucial milestone in our pursuit of enhanced reliability, maintainability, and productivity.</p>
+                        <p class="pml-paragraph">Let's see how null-safety is achieved in PTS. </p>
+
+                    </section>
+                    <section id="how_does_it_work" class="pml-chapter">
+                        <h2 class="pml-chapter-title">How Does It Work?</h2>
+                        <section id="principles" class="pml-chapter">
+                            <h3 class="pml-chapter-title">Fundamental Principles</h3>
+                            <p class="pml-paragraph">PTS null-safety is based on the following principles:</p>
+                            <ul class="pml-list">
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">PTS provides a built-in type dedicated to represent the <i class="pml-italic">absence of a value</i>. This type is named <code class="pml-inline-code">null</code> and it has a single value: <code class="pml-inline-code">null</code>.</p>
+
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">While <code class="pml-inline-code">null</code> is a valid value for type <code class="pml-inline-code">null</code>, it is invalid for all other types. In other words, all other types are <i class="pml-italic">non-null</i>.</p>
+                                    <p class="pml-paragraph">For example, a function with an input parameter of type <code class="pml-inline-code">string</code> <i class="pml-italic">cannot</i> be called with <code class="pml-inline-code">null</code> as input.</p>
+
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph"><i class="pml-italic">Union types</i> are used to declare <i class="pml-italic">nullable</i> object references (as covered already in the previous article titled <a class="pml-link" href="https://www.TODO.com"><i class="pml-italic">Union Types in the Practical Type System</i></a>). <code class="pml-inline-code">null</code> can be assigned to a <i class="pml-italic">nullable</i> object reference.</p>
+                                    <p class="pml-paragraph">For example, a function with an input parameter of type <code class="pml-inline-code">string or null</code> <i class="pml-italic">can</i> be called with <code class="pml-inline-code">null</code> as input.</p>
+
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">The compiler ensures that a method call on an object reference is only valid if the object reference is <i class="pml-italic">guaranteed</i> to be <i class="pml-italic">non-null</i> at run-time. Thus, null pointer errors cannot occur. The type system is <i class="pml-italic">null-safe</i>.</p>
+                                    <p class="pml-paragraph">For example, <code class="pml-inline-code">foo.bar()</code> is only valid if <code class="pml-inline-code">foo</code> is guaranteed to be non-null at run-time.</p>
+
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">A dedicated set of operators and statements facilitates null-handling and the development of null-safe code.</p>
+
+                                </li>
+
+                            </ul>
+                            <p class="pml-paragraph">These are the fundamental design principles.</p>
+                            <p class="pml-paragraph">Now let's dig a bit deeper.</p>
+
+                        </section>
+                        <section id="null_type" class="pml-chapter">
+                            <h3 class="pml-chapter-title">The <code class="pml-inline-code">null</code> Type</h3>
+                            <p class="pml-paragraph">Type <code class="pml-inline-code">null</code> is a built-in type.</p>
+                            <p class="pml-paragraph">This type has a single value, also called <code class="pml-inline-code">null</code>, in its set of allowed values. Thus the cardinality of type <code class="pml-inline-code">null</code> is one.</p>
+                            <p class="pml-paragraph"><code class="pml-inline-code">null</code> is used to represent the absence of a value.</p>
+                            <p class="pml-paragraph">For example, the assignment:</p>
+                            <pre class="pml-code"><code>delivery_date = null</code></pre>
+                            <p class="pml-paragraph">... states the <i class="pml-italic">absence of a date</i> for <code class="pml-inline-code">delivery_date</code>. No date is assigned to <code class="pml-inline-code">delivery_date</code>.</p>
+                            <div class="pml-admonition">
+                                <div class="pml-admonition-label">
+                                    <p class="pml-paragraph">Note</p>
+
+                                </div>
+                                <div class="pml-admonition-content">
+                                    <p class="pml-paragraph">The code <code class="pml-inline-code">delivery_date = null</code> doesn't tell us <i class="pml-italic">the reason</i> for <code class="pml-inline-code">delivery_date</code> pointing to <code class="pml-inline-code">null</code>. The reason <i class="pml-italic">might</i> be that a delivery date is not yet available. But the reason <i class="pml-italic">might</i> also be that the delivery date has not yet been entered into the database. <code class="pml-inline-code">null</code> just means <i class="pml-italic">there is no value available</i>. It doesn't mean anything else, unless a specific meaning has been explicitly specified in a given context.</p>
+                                </div>
+                            </div>
+
+                        </section>
+                        <section id="type_hierarchy" class="pml-chapter">
+                            <h3 class="pml-chapter-title">Type Hierarchy</h3>
+                            <p class="pml-paragraph">The following class diagram shows the top types in the PTS type hierarchy:</p>
+                            <figure style="text-align: left">
+                                <img class="pml-image" src="images/null_hierarchy.png">
+                            </figure>
+                            <div class="pml-admonition">
+                                <div class="pml-admonition-label">
+                                    <p class="pml-paragraph">Note</p>
+
+                                </div>
+                                <div class="pml-admonition-content">
+                                    <p class="pml-paragraph">The convention in class diagrams is to style non-instantiable/abstract types (explained later) in <i class="pml-italic">italic</i>.</p>
+                                </div>
+                            </div>
+                            <p class="pml-paragraph">At the top of the hierarchy sits type <code class="pml-inline-code">any</code> — the root of all types in PTS. Types <code class="pml-inline-code">non_null</code> and <code class="pml-inline-code">null</code> both inherit from <code class="pml-inline-code">any</code>. All other types inherit from <code class="pml-inline-code">non_null</code>.</p>
+                            <div class="pml-admonition">
+                                <div class="pml-admonition-label">
+                                    <p class="pml-paragraph">Note</p>
+
+                                </div>
+                                <div class="pml-admonition-content">
+                                    <p class="pml-paragraph"><i class="pml-italic">Type inheritance</i> has been briefly introduced in section <a class="pml-link" href="https://www.TODO.com"><i class="pml-italic">Type Inheritance</i></a> of a previous PTS article, titled <a class="pml-link" href="https://www.TODO.com"><i class="pml-italic">Record Types in the Practical Type System</i></a>. This topic isn't covered here — it's assumed that readers of this article are familiar with the concept of type inheritance.</p>
+                                </div>
+                            </div>
+                            <p class="pml-paragraph">Now let's have a closer look at these types.</p>
+                            <section id="type_any" class="pml-chapter">
+                                <h4 class="pml-chapter-title">Type <code class="pml-inline-code">any</code></h4>
+                                <p class="pml-paragraph">The set of allowed values for the root type <code class="pml-inline-code">any</code> is empty — its cardinality is zero. Simply put, type <code class="pml-inline-code">any</code> doesn't have a value.</p>
+                                <p class="pml-paragraph">This implies that it's impossible to create an object of type <code class="pml-inline-code">any</code>. Objects can only be created for some child-types/descendants of <code class="pml-inline-code">any</code>. Type <code class="pml-inline-code">any</code> is therefore called a <i class="pml-italic">non-instantiable</i> (or <i class="pml-italic">abstract</i>) type, and styled in <i class="pml-italic">italic</i> in the above diagram.</p>
+                                <p class="pml-paragraph">Moreover, nobody is allowed to define child-types of <code class="pml-inline-code">any</code>. Type <code class="pml-inline-code">any</code> is a so-called <i class="pml-italic">sealed</i> type. Its child-types are fixed: <code class="pml-inline-code">non_null</code> and <code class="pml-inline-code">null</code>.</p>
+                                <p class="pml-paragraph">The PTS source code for <code class="pml-inline-code">any</code> looks like this:</p>
+                                <pre class="pml-code"><code>type any \
+    factories: none \            (1)
+    child_types: non_null, null  (2)
+.</code></pre>
+                                <p class="pml-paragraph">(1) Instances of <code class="pml-inline-code">any</code> can't be created.</p>
+                                <p class="pml-paragraph">(2) <code class="pml-inline-code">non_null</code> and <code class="pml-inline-code">null</code> are the only child-types.</p>
+
+                            </section>
+                            <section id="type_non_null" class="pml-chapter">
+                                <h4 class="pml-chapter-title">Type <code class="pml-inline-code">non_null</code></h4>
+                                <p class="pml-paragraph">Type <code class="pml-inline-code">non_null</code> is a child of type <code class="pml-inline-code">any</code>.</p>
+                                <p class="pml-paragraph">The set of allowed values for type <code class="pml-inline-code">non_null</code> is empty too — its cardinality is zero. Simply put, type <code class="pml-inline-code">non_null</code> doesn't have a value.</p>
+                                <p class="pml-paragraph">Like type <code class="pml-inline-code">any</code>, type <code class="pml-inline-code">non_null</code> is a <i class="pml-italic">non-instantiable</i> type too. It's also a <i class="pml-italic">sealed</i> type, as will be explained in the next PTS article.</p>
+
+                            </section>
+                            <section id="type_null" class="pml-chapter">
+                                <h4 class="pml-chapter-title">Type <code class="pml-inline-code">null</code></h4>
+                                <p class="pml-paragraph">Type <code class="pml-inline-code">null</code> is a child of type <code class="pml-inline-code">any</code>.</p>
+                                <p class="pml-paragraph">As seen already in a previous section, type <code class="pml-inline-code">null</code> has a single value, called <code class="pml-inline-code">null</code>, in its set of allowed values. The cardinality of type <code class="pml-inline-code">null</code> is one. Simply put, type <code class="pml-inline-code">null</code> has only one value: <code class="pml-inline-code">null</code>.</p>
+                                <p class="pml-paragraph">Unlike types <code class="pml-inline-code">any</code> and <code class="pml-inline-code">non_null</code>, type <code class="pml-inline-code">null</code> is an <i class="pml-italic">instantiable</i> (or <i class="pml-italic">concrete</i>) type.</p>
+                                <p class="pml-paragraph">Like <code class="pml-inline-code">any</code> and <code class="pml-inline-code">non_null</code>, <code class="pml-inline-code">null</code> is also a <i class="pml-italic">sealed</i> type. There are no child-types of <code class="pml-inline-code">null</code>, and nobody is allowed to create child-types.</p>
+
+                            </section>
+                            <section id="other_types" class="pml-chapter">
+                                <h4 class="pml-chapter-title">Other Types</h4>
+                                <p class="pml-paragraph">All remaining built-in types not shown in the diagram (<code class="pml-inline-code">string</code>, <code class="pml-inline-code">number</code>, <code class="pml-inline-code">list</code>, etc.), as well as all user-defined types (e.g. <code class="pml-inline-code">customer</code>, <code class="pml-inline-code">supplier</code>, <code class="pml-inline-code">product</code>), inherit from <code class="pml-inline-code">non_null</code>.</p>
+
+                            </section>
+                            <section id="rules" class="pml-chapter">
+                                <h4 class="pml-chapter-title">Rules</h4>
+                                <p class="pml-paragraph">According to the important <a class="pml-link" href="https://en.wikipedia.org/wiki/Liskov_substitution_principle"><i class="pml-italic">Liskov substitution principle</i></a>, any type in a type inheritance tree is compatible with all its parent types.</p>
+                                <p class="pml-paragraph">Applying this principle to the above type inheritance tree implies the following rules:</p>
+                                <ul class="pml-list">
+                                    <li class="pml-list-element">
+                                        <p class="pml-paragraph">Any value of any type can be assigned to an object reference declared to be of type <code class="pml-inline-code">any</code>.</p>
+                                        <p class="pml-paragraph">For example, a function with an input parameter of type <code class="pml-inline-code">any</code> can be called with the following values: <code class="pml-inline-code">null</code>, <code class="pml-inline-code">&quot;foo&quot;</code>, <code class="pml-inline-code">123</code>, or any other value of any other type.</p>
+
+                                    </li>
+                                    <li class="pml-list-element">
+                                        <p class="pml-paragraph"><code class="pml-inline-code">null</code> is an invalid value for object references of type <code class="pml-inline-code">non_null</code> (or any of its descendants).</p>
+                                        <p class="pml-paragraph">For example:</p>
+                                        <ul class="pml-list">
+                                            <li class="pml-list-element">
+                                                <p class="pml-paragraph">A function with an input parameter of type <code class="pml-inline-code">non_null</code> cannot be called with <code class="pml-inline-code">null</code> as input. But any value of every other type (<code class="pml-inline-code">&quot;foo&quot;</code>, <code class="pml-inline-code">123</code>, etc.) is allowed as input.</p>
+
+                                            </li>
+                                            <li class="pml-list-element">
+                                                <p class="pml-paragraph">A function with an input parameter type that's a descendant of <code class="pml-inline-code">non_null</code> (e.g. <code class="pml-inline-code">string</code>, <code class="pml-inline-code">customer</code>) cannot be called with <code class="pml-inline-code">null</code> as input.</p>
+                                                <div class="pml-admonition">
+                                                    <div class="pml-admonition-label">
+                                                        <p class="pml-paragraph">Note</p>
+
+                                                    </div>
+                                                    <div class="pml-admonition-content">
+                                                        <p class="pml-paragraph">This is exactly the opposite of what's allowed in many popular languages, such as C, Java, JavaScript, Python, Ruby, where every object reference can be <code class="pml-inline-code">null</code>. In Java, for example, <code class="pml-inline-code">null</code> can be assigned to an input parameter of type <code class="pml-inline-code">String</code>.</p>
+                                                    </div>
+                                                </div>
+
+                                            </li>
+
+                                        </ul>
+
+                                    </li>
+                                    <li class="pml-list-element">
+                                        <p class="pml-paragraph">It doesn't make sense to declare an object reference of type <code class="pml-inline-code">null</code>. Therefore the compiler doesn't allow it.</p>
+                                        <p class="pml-paragraph">For example, a function input parameter cannot be of type <code class="pml-inline-code">null</code>.</p>
+                                        <p class="pml-paragraph">Type <code class="pml-inline-code">null</code> can only be used as a member of a union type, as explained in the next section.</p>
+
+                                    </li>
+
+                                </ul>
+
+                            </section>
+
+                        </section>
+                        <section id="nullable_object_references" class="pml-chapter">
+                            <h3 class="pml-chapter-title">Nullable Object References</h3>
+                            <p class="pml-paragraph">A union type (see <a class="pml-link" href="https://www.TODO.com"><i class="pml-italic">Union Types in the Practical Type System</i></a>) is used to declare a <i class="pml-italic">nullable</i> object reference. An object reference is <i class="pml-italic">nullable</i> if its type is a union type that contains member <code class="pml-inline-code">null</code> (e.g. <code class="pml-inline-code">string or null</code>). In that case the value <code class="pml-inline-code">null</code> is valid.</p>
+                            <p class="pml-paragraph">For example, if function <code class="pml-inline-code">foo</code> has an input parameter of type <code class="pml-inline-code">string or null</code> then calling it with <code class="pml-inline-code">null</code> as input is valid, as shown in the following code:</p>
+                            <pre class="pml-code"><code>function foo ( <b class="pml-bold">string or null</b> )
+    // body
+.
+
+foo ( &quot;bar&quot; ) // ok
+<b class="pml-bold">foo ( null )  // ok</b></code></pre>
+                            <p class="pml-paragraph">On the other hand, <code class="pml-inline-code">null</code> is not allowed if the input parameter type is simply <code class="pml-inline-code">string</code>:</p>
+                            <pre class="pml-code"><code>function foo ( <b class="pml-bold">string</b> )
+    // body
+.
+
+foo ( &quot;bar&quot; ) // ok
+<b class="pml-bold">foo ( null )  // compile-time error</b></code></pre>
+
+                        </section>
+                        <section id="operators" class="pml-chapter">
+                            <h3 class="pml-chapter-title">Helpful Operators</h3>
+                            <p class="pml-paragraph">In this section we'll have a look at useful operators that facilitate null-handling.</p>
+                            <section id="operator_is" class="pml-chapter">
+                                <h4 class="pml-chapter-title">Operator <code class="pml-inline-code">is</code></h4>
+                                <div class="pml-admonition">
+                                    <div class="pml-admonition-label">
+                                        <p class="pml-paragraph">Note</p>
+
+                                    </div>
+                                    <div class="pml-admonition-content">
+                                        <p class="pml-paragraph">The <code class="pml-inline-code">is</code> operator has already been introduced in section <a class="pml-link" href="https://www.TODO.com"><i class="pml-italic">Operator <code class="pml-inline-code">is</code></i></a> of the previous PTS article titled <a class="pml-link" href="https://www.TODO.com"><i class="pml-italic">Union Types in the Practical Type System</i></a>.</p>
+                                        <p class="pml-paragraph">This section only covers its usage in the context of null-handling.</p>
+                                    </div>
+                                </div>
+                                <p class="pml-paragraph">The <code class="pml-inline-code">is</code> operator checks whether an expression <i class="pml-italic">is</i> of a given type. The result is a <code class="pml-inline-code">boolean</code> value. For example, <code class="pml-inline-code">&quot;foo&quot; is string</code> evaluates to <code class="pml-inline-code">true</code>, while <code class="pml-inline-code">123 is string</code> evaluates to <code class="pml-inline-code">false</code>.</p>
+                                <p class="pml-paragraph">Hence, this operator is useful to check whether a given expression evaluates to <code class="pml-inline-code">null</code>. Here is an example:</p>
+                                <pre class="pml-code"><code>if customer.email_address <b class="pml-bold">is null</b> then
+    write_line ( &quot;No email address!&quot; )
+else
+    send_email ( email_address )
+.</code></pre>
+                                <p class="pml-paragraph">Instead of <code class="pml-inline-code">is</code>, we can use <code class="pml-inline-code">is not</code> to invert the check. Hence the above code can also be written like this:</p>
+                                <pre class="pml-code"><code>if customer.email_address <b class="pml-bold">is not null</b> then
+    send_email ( email_address )
+else
+    write_line ( &quot;No email address!&quot; )
+.</code></pre>
+                                <p class="pml-paragraph">Besides using <code class="pml-inline-code">is</code> in an <code class="pml-inline-code">if</code> <i class="pml-italic">statement</i>, we can also use it in an <code class="pml-inline-code">if</code> <i class="pml-italic">expression</i>:</p>
+                                <pre class="pml-code"><code>const has_email = if customer.email_address <b class="pml-bold">is null</b> then &quot;no&quot; else &quot;yes&quot;
+write_line ( &quot;&quot;&quot;Customer has email: {{has_email}}&quot;&quot;&quot; )</code></pre>
+
+                            </section>
+                            <section id="safe_navigation_operator" class="pml-chapter">
+                                <h4 class="pml-chapter-title">The Safe Navigation Operator (<code class="pml-inline-code">?</code>)</h4>
+                                <p class="pml-paragraph">The Wikipedia article <a class="pml-link" href="https://en.wikipedia.org/wiki/Safe_navigation_operator"><i class="pml-italic">Safe navigation operator</i></a> states:</p>
+                                <div class="pml-division" style="margin-left:2em;">
+                                    <p class="pml-paragraph">In object-oriented programming, the <b class="pml-bold">safe navigation operator</b> (also known as <b class="pml-bold">optional chaining operator</b>, <b class="pml-bold">safe call operator</b>, <b class="pml-bold">null-conditional operator</b>, <b class="pml-bold">null-propagation operator</b>) is a binary operator that returns null if its first argument is null; otherwise it performs a dereferencing operation as specified by the second argument (typically an object member access, array index, or lambda invocation).</p>
+
+                                </div>
+                                <p class="pml-paragraph">Before looking at how this operator works in PTS, let's see why we need it in the first place.</p>
+                                <p class="pml-paragraph">Suppose we want to get the phone number of an employee's manager by first getting the employee's department, then the manager of the department, and finally the manager's phone number.</p>
+                                <p class="pml-paragraph">If none of the objects in the chain can be <code class="pml-inline-code">null</code> (i.e. they are all <i class="pml-italic">non-nullable</i>), then the code might look like this in Java:</p>
+                                <pre class="pml-code"><code>final String phoneNumber = employee.getDepartment().getManager().getPhoneNumber();</code></pre>
+                                <p class="pml-paragraph">Here is the corresponding PTS code:</p>
+                                <pre class="pml-code"><code>const phone_number = employee.department.manager.phone_number</code></pre>
+                                <p class="pml-paragraph">Now let's suppose that later on the data model is changed, and every object in the chain (i.e. employee, department and manager) can now be <code class="pml-inline-code">null</code> (i.e. they change from <i class="pml-italic">non-nullable</i> to <i class="pml-italic">nullable</i>). In that case:</p>
+                                <ul class="pml-list">
+                                    <li class="pml-list-element">
+                                        <p class="pml-paragraph">The above Java code still compiles, but a <code class="pml-inline-code">NullPointerException</code> is thrown at run-time if any object in the chain is <code class="pml-inline-code">null</code>.</p>
+
+                                    </li>
+                                    <li class="pml-list-element">
+                                        <p class="pml-paragraph">The above PTS code doesn't compile anymore, due to the built-in null-safety. There is no risk of a null pointer error at run-time.</p>
+
+                                    </li>
+
+                                </ul>
+                                <p class="pml-paragraph">The Java code could be fixed as follows:</p>
+                                <pre class="pml-code"><code>String phoneNumber = null;
+if ( employee != null ) {
+    Department department = employee.getDepartment();
+    if ( department != null ) {
+        Manager manager = department.getManager();
+        if ( manager != null ) {
+            phoneNumber = manager.getPhoneNumber();
+        }
+    }
+}</code></pre>
+                                <p class="pml-paragraph">The PTS code also mutates into an <code class="pml-inline-code">if</code>-monster, and <code class="pml-inline-code">phone_number</code> can't be a constant anymore, it must be a variable:</p>
+                                <pre class="pml-code"><code>variable phone_number = null
+if employee is not null then
+    const department = employee.department
+    if department is not null then
+        const manager = department.manager
+        if manager is not null then
+            phone_number = manager.phone_number
+        .
+    .
+.</code></pre>
+                                <p class="pml-paragraph">This PTS code can be simplified by using the <i class="pml-italic">safe navigation operator</i> (<code class="pml-inline-code">?</code>), followed by <code class="pml-inline-code">null</code>. The code is now a one-liner again:</p>
+                                <pre class="pml-code"><code>const phone_number = employee<b class="pml-bold">?null</b>.department<b class="pml-bold">?null</b>.manager<b class="pml-bold">?null</b>.phone_number</code></pre>
+                                <p class="pml-paragraph">Instead of writing <code class="pml-inline-code">?null</code>, we can also simply write <code class="pml-inline-code">?</code>:</p>
+                                <pre class="pml-code"><code>const phone_number = employee<b class="pml-bold">?</b>.department<b class="pml-bold">?</b>.manager<b class="pml-bold">?</b>.phone_number</code></pre>
+                                <p class="pml-paragraph">This code is semantically equivalent to its verbose counterpart that uses nested <code class="pml-inline-code">if</code> statements. The evaluation of the compound expression is aborted as soon as <code class="pml-inline-code">null</code> is encountered in the chain. The inferred type for constant <code class="pml-inline-code">phone_number</code> is <code class="pml-inline-code">string or null</code>.</p>
+                                <p class="pml-paragraph">In PTS, usage of the <code class="pml-inline-code">?</code> operator is not restricted to type <code class="pml-inline-code">null</code> — it may be used with any type (e.g. <code class="pml-inline-code">?error</code>, <code class="pml-inline-code">?string</code>, <code class="pml-inline-code">?list&lt;string&gt;</code>).</p>
+                                <p class="pml-paragraph">If no type is specified, the type defaults to <code class="pml-inline-code">null</code>, since that's the most frequent use case. Therefore we can simply write <code class="pml-inline-code">?</code> instead of <code class="pml-inline-code">?⁠null</code>.</p>
+                                <p class="pml-paragraph">Multiple <code class="pml-inline-code">?</code> operators can be chained, to check for different types. For example, if the intermediate values in the chain are retrieved from functions that can return <code class="pml-inline-code">null</code> or an error, we could write:</p>
+                                <pre class="pml-code"><code>const phone_number = get_employee()<b class="pml-bold">?null?error</b> \
+    .get_department()<b class="pml-bold">?null?error</b> \
+    .get_manager()<b class="pml-bold">?null?error</b> \
+    .get_phone_number()</code></pre>
+                                <p class="pml-paragraph">Now the evaluation of the expression is aborted as soon as an intermediate result evaluates to type <code class="pml-inline-code">null</code> or <code class="pml-inline-code">error</code>. The inferred type for <code class="pml-inline-code">phone_number</code> is <code class="pml-inline-code">string or null or error</code>.</p>
+
+                            </section>
+                            <section id="operator_if_is" class="pml-chapter">
+                                <h4 class="pml-chapter-title">Operator <code class="pml-inline-code">if_is</code></h4>
+                                <p class="pml-paragraph">The <code class="pml-inline-code">if_is</code> operator provides one of two possible values, depending on the type of an expression. Thus, <code class="pml-inline-code">if_is</code> is used to execute a <a class="pml-link" href="https://en.wikipedia.org/wiki/Ternary_operation"><i class="pml-italic">ternary operation</i></a> involving a type.</p>
+                                <p class="pml-paragraph">Its syntax is as follows:</p>
+                                <pre class="pml-code"><code>&lt;expression_1&gt; &quot;if_is&quot; &lt;type&gt; &quot;:&quot; &lt;expression_2&gt;</code></pre>
+                                <p class="pml-paragraph">If <code class="pml-inline-code">&lt;expression_1&gt;</code> evaluates to an instance of type <code class="pml-inline-code">&lt;type&gt;</code>, then the result is <code class="pml-inline-code">&lt;expression_2&gt;</code>, else the result is <code class="pml-inline-code">&lt;expression_1&gt;</code>.</p>
+                                <p class="pml-paragraph">Operator <code class="pml-inline-code">if_is</code> is often useful to provide a default value when an expression evaluates to <code class="pml-inline-code">null</code>.</p>
+                                <p class="pml-paragraph">Suppose that <code class="pml-inline-code">product.comment</code> is of type <code class="pml-inline-code">string or null</code>. Now consider the following code that assigns a string to constant <code class="pml-inline-code">text</code>:</p>
+                                <pre class="pml-code"><code>const text = if product.comment is not null then product.comment else &quot;No comment&quot;</code></pre>
+                                <p class="pml-paragraph">The code can be simplified by using the <code class="pml-inline-code">if_is</code> operator:</p>
+                                <pre class="pml-code"><code>const text = product.comment if_is null : &quot;No comment&quot;</code></pre>
+                                <p class="pml-paragraph">This statement is semantically equivalent to the first statement that uses an <code class="pml-inline-code">if then else</code> expression. If <code class="pml-inline-code">product.comment</code> evaluates to a string, then that string is assigned to <code class="pml-inline-code">text</code>. If <code class="pml-inline-code">product.comment</code> evaluates to <code class="pml-inline-code">null</code>, then the string <code class="pml-inline-code">&quot;No comment&quot;</code> is assigned to <code class="pml-inline-code">text</code>.</p>
+                                <p class="pml-paragraph">Instead of <code class="pml-inline-code">if_is null :</code> the shorthand <code class="pml-inline-code">if_null :</code> (or <code class="pml-inline-code">if_null:</code>) can be used:</p>
+                                <pre class="pml-code"><code>const text = product.comment if_null: &quot;No comment&quot;</code></pre>
+                                <div class="pml-admonition">
+                                    <div class="pml-admonition-label">
+                                        <p class="pml-paragraph">Note</p>
+
+                                    </div>
+                                    <div class="pml-admonition-content">
+                                        <p class="pml-paragraph"><code class="pml-inline-code">if_null:</code> is a binary operator that works like the <a class="pml-link" href="https://en.wikipedia.org/wiki/Null_coalescing_operator"><i class="pml-italic">null coalescing operator</i></a> in other languages.</p>
+                                        <p class="pml-paragraph">For example, C# and JavaScript support the null coalescing operator, using the symbol <code class="pml-inline-code">??</code>. Here is a C# example shown on Wikipedia:</p>
+                                        <pre class="pml-code"><code>string pageTitle = suppliedTitle <b class="pml-bold">??</b> &quot;Default Title&quot;;</code></pre>
+                                        <p class="pml-paragraph">In PTS this would be written as:</p>
+                                        <pre class="pml-code"><code>const page_title = supplied_title <b class="pml-bold">if_null:</b> &quot;Default Title&quot;</code></pre>
+                                    </div>
+                                </div>
+                                <p class="pml-paragraph">Besides the obvious benefit of succinct code, using <code class="pml-inline-code">if_null</code> provides other advantages:</p>
+                                <ul class="pml-list">
+                                    <li class="pml-list-element">
+                                        <p class="pml-paragraph">Code duplication is eliminated, since <code class="pml-inline-code">product.comment</code> appears twice in the statement using an <code class="pml-inline-code">if</code> expression, but only once in the code using <code class="pml-inline-code">if_null</code>.</p>
+
+                                    </li>
+                                    <li class="pml-list-element">
+                                        <p class="pml-paragraph">The code executes faster, because <code class="pml-inline-code">product.comment</code> is only evaluated once.</p>
+
+                                    </li>
+                                    <li class="pml-list-element">
+                                        <p class="pml-paragraph">The code can't end up in nasty (and sometimes very difficult to debug) run-time errors that can occur if <code class="pml-inline-code">product.comment</code> is <i class="pml-italic">mutable</i>.</p>
+                                        <p class="pml-paragraph">Consider the first version:</p>
+                                        <pre class="pml-code"><code>const text = if product.comment is not null then product.comment else &quot;No comment&quot;</code></pre>
+                                        <p class="pml-paragraph">Imagine a multithreaded application where <code class="pml-inline-code">product.comment</code> is mutable, and the first evaluation of <code class="pml-inline-code">product.comment</code> results in a <code class="pml-inline-code">string</code>, while the second evaluation results in <code class="pml-inline-code">null</code> because another thread has changed its value between the two evaluations. In that case <code class="pml-inline-code">null</code> would erroneously be assigned to <code class="pml-inline-code">text</code>.</p>
+                                        <p class="pml-paragraph">A problem like this (aka a race condition) is typically very unlikely to happen. Most likely, it never happens during development/tests. But later (maybe much later), when the code is executed millions of times a day in production, the likeliness increases, and suddenly an incredibly nasty bug appears randomly — very difficult to debug.</p>
+
+                                    </li>
+
+                                </ul>
+                                <div class="pml-admonition">
+                                    <div class="pml-admonition-label">
+                                        <p class="pml-paragraph">Note</p>
+
+                                    </div>
+                                    <div class="pml-admonition-content">
+                                        <p class="pml-paragraph">An experienced and diligent developer, well aware of the potential problems with the <code class="pml-inline-code">if</code> expression, would eliminate the three problems mentioned above (code duplication, performance, and risk of a race condition) by writing:</p>
+                                        <pre class="pml-code"><code>const comment = product.comment
+const text = if comment is not null then comment else &quot;No comment&quot;</code></pre>
+                                        <p class="pml-paragraph">If <code class="pml-inline-code">product.comment</code> is mutable, then a diligent compiler, designed to detect potential race conditions, generates an error (or at least a warning), because of the double occurrence of <code class="pml-inline-code">product.comment</code> in the <code class="pml-inline-code">if</code> expression.</p>
+                                        <p class="pml-paragraph">And a diligent IDE would suggest to convert the code using an <code class="pml-inline-code">if</code> expression into idiomatic PTS code which is succinct, fast, and reliable:</p>
+                                        <pre class="pml-code"><code>const text = product.comment if_null: &quot;No comment&quot;</code></pre>
+                                    </div>
+                                </div>
+                                <p class="pml-paragraph">Operator <code class="pml-inline-code">if_is</code> can be used with any type, not just with <code class="pml-inline-code">null</code>:</p>
+                                <pre class="pml-code"><code>const object_displayed = object if_is password: &quot;secret&quot;</code></pre>
+                                <p class="pml-paragraph">Several <code class="pml-inline-code">if_is</code> operators can be chained. This is useful, for example, to stop the evaluation of an expression as soon as a value of a given type is encountered.</p>
+                                <p class="pml-paragraph">Consider an application to create digital documents.  Suppose that the font used to render the document is determined in a cascading fashion: If the font is explicitly defined by an option in the document, then that font is used. If no font is defined in the document, then the application looks for a font defined in a shared config file. If the config file doesn't specify a font, then a hard-coded default font is used as fallback. </p>
+                                <p class="pml-paragraph">Without the <code class="pml-inline-code">if_is</code> operator we would need to write verbose PTS code like this:</p>
+                                <pre class="pml-code"><code>fn get_font ( context ) -&gt; font
+
+    variable font = context.document_font
+    if font is not null then
+        return font
+    .
+    
+    font = context.config_font
+    if font is not null then
+        return font
+    .
+
+    return context.default_font
+}</code></pre>
+                                <p class="pml-paragraph">The <code class="pml-inline-code">if_is</code> operator simplifies the code:</p>
+                                <pre class="pml-code"><code>fn get_font ( context ) -&gt; font =
+    context.document_font if_null: context.config_font if_null: context.default_font</code></pre>
+
+                            </section>
+
+                        </section>
+                        <section id="statements" class="pml-chapter">
+                            <h3 class="pml-chapter-title">Helpful Statements</h3>
+                            <section id="if_statement" class="pml-chapter">
+                                <h4 class="pml-chapter-title"><code class="pml-inline-code">if ... is null</code> Statement</h4>
+                                <p class="pml-paragraph">In section <a class="pml-xref" href="#operator_is"><i class="pml-italic">Operator</i> <code class="pml-inline-code">is</code></a> we already saw how the <code class="pml-inline-code">is</code> operator may be used in an <code class="pml-inline-code">if</code> statement. Here is a reiteration of a previous example:</p>
+                                <pre class="pml-code"><code>if customer.email_address is not null then
+    send_email ( email_address )
+else
+    write_line ( &quot;No email address!&quot; )
+.</code></pre>
+
+                            </section>
+                            <section id="case_type_of_statement" class="pml-chapter">
+                                <h4 class="pml-chapter-title"><code class="pml-inline-code">case type of</code> Statement</h4>
+                                <p class="pml-paragraph">The <code class="pml-inline-code">case type of</code> statement has already been introduced in section <a class="pml-link" href="https://www.TODO.com"><i class="pml-italic"><code class="pml-inline-code">case type of</code> Statement</i></a> of the previous PTS article, titled <a class="pml-link" href="https://www.TODO.com"><i class="pml-italic">Union Types in the Practical Type System</i></a>.</p>
+                                <p class="pml-paragraph">Here is a reiteration of an example shown in that section:</p>
+                                <pre class="pml-code"><code>case type of read_text_file ( file_path.create ( &quot;example.txt&quot; ) )
+    
+    is string as text // the string is stored in constant 'text'
+        write_line ( &quot;Content of file:&quot; )
+        write_line ( text ) // the previously defined constant 'text' is now used
+    
+    <b class="pml-bold">is null</b>
+        write_line ( &quot;The file is empty.&quot; )
+    
+    is file_error as error
+        write_line ( &quot;&quot;&quot;The following error occurred: {{error.message}}&quot;&quot;&quot; )
+.</code></pre>
+                                <p class="pml-paragraph">As you can see, the second branch (<code class="pml-inline-code">is null</code>) is executed when function <code class="pml-inline-code">read_text_file</code> returns <code class="pml-inline-code">null</code>.</p>
+                                <div class="pml-admonition">
+                                    <div class="pml-admonition-label">
+                                        <p class="pml-paragraph">Note</p>
+
+                                    </div>
+                                    <div class="pml-admonition-content">
+                                        <p class="pml-paragraph">Besides a <code class="pml-inline-code">case type of</code> <i class="pml-italic">statement</i>, PTS also provides a <code class="pml-inline-code">case type of</code> <i class="pml-italic">expression</i>:</p>
+                                        <pre class="pml-code"><code>const message = case type of read_text_file ( file_path.create ( &quot;example.txt&quot; ) ) \
+    is string: &quot;text&quot; \
+    <b class="pml-bold">is null:</b> &quot;no text&quot; \
+    is error: &quot;file read error&quot;
+write_line ( &quot;Result: &quot; + message )            </code></pre>
+                                    </div>
+                                </div>
+
+                            </section>
+                            <section id="assert_statement" class="pml-chapter">
+                                <h4 class="pml-chapter-title"><code class="pml-inline-code">assert</code> Statement</h4>
+                                <p class="pml-paragraph">Sometimes we know more than the compiler does. For example we might know that a function declared to return a value of type <code class="pml-inline-code">string or null</code> will never return <code class="pml-inline-code">null</code> in a given context.</p>
+                                <p class="pml-paragraph">In such cases we can use an <code class="pml-inline-code">assert</code> statement to express our assumption:</p>
+                                <pre class="pml-code"><code>const result <b class="pml-bold">string or null</b> = get_string_or_null ( ... )
+<b class="pml-bold">assert result is not null</b>
+...
+const size = result.size // valid because 'result' has been asserted to be non-null</code></pre>
+                                <p class="pml-paragraph">In the above code, <code class="pml-inline-code">assert</code> is used to state that the value stored in <code class="pml-inline-code">result</code> will never be <code class="pml-inline-code">null</code>.</p>
+                                <p class="pml-paragraph">As we all know, &quot;to err is human&quot;. Therefore the assumption <code class="pml-inline-code">result is not null</code> is checked at run-time, and an error is generated if the assumption turns out to be wrong.</p>
+                                <p class="pml-paragraph">Besides asserting <code class="pml-inline-code">not null</code> we can also assert <code class="pml-inline-code">null</code>, or assert any other type for a given expression:</p>
+                                <pre class="pml-code"><code>assert problem <b class="pml-bold">is null</b>
+assert names <b class="pml-bold">is list&lt;string&gt;</b>
+assert result <b class="pml-bold">is not error</b></code></pre>
+                                <p class="pml-paragraph">As in other languages, the <code class="pml-inline-code">assert</code> keyword is followed by any boolean expression. Hence, in addition to asserting the type of an expression, <code class="pml-inline-code">assert</code> can be used to express a wide range of assumptions. It may be used to assert object/state conditions, <a class="pml-link" href="https://en.wikipedia.org/wiki/Loop_invariant">loop invariants</a>, or any other conditions that are helpful to reliably document the code, simplify it, or optimize its performance.</p>
+                                <div class="pml-admonition">
+                                    <div class="pml-admonition-label">
+                                        <p class="pml-paragraph">Note</p>
+
+                                    </div>
+                                    <div class="pml-admonition-content">
+                                        <p class="pml-paragraph"><code class="pml-inline-code">assert</code> statements must always be free of side-effects, especially if a compiler flag allows to disable them for better performance.</p>
+                                    </div>
+                                </div>
+                                <p class="pml-paragraph">We can provide a specific error message to be displayed at run-time, using the <code class="pml-inline-code">error_message:</code> property at the end of the statement. Here are a few examples:</p>
+                                <pre class="pml-code"><code>assert employee.name.size &lt;= 50
+assert customer.phone_number.starts_with ( &quot;+&quot; ) \
+    error_message: &quot;Phone number doesn't start with '+'&quot;
+assert index &gt;= 1 and index &lt;= list.size \
+    error_message: &quot;&quot;&quot;Index ({{index}}) out of bounds (1..{{list.size}})&quot;&quot;&quot;</code></pre>
+
+                            </section>
+                            <section id="clause_on" class="pml-chapter">
+                                <h4 class="pml-chapter-title">Clause <code class="pml-inline-code">on</code></h4>
+                                <p class="pml-paragraph">Clause <code class="pml-inline-code">on</code> is used to execute a <code class="pml-inline-code">return</code> or <code class="pml-inline-code">throw</code> statement if an expressions evaluates to a specified type.</p>
+                                <p class="pml-paragraph">The general syntax of the <code class="pml-inline-code">on</code> clause is as follows:</p>
+                                <pre class="pml-code"><code>&lt;expression&gt; &quot;on&quot; &lt;type&gt; ( &quot;as&quot; &lt;identifier&gt; ) ? &quot;:&quot; &lt;return_or_throw_statement&gt;</code></pre>
+                                <p class="pml-paragraph">If <code class="pml-inline-code">&lt;expression&gt;</code> matches <code class="pml-inline-code">&lt;type&gt;</code> then <code class="pml-inline-code">&lt;return_or_throw_statement&gt;</code> is executed. The optional <code class="pml-inline-code">&lt;identifier&gt;</code> can be used to store the result of <code class="pml-inline-code">&lt;expression&gt;</code> in a constant which can then be used in <code class="pml-inline-code">&lt;return_or_throw_statement&gt;</code> (see examples below).</p>
+                                <p class="pml-paragraph">Let's see why this is useful.</p>
+                                <p class="pml-paragraph">Here's an example of a recurring code pattern:</p>
+                                <pre class="pml-code"><code>const value = get_value_or_null()
+if value is null then
+    return null
+.</code></pre>
+                                <p class="pml-paragraph">We can use the <code class="pml-inline-code">on</code> clause to write semantically equivalent, but shorter code:</p>
+                                <pre class="pml-code"><code>const value = get_value_or_null() <b class="pml-bold">on null : return null</b></code></pre>
+                                <p class="pml-paragraph">Besides a <code class="pml-inline-code">return</code> statement, a <code class="pml-inline-code">throw</code> statement can be used too, to abort program execution:</p>
+                                <pre class="pml-code"><code>const value = get_value_or_null() <b class="pml-bold">on null : throw application_error.create (
+    &quot;Unexpected 'null' returned by 'get_value_or_null'.&quot; )</b></code></pre>
+                                <p class="pml-paragraph">Any type can be used in an <code class="pml-inline-code">on</code> clause, and several <code class="pml-inline-code">on</code> clauses can be chained:</p>
+                                <pre class="pml-code"><code>const value = get_value_or_null_or_error() \
+    <b class="pml-bold">on null : return null</b> \
+    <b class="pml-bold">on error as e : return e</b></code></pre>
+                                <p class="pml-paragraph"><code class="pml-inline-code">on null : return null</code> and <code class="pml-inline-code">on error as e : return e</code> are both used frequently in practice. Therefore, the shorthands <code class="pml-inline-code">^on_null</code> and <code class="pml-inline-code">^on_error</code> can be used instead. The above code becomes:</p>
+                                <pre class="pml-code"><code>const value = get_value_or_null_or_error() ^on_null ^on_error</code></pre>
+                                <p class="pml-paragraph">... which is also semantically equivalent to the following verbose code:</p>
+                                <pre class="pml-code"><code>const value = get_value_or_null_or_error()
+if value is null then
+    return null
+.
+if value is error then
+    return value
+.</code></pre>
+                                <p class="pml-paragraph">The <code class="pml-inline-code">on</code> clause may be used at the end of a constant assignment, variable assignment, or function call:</p>
+                                <pre class="pml-code"><code>// constant assignment
+const c number = get_string_or_number() on string : return null
+
+// variable assignment
+variable v = get_string_or_number() on string : return null
+v = get_number_or_null() ^null
+
+// function call (return value is null or an error)
+close_connections() ^error</code></pre>
+
+                            </section>
+
+                        </section>
+                        <section id="flow_typing" class="pml-chapter">
+                            <h3 class="pml-chapter-title">Flow-Sensitive Typing</h3>
+                            <p class="pml-paragraph"><a class="pml-link" href="https://en.wikipedia.org/wiki/Flow-sensitive_typing"><i class="pml-italic">Flow-sensitive typing</i></a> (also called <i class="pml-italic">flow typing</i> or <i class="pml-italic">occurrence typing</i>) means that the compiler tracks and dynamically changes the type of object references (constants, variables, etc.), depending on where they are accessed in the code.</p>
+                            <p class="pml-paragraph"><i class="pml-italic">Flow typing</i> was already briefly introduced in section <a class="pml-link" href="https://www.TODO.com"><i class="pml-italic">Operator <code class="pml-inline-code">is</code></i></a> of the previous article, titled <a class="pml-link" href="https://www.TODO.com"><i class="pml-italic">Union Types in the Practical Type System</i></a>.</p>
+                            <p class="pml-paragraph">In the context of null-handling, <i class="pml-italic">flow typing</i> is convenient since it reduces the number of <code class="pml-inline-code">null</code> checks required in the code, which leads to smaller and faster code.</p>
+                            <p class="pml-paragraph">For example, consider the following code (where <code class="pml-inline-code">size</code> is a method of type <code class="pml-inline-code">string</code>):</p>
+                            <pre class="pml-code"><code>variable name string or null = null
+variable size = name.size <b class="pml-bold">// invalid</b>
+name = &quot;Bob&quot;
+size = name.size <b class="pml-bold">// valid</b></code></pre>
+                            <p class="pml-paragraph">The second line is clearly invalid, and therefore rejected by the compiler. But the last line is valid, because at this time the value <code class="pml-inline-code">&quot;Bob&quot;</code> is stored in <code class="pml-inline-code">name</code>. However, without <i class="pml-italic">flow typing</i> the compiler would generate an error, since the type of <code class="pml-inline-code">name</code> is declared to be <code class="pml-inline-code">string or null</code>. <i class="pml-italic">Flow typing</i> eliminates this false positive, because the compiler tracks the values assigned to <code class="pml-inline-code">name</code>, dynamically changes its type, and concludes that the last statement is valid.</p>
+                            <p class="pml-paragraph">Now consider this example, involving control flow:</p>
+                            <pre class="pml-code"><code>variable name string or null = null
+if foo() then
+    name = &quot;Bob&quot;
+else
+    name = &quot;Alice&quot;
+.
+const size = name.size <b class="pml-bold">// valid</b></code></pre>
+                            <p class="pml-paragraph">The last line is valid, because a string is assigned in both the <code class="pml-inline-code">then</code> and <code class="pml-inline-code">else</code> branches.</p>
+                            <p class="pml-paragraph">Now let's add some complexity to the previous code:</p>
+                            <pre class="pml-code"><code>variable name string or null = null
+if foo() then
+    if bar() then
+        name = &quot;Bob&quot;
+    .
+else
+    name = &quot;Alice&quot;
+.
+const size = name.size <b class="pml-bold">// invalid</b></code></pre>
+                            <p class="pml-paragraph">Now the last line isn't valid anymore, because if <code class="pml-inline-code">foo()</code> returns <code class="pml-inline-code">true</code>, and <code class="pml-inline-code">bar()</code> returns <code class="pml-inline-code">false</code> then <code class="pml-inline-code">name</code> will be <code class="pml-inline-code">null</code>. A compile-time error is generated.</p>
+                            <p class="pml-paragraph">To implement <i class="pml-italic">flow typing</i>, the compiler analyzes all execution paths in the source code (considering all kinds of control flow statements, such as <code class="pml-inline-code">if</code>, <code class="pml-inline-code">case</code>, <code class="pml-inline-code">while</code>, <code class="pml-inline-code">return</code>, <code class="pml-inline-code">throw</code>), and adapts the types of all object references in scope for each relevant location in the source code.</p>
+                            <p class="pml-paragraph">To cover flow typing everywhere in the code, the compiler must also analyze execution paths <i class="pml-italic">within expressions</i> (besides analyzing statements).</p>
+                            <p class="pml-paragraph">Consider the following code:</p>
+                            <pre class="pml-code"><code>const name string or null = ...
+if ( name is not null and name.size &gt; 50 )
+    write_line ( &quot;Name too long&quot; )
+.</code></pre>
+                            <p class="pml-paragraph">The above code is valid, because when <code class="pml-inline-code">name.size</code> is evaluated, <code class="pml-inline-code">name</code> is guaranteed to be non-null by the preceding <code class="pml-inline-code">name is not null</code> check.</p>
+                            <p class="pml-paragraph">If we accidentally inverted the order of the checks, or used an <code class="pml-inline-code">or</code> instead of an <code class="pml-inline-code">and</code>, the code wouldn't compile anymore:</p>
+                            <pre class="pml-code"><code>if ( name.size &gt; 50 and name is not null ) // compile-time error
+
+if ( name is not null or name.size &gt; 50 )  // compile-time error</code></pre>
+
+                        </section>
+
+                    </section>
+                    <section id="summary" class="pml-chapter">
+                        <h2 class="pml-chapter-title">Summary</h2>
+                        <p class="pml-paragraph">PTS uses <code class="pml-inline-code">null</code> to represent the <i class="pml-italic">absence of a value</i>.</p>
+                        <p class="pml-paragraph"><i class="pml-italic">Union types</i> are used to declare nullable object references (e.g. <code class="pml-inline-code">string or null</code>).</p>
+                        <p class="pml-paragraph"><i class="pml-italic">Null-safety</i> is natively built into the type system, therefore null pointer errors cannot occur.</p>
+                        <p class="pml-paragraph">PTS provides a set of dedicated operators and statements to facilitate null-handling as much as possible.</p>
+                        <p class="pml-paragraph"><i class="pml-italic">Flow typing</i> reduces the number of <code class="pml-inline-code">null</code> checks required in the code, which leads to smaller and faster code. </p>
+
+                    </section>
+                    <section id="closing_note" class="pml-chapter">
+                        <h2 class="pml-chapter-title">A Closing Note on <code class="pml-inline-code">null</code></h2>
+                        <p class="pml-paragraph">There is no need to hate or fear <code class="pml-inline-code">null</code> anymore.</p>
+                        <p class="pml-paragraph"><code class="pml-inline-code">null</code> is a very useful concept, frequently used in many software applications.</p>
+                        <p class="pml-paragraph">The invention of <code class="pml-inline-code">null</code> was not a &quot;billion dollar mistake&quot; <i class="pml-italic">per se</i>. The mistake was the lack of type systems that ensure null-safety, as well as the lack of language features that make null-handling easy, safe, and enjoyable. </p>
+
+                    </section>
+                    <section id="ch__28" class="pml-chapter">
+                        <h2 class="pml-chapter-title">Acknowledgment</h2>
+                        <p class="pml-paragraph">Many thanks to Tristano Ajmone for his useful feedback to improve this article. </p>
+
+                    </section>
+                </article>
+                <aside class="pml-doc-right">
+                </aside>
+            </div>
+            <footer class="pml-doc-footer">
+            </footer>
+        </div>
+
+    </body>
+</html>

@@ -23,6 +23,7 @@
                                 <li class="pml-toc-leaf-node"><a href="#ch__2">1. What, Why, and How?</a></li>
                                 <li class="pml-toc-leaf-node"><a href="#ch__3">2. Essence and Foundation</a></li>
                                 <li class="pml-toc-leaf-node"><a href="#ch__4">3. Record Types</a></li>
+                                <li class="pml-toc-leaf-node"><a href="#ch__5">4. Union Types</a></li>
                             </ul>
                         </div>
                     </nav>
@@ -172,7 +173,7 @@
 
                     </section>
                     <section id="ch__3" class="pml-chapter">
-                        <h2 class="pml-chapter-title">2. <a class="pml-link" href="https://www.TODO.com">Essence and Foundation</a></h2>
+                        <h2 class="pml-chapter-title">2. <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/essence-foundation/index.html">Essence and Foundation</a></h2>
                         <figure style="text-align: center">
                             <img class="pml-image" src="images/PTS_essence_foundation.svg" width="600">
                         </figure>
@@ -245,7 +246,7 @@
 
                     </section>
                     <section id="ch__4" class="pml-chapter">
-                        <h2 class="pml-chapter-title">3. <a class="pml-link" href="https://www.TODO.com">Record Types</a></h2>
+                        <h2 class="pml-chapter-title">3. <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/record-types/index.html">Record Types</a></h2>
                         <figure style="text-align: center">
                             <img class="pml-image" src="images/PTS_record.svg" width="500">
                         </figure>
@@ -300,6 +301,37 @@
                         </ul>
                         <p class="pml-paragraph">These features aim to simplify and streamline working with record types, while also increasing reliability, maintainability, and safety.</p>
                         <p class="pml-paragraph">In particular, the combination of easy and flexible <i class="pml-italic">data validation</i> and <i class="pml-italic">immutability by default</i> make PTS record types very robust. </p>
+
+                    </section>
+                    <section id="ch__5" class="pml-chapter">
+                        <h2 class="pml-chapter-title">4. <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/union-types/index.html">Union Types</a></h2>
+                        <figure style="text-align: center">
+                            <img class="pml-image" src="images/PTS_Color_or_Shape.svg" width="400">
+                        </figure>
+                        <div class="pml-caption" style="text-align:center;">Union type example</div>
+                        <p class="pml-paragraph">Without union types, an object reference (constant, variable, input parameter, etc.) is always an instance of a <i class="pml-italic">single</i> type. For example, input parameter <code class="pml-inline-code">identifier</code> is declared to be of type <code class="pml-inline-code">string</code>.</p>
+                        <p class="pml-paragraph">Union types allow an object reference to be an instance of any type among a defined set of types. For example, input parameter <code class="pml-inline-code">identifier</code> is declared to be of type <code class="pml-inline-code">string or number or null</code>.</p>
+                        <p class="pml-paragraph">Union types provide the following benefits:</p>
+                        <ul class="pml-list">
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">They are simple to understand, easy to use, and they provide an elegant solution for frequent programming tasks.</p>
+
+                            </li>
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">They provide a sound foundation for uniform null- and error-handling — two critical aspects of a practical type system.</p>
+                                <p class="pml-paragraph">Here's an example of a function that might return a <code class="pml-inline-code">string</code> or a <code class="pml-inline-code">file_error</code> or <code class="pml-inline-code">null</code>:</p>
+                                <pre class="pml-code"><code>fn read_text_file ( file file_path ) -&gt; <b class="pml-bold">string or null or file_error</b>
+    // function body
+.</code></pre>
+
+                            </li>
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">They help to simplify APIs, increase type-safety, facilitate eager/lazy evaluation, and provide additional benefits.</p>
+
+                            </li>
+
+                        </ul>
+                        <p class="pml-paragraph">PTS provides a set of dedicated operators and statements to streamline working with union types. </p>
 
                     </section>
                 </article>
