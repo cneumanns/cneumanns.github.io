@@ -22,7 +22,7 @@
                                 <li class="pml-toc-leaf-node"><a href="#introduction">Introduction</a></li>
                                 <li class="pml-toc-branch-node">
                                     <details>
-                                        <summary><a href="#what">What's a Practical Type System?</a></summary>
+                                        <summary><a href="#what">What&apos;s a Practical Type System?</a></summary>
                                         <ul>
                                             <li class="pml-toc-leaf-node"><a href="#type_def">Type</a></li>
                                             <li class="pml-toc-leaf-node"><a href="#cardinality_def">Cardinality</a></li>
@@ -55,7 +55,7 @@
                                     </details>
                                 </li>
                                 <li class="pml-toc-leaf-node"><a href="#conclusion">Conclusion (So Far)</a></li>
-                                <li class="pml-toc-leaf-node"><a href="#next">What's Next?</a></li>
+                                <li class="pml-toc-leaf-node"><a href="#next">What&apos;s Next?</a></li>
                                 <li class="pml-toc-leaf-node"><a href="#article_links">Links to All Articles in the Series</a></li>
                                 <li class="pml-toc-leaf-node"><a href="#ch__21">Acknowledgment</a></li>
                             </ul>
@@ -149,8 +149,8 @@
 
                     </section>
                     <section id="what" class="pml-chapter">
-                        <h2 class="pml-chapter-title">What's a <i class="pml-italic">Practical</i> Type System?</h2>
-                        <p class="pml-paragraph">We'll have a look at many source examples demonstrating how a type system helps to write better code. But first we need to define the following terminology, which is used throughout the article: <i class="pml-italic">type</i>, <i class="pml-italic">cardinality</i>, <i class="pml-italic">type system</i>, and <i class="pml-italic">practical type system</i>.</p>
+                        <h2 class="pml-chapter-title">What&apos;s a <i class="pml-italic">Practical</i> Type System?</h2>
+                        <p class="pml-paragraph">We&apos;ll have a look at many source examples demonstrating how a type system helps to write better code. But first we need to define the following terminology, which is used throughout the article: <i class="pml-italic">type</i>, <i class="pml-italic">cardinality</i>, <i class="pml-italic">type system</i>, and <i class="pml-italic">practical type system</i>.</p>
                         <section id="type_def" class="pml-chapter">
                             <h3 class="pml-chapter-title">Type</h3>
                             <p class="pml-paragraph">A <i class="pml-italic">type</i> is a name for a set of values.</p>
@@ -161,7 +161,7 @@
                             <h3 class="pml-chapter-title">Cardinality</h3>
                             <p class="pml-paragraph">The <a class="pml-link" href="https://en.wikipedia.org/wiki/Cardinality"><i class="pml-italic">cardinality</i></a> of a type is the number of distinct values in its set of values.</p>
                             <p class="pml-paragraph">For example, type <code class="pml-inline-code">boolean</code> has a cardinality of 2, because there are two values: <code class="pml-inline-code">true</code> and <code class="pml-inline-code">false</code>.</p>
-                            <p class="pml-paragraph">As we'll see soon, <i class="pml-italic">cardinality</i> plays a pivotal role in the design of a practical type system. </p>
+                            <p class="pml-paragraph">As we&apos;ll see soon, <i class="pml-italic">cardinality</i> plays a pivotal role in the design of a practical type system. </p>
 
                         </section>
                         <section id="type_system_def" class="pml-chapter">
@@ -214,7 +214,7 @@
                                     <li class="pml-list-element">
                                         <p class="pml-paragraph">The <b class="pml-bold">Fail Fast!</b> Condition</p>
                                         <p class="pml-paragraph">Invalid values, type incompatibilities, and other type-related errors are detected immediately at compile-time, whenever possible.</p>
-                                        <p class="pml-paragraph">If it's impossible to detect an error at <i class="pml-italic">compile</i>-time then it must be detected as soon as possible at <i class="pml-italic">run</i>-time.</p>
+                                        <p class="pml-paragraph">If it&apos;s impossible to detect an error at <i class="pml-italic">compile</i>-time then it must be detected as soon as possible at <i class="pml-italic">run</i>-time.</p>
 
                                     </li>
 
@@ -226,7 +226,7 @@
 
                             </div>
                             <p class="pml-paragraph">Henceforth, I will refer to the above definition as the <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/01-what-why-how/index.html#pts_design_rule"><i class="pml-italic">PTS Design Rule</i></a>, where <i class="pml-italic">PTS</i> is an acronym for <i class="pml-italic">Practical Type System</i>.</p>
-                            <p class="pml-paragraph">At first sight, the above definition might seem overly simplistic, because I am not mentioning important features such as static typing, semantic types, null-safety, error handling, immutability by default, etc. However, as we'll see later, the above definition is indeed all we need. In the following articles, we will simply apply the <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/01-what-why-how/index.html#pts_design_rule"><i class="pml-italic">PTS Design Rule</i></a> again and again, in order to discover the whole set of features and rules needed in a practical type system.</p>
+                            <p class="pml-paragraph">At first sight, the above definition might seem overly simplistic, because I am not mentioning important features such as static typing, semantic types, null-safety, error handling, immutability by default, etc. However, as we&apos;ll see later, the above definition is indeed all we need. In the following articles, we will simply apply the <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/01-what-why-how/index.html#pts_design_rule"><i class="pml-italic">PTS Design Rule</i></a> again and again, in order to discover the whole set of features and rules needed in a practical type system.</p>
                             <p class="pml-paragraph">The flow chart below illustrates the process:</p>
                             <figure style="text-align: left">
                                 <img class="pml-image" src="images/PTS_process.png">
@@ -250,7 +250,7 @@
 
                             </div>
                         </blockquote>
-                        <p class="pml-paragraph">In this section we're going to have a look at the following well-known (and not-so-well-known) benefits of a good type system:</p>
+                        <p class="pml-paragraph">In this section we&apos;re going to have a look at the following well-known (and not-so-well-known) benefits of a good type system:</p>
                         <ul class="pml-list">
                             <li class="pml-list-element">
                                 <p class="pml-paragraph">increased expressiveness</p>
@@ -294,10 +294,10 @@
     // body
 }</code></pre>
                             <p class="pml-paragraph">This code lacks <i class="pml-italic">expressiveness</i>!</p>
-                            <p class="pml-paragraph">By just looking at the function signature we don't know how to use this function. There are a lot of relevant questions, such as:</p>
+                            <p class="pml-paragraph">By just looking at the function signature we don&apos;t know how to use this function. There are a lot of relevant questions, such as:</p>
                             <ul class="pml-list">
                                 <li class="pml-list-element">
-                                    <p class="pml-paragraph">What does the function do? What does it mean to 'make coffee'? What does the function return? Does it just produce a side effect and return nothing?</p>
+                                    <p class="pml-paragraph">What does the function do? What does it mean to &apos;make coffee&apos;? What does the function return? Does it just produce a side effect and return nothing?</p>
 
                                 </li>
                                 <li class="pml-list-element">
@@ -310,14 +310,14 @@
                                 </li>
 
                             </ul>
-                            <p class="pml-paragraph">Better naming could help, but let's just look at the same function signature in a language that uses static typing (e.g. C, C++, C#, Go, Haskell, Java, Kotlin, Rust). The code below is written in Java:</p>
+                            <p class="pml-paragraph">Better naming could help, but let&apos;s just look at the same function signature in a language that uses static typing (e.g. C, C++, C#, Go, Haskell, Java, Kotlin, Rust). The code below is written in Java:</p>
                             <pre class="pml-code"><code>CupOfCoffee makeCoffee ( boolean milk, boolean sugar, int quantity ) {
     // body
 }</code></pre>
                             <p class="pml-paragraph"><i class="pml-italic">Much</i> better!</p>
                             <p class="pml-paragraph">We can clearly see that the function (or method in Java terminology) returns a <code class="pml-inline-code">CupOfCoffee</code> object. If we need more information we can have a look at the definition of <code class="pml-inline-code">CupOfCoffee</code>. If we use a modern IDE, we can chose <i class="pml-italic">goto definition</i> from a context menu, and the IDE will immediately open the source code file (without the need for us to specify the file location).</p>
                             <p class="pml-paragraph">We can also see that <code class="pml-inline-code">milk</code> and <code class="pml-inline-code">sugar</code> are <code class="pml-inline-code">boolean</code> input arguments, hence we can infer that they indicate whether or not we want to add milk and sugar.</p>
-                            <p class="pml-paragraph">However, we don't know how to use <code class="pml-inline-code">quantity</code>.</p>
+                            <p class="pml-paragraph">However, we don&apos;t know how to use <code class="pml-inline-code">quantity</code>.</p>
                             <p class="pml-paragraph">Is it the number of cups of coffee we want? Probably not, because the function returns a single <code class="pml-inline-code">CupOfCoffee</code>, not a <code class="pml-inline-code">List&lt;CupOfCoffee&gt;</code></p>
                             <p class="pml-paragraph">Is it an enumerated value (e.g. 1 = small size, 2 = medium, 3 = big)? Probably not, because then a Java <code class="pml-inline-code">enum</code> type should have been used.</p>
                             <p class="pml-paragraph">So what is the unit of <code class="pml-inline-code">quantity</code>? Is it milliliters, centiliters, or maybe ounces?</p>
@@ -352,34 +352,34 @@
                         </section>
                         <section id="reliability" class="pml-chapter">
                             <h3 class="pml-chapter-title">More Reliable and Maintainable Code</h3>
-                            <p class="pml-paragraph">Let's assume that <code class="pml-inline-code">makeCoffee</code> is actually meant to work as shown in the last example: It takes <code class="pml-inline-code">boolean</code> values for input <code class="pml-inline-code">milk</code> and <code class="pml-inline-code">sugar</code>, and an <code class="pml-inline-code">integer</code> value ranging from 50 to 300 milliliters for input <code class="pml-inline-code">quantity</code>.</p>
-                            <p class="pml-paragraph">Now suppose that Bob (a new programmer in the team) doesn't know this. To get 1 cup of coffee without milk and sugar he calls the function like this:</p>
+                            <p class="pml-paragraph">Let&apos;s assume that <code class="pml-inline-code">makeCoffee</code> is actually meant to work as shown in the last example: It takes <code class="pml-inline-code">boolean</code> values for input <code class="pml-inline-code">milk</code> and <code class="pml-inline-code">sugar</code>, and an <code class="pml-inline-code">integer</code> value ranging from 50 to 300 milliliters for input <code class="pml-inline-code">quantity</code>.</p>
+                            <p class="pml-paragraph">Now suppose that Bob (a new programmer in the team) doesn&apos;t know this. To get 1 cup of coffee without milk and sugar he calls the function like this:</p>
                             <pre class="pml-code"><code>makeCoffee ( &quot;no&quot;, &quot;no&quot;, 1 )</code></pre>
                             <p class="pml-paragraph">Questions: What will happen at compile-time? What at run-time?</p>
                             <p class="pml-paragraph">These are critical questions!</p>
                             <p class="pml-paragraph">The answer for both questions is that <i class="pml-italic">it depends on the type system</i>!</p>
-                            <p class="pml-paragraph">Let's first look at what happens in JavaScript.</p>
+                            <p class="pml-paragraph">Let&apos;s first look at what happens in JavaScript.</p>
                             <p class="pml-paragraph">JavaScript is mostly implemented by an interpreter, so there is no compile-time (although a JIT compiler might be used at runtime to improve performance).</p>
                             <p class="pml-paragraph">What happens at run-time?</p>
                             <p class="pml-paragraph">The function expects a <code class="pml-inline-code">boolean</code> value for <code class="pml-inline-code">milk</code>. However, Bob provides a <code class="pml-inline-code">string</code> value. JavaScript applies an error-prone technique called implicit type coercion, and uses so-called truthy and falsy values. For example, every non-empty string is considered to be truthy. Hence, if the function contains an <code class="pml-inline-code">if ( milk ) { ... } else { ... }</code> statement, the <code class="pml-inline-code">then</code> branch is executed if <code class="pml-inline-code">milk</code> contains the string <code class="pml-inline-code">&quot;no&quot;</code>. So Bob will get a cup of coffee <i class="pml-italic">with</i> milk, which is exactly the opposite of what he wanted!</p>
                             <p class="pml-paragraph">The final result of all this is that Bob asked for a cup of black coffee (no milk and no sugar), but instead gets a mixture of milk, sugar, and 1 milliliter of coffee!</p>
                             <p class="pml-paragraph">What about Java (and other statically typed languages)?</p>
-                            <p class="pml-paragraph">Fortunately, the above outcome doesn't happen in Java, because <i class="pml-italic">the type system doesn't allow it</i> to happen. The statement:</p>
+                            <p class="pml-paragraph">Fortunately, the above outcome doesn&apos;t happen in Java, because <i class="pml-italic">the type system doesn&apos;t allow it</i> to happen. The statement:</p>
                             <pre class="pml-code"><code>makeCoffee ( &quot;no&quot;, &quot;no&quot;, 1 )</code></pre>
                             <p class="pml-paragraph">... would immediately result in a <i class="pml-italic">compile</i>-time error, because a <code class="pml-inline-code">string</code> cannot be assigned to a <code class="pml-inline-code">boolean</code> input argument.</p>
-                            <p class="pml-paragraph">That's exactly what we want! We want the type system to help us and report mistakes as soon as possible.</p>
-                            <div class="pml-header">A Note on 'Silly Code'</div>
+                            <p class="pml-paragraph">That&apos;s exactly what we want! We want the type system to help us and report mistakes as soon as possible.</p>
+                            <div class="pml-header">A Note on &apos;Silly Code&apos;</div>
                             <p class="pml-paragraph">One could argue that the above sample code is just a funny toy example, only useful to entertain readers, and that nobody would write <i class="pml-italic">silly</i> code like this. However, fact is that silly mistakes <i class="pml-italic">do</i> happen in the real world. Practice shows that they happen all the time. Their probability increases significantly with the size and complexity of a project, and can be influenced by various factors such as domain complexity, expertise of the managers and developers, the amount of code to be written and maintained, the tools and processes used to detect and resolve bugs, and more.</p>
-                            <p class="pml-paragraph">For the sake of exercise, just <i class="pml-italic">imagine</i> a bug like the above one in a complex software application that manages the manufacturing process of drugs. Producing a drug with the wrong ingredients isn't funny anymore. The bug can cause fatalities that could have been prevented by using a programming language with a better type system suited to write reliable code.</p>
-                            <p class="pml-paragraph">Here is my personal experience: Although I've been coding for a few decades now (and still love it), I'm still making silly mistakes. I make less mistakes than when I started to write code, but I'm still unable to write bug-free code. Some of my coding mistakes were not just 'silly' — they were 'very silly'. I need a type system that protects me (as far as possible) from shooting myself in my foot.</p>
-                            <p class="pml-paragraph">I guess I'm not alone.</p>
-                            <p class="pml-paragraph">Maybe there are some geniuses out there who are capable of writing code that is entirely free of bugs, but I'm not a member of such an elite group. I suspect that such individuals would be very rare outliers.</p>
-                            <p class="pml-paragraph">Consider, for example, a highly qualified software developer working on a space mission project. He or she would never force a 64-bit floating point number into a 16-bit signed integer value, without checking first if the value isn't to high, because that would be silly, right? Right, but that's exactly what caused the Ariane 5 rocket to explode in 1996. This is just one example in the Wikipedia entry <a class="pml-link" href="https://en.wikipedia.org/wiki/List_of_software_bugs"><i class="pml-italic">List of software bugs</i></a> with extremely serious consequences.</p>
+                            <p class="pml-paragraph">For the sake of exercise, just <i class="pml-italic">imagine</i> a bug like the above one in a complex software application that manages the manufacturing process of drugs. Producing a drug with the wrong ingredients isn&apos;t funny anymore. The bug can cause fatalities that could have been prevented by using a programming language with a better type system suited to write reliable code.</p>
+                            <p class="pml-paragraph">Here is my personal experience: Although I&apos;ve been coding for a few decades now (and still love it), I&apos;m still making silly mistakes. I make less mistakes than when I started to write code, but I&apos;m still unable to write bug-free code. Some of my coding mistakes were not just &apos;silly&apos; — they were &apos;very silly&apos;. I need a type system that protects me (as far as possible) from shooting myself in my foot.</p>
+                            <p class="pml-paragraph">I guess I&apos;m not alone.</p>
+                            <p class="pml-paragraph">Maybe there are some geniuses out there who are capable of writing code that is entirely free of bugs, but I&apos;m not a member of such an elite group. I suspect that such individuals would be very rare outliers.</p>
+                            <p class="pml-paragraph">Consider, for example, a highly qualified software developer working on a space mission project. He or she would never force a 64-bit floating point number into a 16-bit signed integer value, without checking first if the value isn&apos;t to high, because that would be silly, right? Right, but that&apos;s exactly what caused the Ariane 5 rocket to explode in 1996. This is just one example in the Wikipedia entry <a class="pml-link" href="https://en.wikipedia.org/wiki/List_of_software_bugs"><i class="pml-italic">List of software bugs</i></a> with extremely serious consequences.</p>
                             <figure style="text-align: left">
                                 <iframe class="pml-youtube-video" src="https://www.youtube.com/embed/PK_yguLapgA" width="600" height="400" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen"></iframe>
                             </figure>
                             <div class="pml-caption">Ariane 5 explosion due to a software bug (explosion starts at 1:30)</div>
-                            <p class="pml-paragraph">We all make mistakes, and that's OK. That's precisely why we need type systems capable of auto-detecting inevitable human errors, including silly ones.</p>
+                            <p class="pml-paragraph">We all make mistakes, and that&apos;s OK. That&apos;s precisely why we need type systems capable of auto-detecting inevitable human errors, including silly ones.</p>
 
                         </section>
                         <section id="tools" class="pml-chapter">
@@ -433,7 +433,7 @@
 
                                 </div>
                                 <div class="pml-admonition-content">
-                                    <p class="pml-paragraph">This topic deserves a dedicated article in its own right, which I'm planning to publish at some future date.</p>
+                                    <p class="pml-paragraph">This topic deserves a dedicated article in its own right, which I&apos;m planning to publish at some future date.</p>
                                 </div>
                             </div>
 
@@ -465,7 +465,7 @@
                                 <div class="pml-quote-text-block">
                                     <div class="pml-quote-text-prefix"></div>
                                     <div class="pml-quote-text">
-                                        <p class="pml-paragraph">I’m a huge proponent of designing your code around the data, rather than the other way around, and I think it's one of the reasons git has been fairly successful.</p>
+                                        <p class="pml-paragraph">I’m a huge proponent of designing your code around the data, rather than the other way around, and I think it&apos;s one of the reasons git has been fairly successful.</p>
                                         <p class="pml-paragraph">Bad programmers worry about the code. Good programmers worry about data structures and their relationships.</p>
                                     </div>
                                     <div class="pml-quote-text-suffix"></div>
@@ -481,7 +481,7 @@
 
                                 </div>
                                 <div class="pml-admonition-content">
-                                    <p class="pml-paragraph">For more details about the data structure used in Git, see: <a class="pml-link" href="https://news.ycombinator.com/item?id=21418033"><i class="pml-italic">comments on Hacker News</i></a> (especially the first one by cmarschner), and Linus's first <a class="pml-link" href="https://bitbucket.org/jacobstopak/baby-git/src/master/README.torvalds"><i class="pml-italic">README file</i></a> that describes the data structure (in typical Linus style).</p>
+                                    <p class="pml-paragraph">For more details about the data structure used in Git, see: <a class="pml-link" href="https://news.ycombinator.com/item?id=21418033"><i class="pml-italic">comments on Hacker News</i></a> (especially the first one by cmarschner), and Linus&apos;s first <a class="pml-link" href="https://bitbucket.org/jacobstopak/baby-git/src/master/README.torvalds"><i class="pml-italic">README file</i></a> that describes the data structure (in typical Linus style).</p>
                                 </div>
                             </div>
                             <blockquote class="pml-quote">
@@ -522,7 +522,7 @@
                             <p class="pml-paragraph">Recognizing that defining data is the first step, we need to ask:</p>
                             <p class="pml-paragraph">What do we use to define data?</p>
                             <p class="pml-paragraph">The answer depends, of course, on the software architecture and development environment, but more often than not, we use the <i class="pml-italic">type system</i> of the programming language to define the data structures and their relationships. A well suited type system is therefore an essential instrument that allows us to define the data in a succinct, expressive, precise, reliable, and maintainable way. Hence, the type system often plays an important role at the <i class="pml-italic">start</i> of a new software project, especially if many different data structures are involved.</p>
-                            <p class="pml-paragraph">What's more, well designed and maintainable data plays an important role <i class="pml-italic">during</i> the software development and maintenance cycle. For example, new software developers joining the team at a later stage will be able to understand the internal workings of the application faster if they can look at type definitions that are succinct, expressive, and precise, so that they can quickly understand which values are allowed.</p>
+                            <p class="pml-paragraph">What&apos;s more, well designed and maintainable data plays an important role <i class="pml-italic">during</i> the software development and maintenance cycle. For example, new software developers joining the team at a later stage will be able to understand the internal workings of the application faster if they can look at type definitions that are succinct, expressive, and precise, so that they can quickly understand which values are allowed.</p>
                             <p class="pml-paragraph">Fred Brooks puts it this way (text within brackets added for clarification):</p>
                             <blockquote class="pml-quote">
                                 <div class="pml-quote-text-block">
@@ -544,7 +544,7 @@
                     <section id="how_does_it_work" class="pml-chapter">
                         <h2 class="pml-chapter-title">How Does it Work?</h2>
                         <p class="pml-paragraph">To get the gist of PTS, let us first look at a real-life example to clearly demonstrate what we want to achieve.</p>
-                        <p class="pml-paragraph">Then we'll have a closer look at the essential <i class="pml-italic">Fail Fast!</i> condition of the <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/01-what-why-how/index.html#pts_design_rule"><i class="pml-italic">PTS Design Rule</i></a>.</p>
+                        <p class="pml-paragraph">Then we&apos;ll have a closer look at the essential <i class="pml-italic">Fail Fast!</i> condition of the <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/01-what-why-how/index.html#pts_design_rule"><i class="pml-italic">PTS Design Rule</i></a>.</p>
                         <section id="example" class="pml-chapter">
                             <h3 class="pml-chapter-title">Example</h3>
                             <p class="pml-paragraph">Suppose we want to assign quality levels to products. There are five levels:<br /> <code class="pml-inline-code">worst</code>, <code class="pml-inline-code">bad</code>, <code class="pml-inline-code">medium</code>, <code class="pml-inline-code">good</code>, and <code class="pml-inline-code">best</code>.</p>
@@ -554,13 +554,13 @@
                                     // enum values are defined in uppercase letters.
 }
 </code></pre>
-                            <p class="pml-paragraph">We can immediately agree that it's easy to define type <code class="pml-inline-code">Quality</code>. We are able to express what we want with a minimum of succinct code.</p>
+                            <p class="pml-paragraph">We can immediately agree that it&apos;s easy to define type <code class="pml-inline-code">Quality</code>. We are able to express what we want with a minimum of succinct code.</p>
                             <p class="pml-paragraph">Hence the first condition (the <i class="pml-italic">Easy!</i> condition) of the <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/01-what-why-how/index.html#pts_design_rule"><i class="pml-italic">PTS Design Rule</i></a> is fulfilled: It is <i class="pml-italic">easy</i> to define, understand, and maintain our type.</p>
-                            <p class="pml-paragraph">Now let's verify the second condition (the <i class="pml-italic">Fail Fast!</i> condition): &quot;Invalid values, type incompatibilities, and other type-related errors are detected immediately at compile-time, whenever possible.&quot;</p>
+                            <p class="pml-paragraph">Now let&apos;s verify the second condition (the <i class="pml-italic">Fail Fast!</i> condition): &quot;Invalid values, type incompatibilities, and other type-related errors are detected immediately at compile-time, whenever possible.&quot;</p>
                             <p class="pml-paragraph">A valid value can be assigned to a variable of type <code class="pml-inline-code">Quality</code> as follows:</p>
                             <pre class="pml-code"><code>        Quality productQuality = Quality.GOOD;
 </code></pre>
-                            <p class="pml-paragraph">Let's try to assign an invalid value:</p>
+                            <p class="pml-paragraph">Let&apos;s try to assign an invalid value:</p>
                             <pre class="pml-code"><code>        Quality productQuality = Quality.QUITE_GOOD;
 </code></pre>
                             <p class="pml-paragraph">The Java compiler immediately reports an error, because <code class="pml-inline-code">QUITE_GOOD</code> is an invalid value:</p>
@@ -574,14 +574,14 @@ location: class Quality</pre>
                                 <img class="pml-image" src="images/quality_error.png" width="700">
                             </figure>
                             <p class="pml-paragraph">This is exactly what we want!</p>
-                            <p class="pml-paragraph">Let's try another kind of error:</p>
+                            <p class="pml-paragraph">Let&apos;s try another kind of error:</p>
                             <pre class="pml-code"><code>        Quality productQuality = &quot;GOOD&quot;;
 </code></pre>
                             <p class="pml-paragraph">Again, the compiler immediately reports an error, because we are trying to assign a value of type <code class="pml-inline-code">String</code> to a variable of type <code class="pml-inline-code">Quality</code>.</p>
                             <p class="pml-paragraph">The <i class="pml-italic">Fail Fast!</i> condition is clearly fulfilled too.</p>
-                            <p class="pml-paragraph">We can conclude that type <code class="pml-inline-code">Quality</code> is a good example to demonstrate how a practical type system should work. It's easy to define, understand, and maintain the type (condition 1), and the compiler catches all type errors (condition 2). Moreover, if we use an intelligent IDE, all bugs are immediately reported at <i class="pml-italic">edit</i>-time, and the IDE displays helpful messages to fix the bug. Awesome!</p>
+                            <p class="pml-paragraph">We can conclude that type <code class="pml-inline-code">Quality</code> is a good example to demonstrate how a practical type system should work. It&apos;s easy to define, understand, and maintain the type (condition 1), and the compiler catches all type errors (condition 2). Moreover, if we use an intelligent IDE, all bugs are immediately reported at <i class="pml-italic">edit</i>-time, and the IDE displays helpful messages to fix the bug. Awesome!</p>
                             <p class="pml-paragraph">Type <code class="pml-inline-code">Quality</code> is fully compliant with the <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/01-what-why-how/index.html#pts_design_rule"><i class="pml-italic">PTS Design Rule</i></a>.</p>
-                            <p class="pml-paragraph">Our aim is to achieve this level of excellence for <i class="pml-italic">all</i> types. However, that's quite challenging, as we'll see in the upcoming articles of this series.</p>
+                            <p class="pml-paragraph">Our aim is to achieve this level of excellence for <i class="pml-italic">all</i> types. However, that&apos;s quite challenging, as we&apos;ll see in the upcoming articles of this series.</p>
 
                         </section>
                         <section id="fail_fast" class="pml-chapter">
@@ -595,7 +595,7 @@ location: class Quality</pre>
                                     <p class="pml-paragraph">Readers familiar with the important <i class="pml-italic">Fail Fast!</i> principle can <a class="pml-xref" href="#coding_rule">skip</a> this section.</p>
                                 </div>
                             </div>
-                            <p class="pml-paragraph">While the <b class="pml-bold"><i class="pml-italic">Easy!</i></b> condition (the first condition of the <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/01-what-why-how/index.html#pts_design_rule"><i class="pml-italic">PTS Design Rule</i></a>) is easy to grasp, let's look at a simple example illustrating the full meaning of the <b class="pml-bold"><i class="pml-italic">Fail Fast!</i></b> condition (the second condition of the <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/01-what-why-how/index.html#pts_design_rule"><i class="pml-italic">PTS Design Rule</i></a>):</p>
+                            <p class="pml-paragraph">While the <b class="pml-bold"><i class="pml-italic">Easy!</i></b> condition (the first condition of the <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/01-what-why-how/index.html#pts_design_rule"><i class="pml-italic">PTS Design Rule</i></a>) is easy to grasp, let&apos;s look at a simple example illustrating the full meaning of the <b class="pml-bold"><i class="pml-italic">Fail Fast!</i></b> condition (the second condition of the <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/01-what-why-how/index.html#pts_design_rule"><i class="pml-italic">PTS Design Rule</i></a>):</p>
                             <blockquote class="pml-quote">
                                 <div class="pml-quote-text-block">
                                     <div class="pml-quote-text-prefix"></div>
@@ -625,7 +625,7 @@ location: class Quality</pre>
                             </div>
                             <p class="pml-paragraph">An interesting question arises: What will happen?</p>
                             <p class="pml-paragraph">Answer: <b class="pml-bold">It depends on the type system</b>!</p>
-                            <p class="pml-paragraph">In a primitive type system, IO errors can be ignored. If the source code doesn't explicitly test for an IO error, then no error is generated, neither at compile-time, nor at run-time. File <code class="pml-inline-code">temp/secret/passwords.txt</code> will simply not be deleted, and the application will happily continue execution, as if exposing passwords in a plain text file is not a big deal, and everything is OK.</p>
+                            <p class="pml-paragraph">In a primitive type system, IO errors can be ignored. If the source code doesn&apos;t explicitly test for an IO error, then no error is generated, neither at compile-time, nor at run-time. File <code class="pml-inline-code">temp/secret/passwords.txt</code> will simply not be deleted, and the application will happily continue execution, as if exposing passwords in a plain text file is not a big deal, and everything is OK.</p>
                             <p class="pml-paragraph">In many programming languages, this bug would lead to a &quot;file not found&quot; run-time error later when the application tries to access the file. However, &quot;later&quot; in this context might mean &quot;much later.&quot; Hence, if the application crashes or is interrupted before executing the instruction that is supposed to delete the file, then the file will not be deleted and no error will be generated.</p>
                             <p class="pml-paragraph">In a better type system, an &quot;invalid file path&quot; <i class="pml-italic">run</i>-time error occurs as soon as the assignment <code class="pml-inline-code">fileToDelete = &quot;temp/secret:passwords.txt&quot;</code> is executed (i.e. <i class="pml-italic">before</i> accessing the file on the OS).</p>
                             <p class="pml-paragraph">An ideal type system reports the bug at <i class="pml-italic">compile</i>-time.</p>
@@ -658,8 +658,8 @@ location: class Quality</pre>
                             </ul>
                             <p class="pml-paragraph">By now, it should be clear that the goal of PTS is to catch as many bugs as possible at compile-time (or edit-time if an intelligent IDE is used).</p>
                             <p class="pml-paragraph">If a bug cannot be detected at compile-time, it should be detected as soon as possible at run-time.</p>
-                            <p class="pml-paragraph">Let's now suppose that the buggy file path (<code class="pml-inline-code">temp/secret:passwords.txt</code>) is not hard-coded, but read from a config file. In that case, the compiler can't report a bug. The error in the config file should therefore be caught immediately when the path is read from the file (and not just later when the file is deleted). A subsequent article will show data input validation can be facilitated by the type system.</p>
-                            <p class="pml-paragraph">Note that bugs detected at <i class="pml-italic">run</i>-time can be caught by unit tests. This helps to eliminate bugs before the application goes into production. Therefore, good support for unit tests (beyond the scope of this article) is an essential feature in any programming language, even if the language has an advanced type system. A good type system doesn't make unit tests dispensable. The slogan &quot;If it compiles, it works!&quot; is just wishful dreaming. No compiler in the world can detect bugs like using the wrong formula to compute the area of a circle. We need unit tests to detect bugs like that.</p>
+                            <p class="pml-paragraph">Let&apos;s now suppose that the buggy file path (<code class="pml-inline-code">temp/secret:passwords.txt</code>) is not hard-coded, but read from a config file. In that case, the compiler can&apos;t report a bug. The error in the config file should therefore be caught immediately when the path is read from the file (and not just later when the file is deleted). A subsequent article will show data input validation can be facilitated by the type system.</p>
+                            <p class="pml-paragraph">Note that bugs detected at <i class="pml-italic">run</i>-time can be caught by unit tests. This helps to eliminate bugs before the application goes into production. Therefore, good support for unit tests (beyond the scope of this article) is an essential feature in any programming language, even if the language has an advanced type system. A good type system doesn&apos;t make unit tests dispensable. The slogan &quot;If it compiles, it works!&quot; is just wishful dreaming. No compiler in the world can detect bugs like using the wrong formula to compute the area of a circle. We need unit tests to detect bugs like that.</p>
                             <div class="pml-admonition">
                                 <div class="pml-admonition-label">
                                     <p class="pml-paragraph">Note</p>
@@ -677,7 +677,7 @@ location: class Quality</pre>
                             <p class="pml-paragraph">But practice shows that writing reliable code is challenging in many programming languages, and often requires boilerplate code (as will be shown in subsequent articles). It largely depends on the type system.</p>
                             <p class="pml-paragraph">As seen already, an essential role of a practical type system is to <i class="pml-italic">facilitate</i> (as far as possible) the process of writing and maintaining reliable code.</p>
                             <p class="pml-paragraph">However, a type system cannot <i class="pml-italic">force</i> us to write reliable code in all cases. It can only do so to a certain extent.</p>
-                            <p class="pml-paragraph">For example, a type system cannot force us to create a dedicated type <code class="pml-inline-code">ISBN</code> that only allows valid values according to the ISBN standard. If we decide to use a simple string for ISBNs, thereby allowing nonsense values like <code class="pml-inline-code">@#$</code>, malicious values like <code class="pml-inline-code">&lt;script&gt;alert(&quot;Hi! You've been hacked&quot;)&lt;/script&gt;</code>, and other wicked values, then there is nothing the type system can do about it.</p>
+                            <p class="pml-paragraph">For example, a type system cannot force us to create a dedicated type <code class="pml-inline-code">ISBN</code> that only allows valid values according to the ISBN standard. If we decide to use a simple string for ISBNs, thereby allowing nonsense values like <code class="pml-inline-code">@#$</code>, malicious values like <code class="pml-inline-code">&lt;script&gt;alert(&quot;Hi! You&apos;ve been hacked&quot;)&lt;/script&gt;</code>, and other wicked values, then there is nothing the type system can do about it.</p>
                             <p class="pml-paragraph">Maximum reliability can only be achieved if the programmer actually <i class="pml-italic">uses</i> the available type system mechanisms to define safe types. Therefore, besides the <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/01-what-why-how/index.html#pts_design_rule"><i class="pml-italic">PTS Design Rule</i></a>, we also need the following simple <i class="pml-italic">PTS Coding Rule</i>:</p>
                             <div id="pts_coding_rule" class="pml-division" style="margin-left:5em; margin-right:5em;background-color:#F0FFF0;padding:1em;border-radius:1em;">
                                 <p class="pml-paragraph">All data types in a software project should have the lowest possible cardinality.</p>
@@ -691,14 +691,14 @@ location: class Quality</pre>
                             <p class="pml-paragraph">Whole classes of bugs can easily be prevented if a package uses safe types with the lowest possible cardinality.</p>
                             <p class="pml-paragraph">Besides disallowing invalid values, dedicated safe types also provide protection against semantic type errors.</p>
                             <p class="pml-paragraph">Consider the following Java code:</p>
-                            <pre class="pml-code"><code>String s1 = &quot;Hello&quot;  // declare 's1' of type 'String', with value &quot;Hello&quot;
-String s2 = s1       // declare 's2' of type 'String', with same value as 's1'</code></pre>
+                            <pre class="pml-code"><code>String s1 = &quot;Hello&quot;  // declare &apos;s1&apos; of type &apos;String&apos;, with value &quot;Hello&quot;
+String s2 = s1       // declare &apos;s2&apos; of type &apos;String&apos;, with same value as &apos;s1&apos;</code></pre>
                             <p class="pml-paragraph">Is there a bug in this code?</p>
                             <p class="pml-paragraph">Well, there is no obvious bug, and the code is surely correct for the compiler.</p>
-                            <p class="pml-paragraph">Now let's just change the variable names:</p>
+                            <p class="pml-paragraph">Now let&apos;s just change the variable names:</p>
                             <pre class="pml-code"><code>String message = &quot;Hello&quot;
 String book_ISBN = message</code></pre>
-                            <p class="pml-paragraph">The code is now <i class="pml-italic">obviously</i> wrong (<code class="pml-inline-code">&quot;Hello&quot;</code> is an invalid ISBN), but the bug can't be detected by the compiler.</p>
+                            <p class="pml-paragraph">The code is now <i class="pml-italic">obviously</i> wrong (<code class="pml-inline-code">&quot;Hello&quot;</code> is an invalid ISBN), but the bug can&apos;t be detected by the compiler.</p>
                             <p class="pml-paragraph">However, the bug can easily be prevented by using a dedicated and safe type <code class="pml-inline-code">ISBN</code>, instead of a <code class="pml-inline-code">String</code>:</p>
                             <pre class="pml-code"><code>String message = &quot;Hello&quot;
 ISBN book_ISBN = message
@@ -724,10 +724,10 @@ ISBN book_ISBN = message
 
                     </section>
                     <section id="next" class="pml-chapter">
-                        <h2 class="pml-chapter-title">What's Next?</h2>
-                        <p class="pml-paragraph">In the next article, we'll have a look at PTS goals and non-goals, the history of PTS, core types, and 'features' that should <i class="pml-italic">not</i> be supported in a practical type system.</p>
-                        <p class="pml-paragraph">Then, we'll apply the <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/01-what-why-how/index.html#pts_design_rule"><i class="pml-italic">PTS Design Rule</i></a> again and again, in order to discover all PTS features and rules needed to help writing reliable, maintainable, and safe code in less time.</p>
-                        <p class="pml-paragraph">We'll also have a look at many source code examples to illustrate how source code could look like in a language that implements PTS. </p>
+                        <h2 class="pml-chapter-title">What&apos;s Next?</h2>
+                        <p class="pml-paragraph">In the next article, we&apos;ll have a look at PTS goals and non-goals, the history of PTS, core types, and &apos;features&apos; that should <i class="pml-italic">not</i> be supported in a practical type system.</p>
+                        <p class="pml-paragraph">Then, we&apos;ll apply the <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/01-what-why-how/index.html#pts_design_rule"><i class="pml-italic">PTS Design Rule</i></a> again and again, in order to discover all PTS features and rules needed to help writing reliable, maintainable, and safe code in less time.</p>
+                        <p class="pml-paragraph">We&apos;ll also have a look at many source code examples to illustrate how source code could look like in a language that implements PTS. </p>
 
                     </section>
                     <section id="article_links" class="pml-chapter">
@@ -752,6 +752,10 @@ ISBN book_ISBN = message
                             </li>
                             <li class="pml-list-element">
                                 <p class="pml-paragraph"><a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/null-safety/index.html"><i class="pml-italic">Null-Safety</i></a></p>
+
+                            </li>
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph"><a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/error-handling/index.html"><i class="pml-italic">Error Handling</i></a></p>
 
                             </li>
 

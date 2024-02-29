@@ -1,0 +1,1403 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="generator" content="PML 4.0.0 (www.pml-lang.dev)" />
+        <title>Error Handling in the Practical Type System (PTS)</title>
+        <link rel="stylesheet" href="css/pml-default.css">
+        <link rel="stylesheet" href="css/pml-print-default.css" media="print">
+
+    </head>
+    <body>
+
+        <div class="pml-doc-wrapper">
+            <header class="pml-doc-header">
+            </header>
+            <div class="pml-doc-content">
+                <aside class="pml-doc-left">
+                    <nav class="pml-toc">
+                        <h2 class="pml-toc-title">Table of Contents</h2>
+                        <div class="pml-toc-tree" id="TOCTree">
+                            <ul>
+                                <li class="pml-toc-leaf-node"><a href="#introduction">Introduction</a></li>
+                                <li class="pml-toc-leaf-node"><a href="#approaches">Common Error-Handling Approaches</a></li>
+                                <li class="pml-toc-branch-node">
+                                    <details>
+                                        <summary><a href="#how">How Does It Work?</a></summary>
+                                        <ul>
+                                            <li class="pml-toc-leaf-node"><a href="#principles">Fundamental Principles</a></li>
+                                            <li class="pml-toc-branch-node">
+                                                <details>
+                                                    <summary><a href="#types">Types</a></summary>
+                                                    <ul>
+                                                        <li class="pml-toc-leaf-node"><a href="#type_hierarchy">Type Hierarchy</a></li>
+                                                        <li class="pml-toc-leaf-node"><a href="#type_error">Type error</a></li>
+                                                        <li class="pml-toc-leaf-node"><a href="#type_non_error">Type non_error</a></li>
+                                                        <li class="pml-toc-leaf-node"><a href="#type_anticipated_error">Type anticipated_error</a></li>
+                                                        <li class="pml-toc-leaf-node"><a href="#type_unanticipated_error">Type unanticipated_error</a></li>
+                                                        <li class="pml-toc-leaf-node"><a href="#built_in_error_children">Built-in Child-Types of error</a></li>
+                                                        <li class="pml-toc-leaf-node"><a href="#user_defined_error_children">User-Defined Child-Types of error</a></li>
+                                                    </ul>
+                                                </details>
+                                            </li>
+                                            <li class="pml-toc-branch-node">
+                                                <details>
+                                                    <summary><a href="#anticipated_errors">Anticipated Errors</a></summary>
+                                                    <ul>
+                                                        <li class="pml-toc-leaf-node"><a href="#function_signature">Function Signature</a></li>
+                                                        <li class="pml-toc-leaf-node"><a href="#returning_errors">Returning Errors from Functions</a></li>
+                                                        <li class="pml-toc-leaf-node"><a href="#operators">Helpful Operators, Statements, and Compiler Features</a></li>
+                                                        <li class="pml-toc-branch-node">
+                                                            <details>
+                                                                <summary><a href="#handling">Error Handling Approaches</a></summary>
+                                                                <ul>
+                                                                    <li class="pml-toc-leaf-node"><a href="#handling_handle">Handling the Error</a></li>
+                                                                    <li class="pml-toc-leaf-node"><a href="#handling_return">Returning the Error</a></li>
+                                                                    <li class="pml-toc-leaf-node"><a href="#handling_wrap">Returning a Wrapper Error</a></li>
+                                                                    <li class="pml-toc-leaf-node"><a href="#handling_throw">Throwing an Unanticipated Error</a></li>
+                                                                    <li class="pml-toc-leaf-node"><a href="#handling_abort">Aborting Program Execution</a></li>
+                                                                    <li class="pml-toc-leaf-node"><a href="#handling_ignore">Explicitly Ignoring the Error</a></li>
+                                                                    <li class="pml-toc-leaf-node"><a href="#try_statement_1">The try Statement</a></li>
+                                                                </ul>
+                                                            </details>
+                                                        </li>
+                                                    </ul>
+                                                </details>
+                                            </li>
+                                            <li class="pml-toc-branch-node">
+                                                <details>
+                                                    <summary><a href="#unanticipated_errors">Unanticipated Errors</a></summary>
+                                                    <ul>
+                                                        <li class="pml-toc-branch-node">
+                                                            <details>
+                                                                <summary><a href="#unanticipated_error_handling">Handling Unanticipated Errors</a></summary>
+                                                                <ul>
+                                                                    <li class="pml-toc-leaf-node"><a href="#global_error_handler">Global Error Handlers</a></li>
+                                                                    <li class="pml-toc-leaf-node"><a href="#try_statement_2">try Statement</a></li>
+                                                                    <li class="pml-toc-leaf-node"><a href="#throw_statement">throw Statement</a></li>
+                                                                </ul>
+                                                            </details>
+                                                        </li>
+                                                    </ul>
+                                                </details>
+                                            </li>
+                                        </ul>
+                                    </details>
+                                </li>
+                                <li class="pml-toc-branch-node">
+                                    <details>
+                                        <summary><a href="#tips">Practical Considerations</a></summary>
+                                        <ul>
+                                            <li class="pml-toc-leaf-node"><a href="#tips_many">Avoid Returning Many Types of Anticipated Errors!</a></li>
+                                            <li class="pml-toc-leaf-node"><a href="#tips_wrapper">Use Wrappers if Appropriate!</a></li>
+                                            <li class="pml-toc-leaf-node"><a href="#tips_overuse">Use Unanticipated Errors if Appropriate!</a></li>
+                                            <li class="pml-toc-leaf-node"><a href="#tips_null">Don&apos;t Use null to Return Error Conditions!</a></li>
+                                        </ul>
+                                    </details>
+                                </li>
+                                <li class="pml-toc-leaf-node"><a href="#summary">Summary</a></li>
+                                <li class="pml-toc-leaf-node"><a href="#ch__36">Acknowledgment</a></li>
+                            </ul>
+                        </div>
+                    </nav>
+                </aside>
+                <article id="doc__" class="pml-doc-text">
+                    <h1 class="pml-doc-title">Error Handling in the Practical Type System (PTS)</h1>
+                    <table class="pml-table">
+                        <tr class="pml-table-body-row">
+                            <td class="pml-table-body-cell">
+                                <p class="pml-paragraph"><b class="pml-bold">First Published</b></p>
+
+                            </td>
+                            <td class="pml-table-body-cell">
+                                <p class="pml-paragraph">2024-02-29</p>
+
+                            </td>
+
+                        </tr>
+                        <tr class="pml-table-body-row">
+                            <td class="pml-table-body-cell">
+                                <p class="pml-paragraph"><b class="pml-bold">Author</b></p>
+
+                            </td>
+                            <td class="pml-table-body-cell">
+                                <p class="pml-paragraph">Christian Neumanns</p>
+
+                            </td>
+
+                        </tr>
+                        <tr class="pml-table-body-row">
+                            <td class="pml-table-body-cell">
+                                <p class="pml-paragraph"><b class="pml-bold">Editor</b></p>
+
+                            </td>
+                            <td class="pml-table-body-cell">
+                                <p class="pml-paragraph">Tristano Ajmone</p>
+
+                            </td>
+
+                        </tr>
+                        <tr class="pml-table-body-row">
+                            <td class="pml-table-body-cell">
+                                <p class="pml-paragraph"><b class="pml-bold">License</b></p>
+
+                            </td>
+                            <td class="pml-table-body-cell">
+                                <p class="pml-paragraph"><a class="pml-link" href="https://creativecommons.org/licenses/by-nd/4.0/">CC BY-ND 4.0</a></p>
+
+                            </td>
+
+                        </tr>
+
+                    </table>
+                    <p class="pml-paragraph"><br /></p>
+                    <p class="pml-paragraph">This is part 6 in a series of articles titled <i class="pml-italic">How to Design a Practical Type System to Maximize Reliability, Maintainability, and Productivity in Software Development Projects</i>.</p>
+                    <p class="pml-paragraph">It is recommended (but not required for experienced programmers) to read the articles in their order of publication, starting with <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/01-what-why-how/index.html"><i class="pml-italic">Part 1: What? Why? How?</i></a>.</p>
+                    <p class="pml-paragraph">For a quick summary of previous articles you can read <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/summary/index.html"><i class="pml-italic">Summary of the Practical Type System </i>(<i class="pml-italic">PTS</i>) <i class="pml-italic">Article Series</i></a>.</p>
+                    <div class="pml-admonition">
+                        <div class="pml-admonition-label">
+                            <p class="pml-paragraph">Note</p>
+
+                        </div>
+                        <div class="pml-admonition-content">
+                            <p class="pml-paragraph">Please be aware that PTS is a new paradigm and still a work-in-progress. As explained in section <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/essence-foundation/index.html#history"><i class="pml-italic">History</i></a> of the article <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/essence-foundation/index.html"><i class="pml-italic">Essence and Foundation of the Practical Type System (PTS)</i></a>, I created a proof-of-concept implementation which is now a bit outdated — therefore you won’t be able to try out the PTS code examples shown in this article. </p>
+                        </div>
+                    </div>
+                    <p class="pml-paragraph"><br /></p>
+                    <figure style="text-align: center">
+                        <img class="pml-image" src="images/erorr.png" width="300">
+                    </figure>
+                    <div class="pml-caption" style="text-align:center;">Error in the Error-Handling Code</div>
+                    <section id="introduction" class="pml-chapter">
+                        <h2 class="pml-chapter-title">Introduction</h2>
+                        <p class="pml-paragraph">Do you like to write code that handles errors?</p>
+                        <p class="pml-paragraph">Most programmers (including myself) don&apos;t. We prefer coding &quot;<a class="pml-link" href="https://en.wikipedia.org/wiki/Happy_path">the happy path</a>&quot; — handling errors is &quot;no fun.&quot; We hope that our applications will run in a world where required files always exist, databases never fail, network connections are always available, and malicious people are unheard of.</p>
+                        <p class="pml-paragraph">Practice shows that error-handling is often neglected (especially in the early stages of a project), because it requires a good deal of dedication, discipline, experience, and expertise. A common pitfall is to think that error-handling &quot;can be done later,&quot; since this too often means that it&apos;ll never be done, because &quot;there are deadlines, and we need and want to add features.&quot;</p>
+                        <p class="pml-paragraph">At the same time, we&apos;re also aware of the importance of error-handling, because it helps to identify and resolve issues quickly. Good error-handling is critical for creating software that is reliable, robust, secure, fault-tolerant, maintainable, and user-friendly.</p>
+                        <p class="pml-paragraph">To put it shortly: Error-handling is important, but nobody wants to do it!</p>
+                        <p class="pml-paragraph">Therefore, a type system designed for reliability should:</p>
+                        <ul class="pml-list">
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">protect us from accidentally forgetting to handle errors</p>
+
+                            </li>
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">facilitate all error-handling variations as much as possible (including explicitly ignoring errors), and support a succinct syntax that is easy to read and write</p>
+
+                            </li>
+
+                        </ul>
+                        <p class="pml-paragraph">This article shows how PTS aims to achieve this. </p>
+
+                    </section>
+                    <section id="approaches" class="pml-chapter">
+                        <h2 class="pml-chapter-title">Common Error-Handling Approaches</h2>
+                        <p class="pml-paragraph">Before showing how error-handling works in PTS, it might be useful to first consider some common error-handling approaches.</p>
+                        <div class="pml-admonition">
+                            <div class="pml-admonition-label">
+                                <p class="pml-paragraph">Note</p>
+
+                            </div>
+                            <div class="pml-admonition-content">
+                                <p class="pml-paragraph">Readers only interested in the PTS approach can <a class="pml-xref" href="#how">skip this section</a>.</p>
+                            </div>
+                        </div>
+                        <p class="pml-paragraph">Here&apos;s a brief summary:</p>
+                        <ul class="pml-list">
+                            <li class="pml-list-element">
+                                <div class="pml-header">Dedicated Return Value(s)</div>
+                                <p class="pml-paragraph">In langues without native support for error-handling, a <i class="pml-italic">dedicated return value</i> can be used to signal an error.</p>
+                                <p class="pml-paragraph">For example:</p>
+                                <ul class="pml-list">
+                                    <li class="pml-list-element">
+                                        <p class="pml-paragraph">A function returning an integer greater or equal to 0, returns <code class="pml-inline-code">-1</code> in case of an error.</p>
+
+                                    </li>
+                                    <li class="pml-list-element">
+                                        <p class="pml-paragraph">A function that converts an XML document into a JSON string returns <code class="pml-inline-code">&quot;XML ERROR&quot;</code> if the XML document could not be parsed, or <code class="pml-inline-code">&quot;JSON ERROR&quot;</code> if the JSON document couldn&apos;t be created.</p>
+
+                                    </li>
+
+                                </ul>
+                                <p class="pml-paragraph">A special case of this approach is to return a boolean value indicating success or failure.</p>
+
+                            </li>
+                            <li class="pml-list-element">
+                                <div class="pml-header">Mutable Input Parameter</div>
+                                <p class="pml-paragraph">Another way to return errors in languages without built-in error-handling support is to use a mutable input parameter that can be set to an error value inside the function, and then be explored in code that invoked the function.</p>
+
+                            </li>
+                            <li class="pml-list-element">
+                                <div class="pml-header">Global Error Object</div>
+                                <p class="pml-paragraph">A few languages provide a global read/write error object that&apos;s updated by a function to signal an error, and then read by parent functions in the call stack to check whether an error occurred.</p>
+                                <p class="pml-paragraph">An example is <a class="pml-link" href="https://en.wikipedia.org/wiki/Errno.h"><code class="pml-inline-code">errno</code></a> in C.</p>
+
+                            </li>
+                            <li class="pml-list-element">
+                                <div class="pml-header">Multiple Return Values</div>
+                                <p class="pml-paragraph">Some programming languages support multiple return values in functions. The first output parameter(s) are used to return a result, while the last output parameter is used to return an error. Golang uses this approach.</p>
+                                <p class="pml-paragraph">A similar effect can be achieved with tuples returned by functions.</p>
+
+                            </li>
+                            <li class="pml-list-element">
+                                <div class="pml-header">Exceptions</div>
+                                <p class="pml-paragraph">Many popular programming languages support <i class="pml-italic">exceptions</i> as a dedicated mechanism for handling errors — for example C++, C#, Java, JavaScript, Kotlin, Python, and Ruby.</p>
+                                <p class="pml-paragraph">As far as I know, Java is the only popular language that differentiates between <i class="pml-italic">checked</i> and <i class="pml-italic">unchecked</i> exceptions. Unchecked exceptions can be ignored, but checked exceptions can&apos;t. All other languages listed above use only unchecked exceptions.</p>
+
+                            </li>
+                            <li class="pml-list-element">
+                                <div class="pml-header"><code class="pml-inline-code">Result</code>/<code class="pml-inline-code">Either</code> Type</div>
+                                <p class="pml-paragraph">Some languages provide a <code class="pml-inline-code">Result</code> (aka <code class="pml-inline-code">Either</code>) type, which can be used as the return type of a function that might fail. There are two possible instances for this type: an instance representing a successful return value, or an instance representing an error.</p>
+                                <p class="pml-paragraph">For example:</p>
+                                <ul class="pml-list">
+                                    <li class="pml-list-element">
+                                        <p class="pml-paragraph">Rust provides a <a class="pml-link" href="https://doc.rust-lang.org/std/result/"><code class="pml-inline-code">Result</code></a> type for returning and propagating errors.</p>
+
+                                    </li>
+                                    <li class="pml-list-element">
+                                        <p class="pml-paragraph">Haskell provides an <a class="pml-link" href="https://hackage.haskell.org/package/base-4.7.0.1/docs/Data-Either.html"><code class="pml-inline-code">Either</code></a> monad to represent a value which is either correct or an error.</p>
+
+                                    </li>
+
+                                </ul>
+
+                            </li>
+
+                        </ul>
+                        <div class="pml-admonition">
+                            <div class="pml-admonition-label">
+                                <p class="pml-paragraph">Note</p>
+
+                            </div>
+                            <div class="pml-admonition-content">
+                                <p class="pml-paragraph">For a thorough discussion of most error-handling approaches listed above, I recommend reading Joe Duffy&apos;s article <a class="pml-link" href="https://joeduffyblog.com/2016/02/07/the-error-model/"><i class="pml-italic">The Error Model</i></a>.</p>
+                                <p class="pml-paragraph">Examples of the above approaches are also shown in Nicolas Fränkel&apos;s article <a class="pml-link" href="https://blog.frankel.ch/error-handling/"><i class="pml-italic">Error handling across different languages</i></a>.</p>
+                            </div>
+                        </div>
+                        <div class="pml-header">PTS Approach</div>
+                        <p class="pml-paragraph">PTS doesn&apos;t adopt any of the above approaches.</p>
+                        <p class="pml-paragraph">The first three approaches (dedicated return value, mutable input parameter, and global error object) are poor ones — they lead to error-prone error-handling, and they are therefore inappropriate in high-level languages designed to write reliable code.</p>
+                        <p class="pml-paragraph">Using multiple return values or tuples for error handling isn&apos;t developer-friendly. Errors can easily be ignored, and the code quickly becomes cluttered with error-handling.</p>
+                        <p class="pml-paragraph">The main reasons for not using exceptions or a <code class="pml-inline-code">Result</code>/<code class="pml-inline-code">Either</code> type in PTS are explained in section <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/union-types/index.html#why"><i class="pml-italic">Why Do We Need Union Types?</i></a> of the article <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/union-types/index.html"><i class="pml-italic">Union Types in the Practical Type System (PTS)</i></a>.</p>
+                        <div class="pml-admonition">
+                            <div class="pml-admonition-label">
+                                <p class="pml-paragraph">Note</p>
+
+                            </div>
+                            <div class="pml-admonition-content">
+                                <p class="pml-paragraph">Other reasons for not adopting unchecked exceptions to handle <i class="pml-italic">all</i> errors can be found in section <a class="pml-link" href="https://joeduffyblog.com/2016/02/07/the-error-model/index.html#unchecked-exceptions"><i class="pml-italic">Unchecked Exceptions</i></a> of Joe Duffy&apos;s (long but very insightful) article <a class="pml-link" href="https://joeduffyblog.com/2016/02/07/the-error-model/index.html"><i class="pml-italic">The Error Model</i></a></p>
+                            </div>
+                        </div>
+
+                    </section>
+                    <section id="how" class="pml-chapter">
+                        <h2 class="pml-chapter-title">How Does It Work?</h2>
+                        <p class="pml-paragraph">This section provides an overview of error-handling in PTS, illustrated by simple source code examples, but without delving into implementation details.</p>
+                        <section id="principles" class="pml-chapter">
+                            <h3 class="pml-chapter-title">Fundamental Principles</h3>
+                            <p class="pml-paragraph">A crucial principle in PTS is to distinguish between two types of errors:</p>
+                            <ul class="pml-list">
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph"><i class="pml-italic">anticipated</i> errors, for example <code class="pml-inline-code">file_not_found_error</code>, <code class="pml-inline-code">network_connection_error</code>, etc.</p>
+                                    <p class="pml-paragraph">These errors are expected to possibly occur at run-time.</p>
+
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph"><i class="pml-italic">unanticipated</i> errors, for example <code class="pml-inline-code">out_of_memory_error</code>, <code class="pml-inline-code">stack_overflow_error</code>, etc.</p>
+                                    <p class="pml-paragraph">These errors are not expected to occur at run-time. They occur only if there is a serious problem that can&apos;t usually be solved at run-time.</p>
+
+                                </li>
+
+                            </ul>
+                            <p class="pml-paragraph">Both types of errors are handled differently.</p>
+                            <p class="pml-paragraph"><i class="pml-italic">Anticipated</i> errors are governed by the following principles:</p>
+                            <ul class="pml-list">
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">Functions that might fail at run-time must state in their signature that an anticipated error might be returned. </p>
+
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">Errors returned by functions cannot be silently ignored: They must be handled in the calling code, or ignored <i class="pml-italic">explicitly</i>.</p>
+
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">There is only one idiomatic way to <i class="pml-italic">return</i> errors from functions, but there are several (well supported) ways to <i class="pml-italic">handle</i> errors returned by functions.</p>
+
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">A dedicated set of operators and statements facilitates error-handling.</p>
+
+                                </li>
+
+                            </ul>
+                            <p class="pml-paragraph"><i class="pml-italic">Unanticipated</i> errors are governed by the following principles:</p>
+                            <ul class="pml-list">
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">Unanticipated errors can potentially occur at any time during program execution, and at any location in the source code. However, they are <i class="pml-italic">not expected</i> to occur — they are <i class="pml-italic">un</i>anticipated, and therefore not declared in function signatures.</p>
+
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">By default, unanticipated errors are handled by a global error handler. A built-in, default implementation of this handler writes error information (including stack traces) to the standard OS <code class="pml-inline-code">err</code> device and then aborts program execution with exit code <code class="pml-inline-code">1</code>.</p>
+                                    <p class="pml-paragraph">An application can register different error handlers to customize global handling of unanticipated errors.</p>
+
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">Unanticipated errors can be caught explicitly anywhere in the source code, in order to provide customized error handling in specific situations.</p>
+
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">Unanticipated errors are usually thrown implicitly, but they can also be thrown explicitly, for example in case of an unrecoverable problem detected at run-time.</p>
+
+                                </li>
+
+                            </ul>
+                            <p class="pml-paragraph">These are the fundamental design principles.</p>
+                            <p class="pml-paragraph">Now let&apos;s look into details. </p>
+
+                        </section>
+                        <section id="types" class="pml-chapter">
+                            <h3 class="pml-chapter-title">Types</h3>
+                            <section id="type_hierarchy" class="pml-chapter">
+                                <h4 class="pml-chapter-title">Type Hierarchy</h4>
+                                <p class="pml-paragraph">In section <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/null-safety/index.html#type_hierarchy"><i class="pml-italic">Type Hierarchy</i></a> of the previous article <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/null-safety/index.html"><i class="pml-italic">Null-Safety in the Practical Type System (PTS)</i></a> we already saw the following top types in the PTS type hierarchy:</p>
+                                <figure style="text-align: left">
+                                    <img class="pml-image" src="images/null_hierarchy.png">
+                                </figure>
+                                <p class="pml-paragraph">We&apos;ll now refine this type hierarchy, first by defining the sub-types of <code class="pml-inline-code">non_null</code>:</p>
+                                <figure style="text-align: left">
+                                    <img class="pml-image" src="images/non_null_types.png">
+                                </figure>
+                                <p class="pml-paragraph">As you can see, there is a clear separation between types that represent errors (child-types of <code class="pml-inline-code">error</code>), and those that don&apos;t (child-types of <code class="pml-inline-code">non_error</code>).</p>
+                                <p class="pml-paragraph">Now let&apos;s look at the sub-types of <code class="pml-inline-code">error</code>:</p>
+                                <figure style="text-align: left">
+                                    <img class="pml-image" src="images/error_types.png">
+                                </figure>
+                                <p class="pml-paragraph">This diagram shows the distinction between <i class="pml-italic">anticipated</i> and <i class="pml-italic">unanticipated</i> errors. </p>
+                                <p class="pml-paragraph">Taking into account the above additional types, the PTS top-types hierarchy becomes:</p>
+                                <figure style="text-align: left">
+                                    <img class="pml-image" src="images/null_and_error_hierarchy.png">
+                                </figure>
+                                <p class="pml-paragraph">All types displayed in italics are <i class="pml-italic">non-instantiable</i> types (aka <i class="pml-italic">abstract</i> types). Their cardinality is zero.</p>
+                                <p class="pml-paragraph">Now let&apos;s have a closer look at these types.</p>
+
+                            </section>
+                            <section id="type_error" class="pml-chapter">
+                                <h4 class="pml-chapter-title">Type <code class="pml-inline-code">error</code></h4>
+                                <p class="pml-paragraph">Type <code class="pml-inline-code">error</code> is the root of all types representing errors.</p>
+                                <p class="pml-paragraph"><code class="pml-inline-code">error</code> is a <i class="pml-italic">non-instantiable</i> (aka <i class="pml-italic">abstract</i>) type — its cardinality is zero. Hence, it&apos;s impossible to create an object of type <code class="pml-inline-code">error</code> — only concrete descendants of <code class="pml-inline-code">error</code> can be created, such as <code class="pml-inline-code">file_not_found_error</code> and <code class="pml-inline-code">invalid_user_input_error</code>.</p>
+                                <p class="pml-paragraph">Type <code class="pml-inline-code">error</code> is also <i class="pml-italic">sealed</i>. It has a fixed set of two direct child-types: <code class="pml-inline-code">anticipated_error</code> and <code class="pml-inline-code">unanticipated_error</code>. Nobody is allowed to define additional direct child-types of <code class="pml-inline-code">error</code>.</p>
+                                <p class="pml-paragraph">Types representing errors all provide specific, structured data about the error — useful information to handle errors and report them appropriately. Type <code class="pml-inline-code">error</code> defines four common attributes, inherited by all its descendants: <code class="pml-inline-code">message</code>, <code class="pml-inline-code">id</code>, <code class="pml-inline-code">time</code>, and <code class="pml-inline-code">cause</code>.</p>
+                                <p class="pml-paragraph">Taking into account the above specifications, type <code class="pml-inline-code">error</code> is defined as follows (using PTS syntax):</p>
+                                <pre class="pml-code"><code>type error
+    inherit: non_null                                                         (1)
+    child_types: anticipated_error, unanticipated_error                       (2)
+    factories: none                                                           (3)
+
+    atts
+        message string                                                        (4)
+        id string (pattern = &quot;[a-zA-Z0-9_-\.]{1,100}&quot;) or null default:null   (5)
+        time date_time or null default:date_time.now                          (6)
+        cause error or null default:null                                      (7)
+    .
+.</code></pre>
+                                <p class="pml-paragraph">(1) Type <code class="pml-inline-code">error</code> is a child of <code class="pml-inline-code">non_null.</code></p>
+                                <p class="pml-paragraph">(2) The <code class="pml-inline-code">child_types</code> property defines the fixed set of direct child-types for <code class="pml-inline-code">error</code>: <code class="pml-inline-code">anticipated_error</code> and <code class="pml-inline-code">unanticipated_error</code>. Thus, type <code class="pml-inline-code">error</code> is sealed. It&apos;s invalid to define other direct child-types. Moreover, the compiler checks that <code class="pml-inline-code">anticipated_error</code> and <code class="pml-inline-code">unanticipated_error</code> are actually defined in the library.</p>
+                                <p class="pml-paragraph">(3) <code class="pml-inline-code">factories: none</code> declares type <code class="pml-inline-code">error</code> to be a non-instantiable (abstract) type.</p>
+                                <p class="pml-paragraph">(4) Attribute <code class="pml-inline-code">message</code> is required. It holds a description of the error, typically displayed when an error occurs at run-time.</p>
+                                <p class="pml-paragraph">(5) <code class="pml-inline-code">id</code> is an optional string identifier for the error (e.g. <code class="pml-inline-code">&quot;FILE_NOT_FOUND&quot;</code>).</p>
+                                <p class="pml-paragraph">(6) <code class="pml-inline-code">time</code> represents the time at which the error occurred. By default, the current date and time is used. This attribute can be set to <code class="pml-inline-code">null</code> in security-sensitive environments where the time must not be stored (e.g. an attacker shouldn&apos;t know at which time an error occurred).</p>
+                                <p class="pml-paragraph">(7) <code class="pml-inline-code">cause</code> is an optional attribute representing the lower-level error that caused this error. For example, the cause of a <code class="pml-inline-code">config_data_not_available_error</code> could be a <code class="pml-inline-code">file_not_found_error</code>.</p>
+
+                            </section>
+                            <section id="type_non_error" class="pml-chapter">
+                                <h4 class="pml-chapter-title">Type <code class="pml-inline-code">non_error</code></h4>
+                                <p class="pml-paragraph">Type <code class="pml-inline-code">non_error</code> is the root of all types that don&apos;t represent errors. Descendants comprise:</p>
+                                <ul class="pml-list">
+                                    <li class="pml-list-element">
+                                        <p class="pml-paragraph">built-in PTS types, such as <code class="pml-inline-code">string</code>, <code class="pml-inline-code">number</code>, <code class="pml-inline-code">boolean</code>, <code class="pml-inline-code">list</code>, <code class="pml-inline-code">set</code>, <code class="pml-inline-code">map</code></p>
+
+                                    </li>
+                                    <li class="pml-list-element">
+                                        <p class="pml-paragraph">user-defined types, such as <code class="pml-inline-code">customer</code>, <code class="pml-inline-code">supplier</code>, <code class="pml-inline-code">product</code></p>
+
+                                    </li>
+
+                                </ul>
+                                <p class="pml-paragraph">Like <code class="pml-inline-code">error</code>, <code class="pml-inline-code">non_error</code> is also non-instantiable and sealed. The fixed set of child-types depends on the PTS implementation, but typical child-types would be: <code class="pml-inline-code">scalar</code>, <code class="pml-inline-code">collection</code>, <code class="pml-inline-code">record</code>, <code class="pml-inline-code">object</code>, and <code class="pml-inline-code">function</code>.</p>
+
+                            </section>
+                            <section id="type_anticipated_error" class="pml-chapter">
+                                <h4 class="pml-chapter-title">Type <code class="pml-inline-code">anticipated_error</code></h4>
+                                <p class="pml-paragraph">An <i class="pml-italic">anticipated error</i> is an error that is <i class="pml-italic">expected to possibly occur</i> at run-time.</p>
+                                <p class="pml-paragraph">For example, consider an application that relies on configuration data stored in a file. There is no guarantee that the file will actually exist at run-time — it might have been moved, renamed, or deleted accidentally. We have to <i class="pml-italic">anticipate</i> this problem, and handle it accordingly (if we want to write high-quality code). For example, we might display a helpful error to the user and ask if he/she wants to continue with a hard-coded default configuration.</p>
+                                <p class="pml-paragraph">The sub-tree of <code class="pml-inline-code">anticipated_error</code> depends on the PTS implementation. Examples of descendants could be:</p>
+                                <ul class="pml-list">
+                                    <li class="pml-list-element">
+                                        <p class="pml-paragraph">all kinds of resource input/output errors (e.g. <code class="pml-inline-code">file_error</code>, <code class="pml-inline-code">directory_error</code>, <code class="pml-inline-code">database_connection_error</code> — all child-types of <code class="pml-inline-code">IO_error</code>)</p>
+
+                                    </li>
+                                    <li class="pml-list-element">
+                                        <p class="pml-paragraph"><code class="pml-inline-code">invalid_data_error</code>, <code class="pml-inline-code">user_input_error</code>, <code class="pml-inline-code">compiler_diagnostic_error</code>, <code class="pml-inline-code">unit_test_error</code>, etc.</p>
+
+                                    </li>
+
+                                </ul>
+
+                            </section>
+                            <section id="type_unanticipated_error" class="pml-chapter">
+                                <h4 class="pml-chapter-title">Type <code class="pml-inline-code">unanticipated_error</code></h4>
+                                <p class="pml-paragraph">An <i class="pml-italic">unanticipated error</i> is an error that is <i class="pml-italic">not expected</i> to occur at run-time — if it does occur, it means that something really bad happened.</p>
+                                <p class="pml-paragraph">A few examples are: hardware malfunction, a problem in the OS, a configuration issue (e.g. missing library), a bug in the code.</p>
+
+                            </section>
+                            <section id="built_in_error_children" class="pml-chapter">
+                                <h4 class="pml-chapter-title">Built-in Child-Types of <code class="pml-inline-code">error</code></h4>
+                                <p class="pml-paragraph">As mentioned already, a PTS implementation provides a built-in set of commonly used descendants of <code class="pml-inline-code">anticipated_error</code> and <code class="pml-inline-code">unanticipated_error</code>.</p>
+                                <p class="pml-paragraph">Descendant types may define additional attributes to those defined in type <code class="pml-inline-code">error</code>, in order to provide specific, structured data related to the error. For instance, type <code class="pml-inline-code">unanticipated_error</code> has the <code class="pml-inline-code">call_trace</code> attribute — a list of source code locations representing the function call stack (very useful for debugging purposes).</p>
+                                <p class="pml-paragraph">If PTS is implemented in an object-oriented language, useful methods can be added too.</p>
+                                <p class="pml-paragraph">As an example, let&apos;s look at type <code class="pml-inline-code">file_error</code>, a native descendant of <code class="pml-inline-code">anticipated_error</code> which adds attribute <code class="pml-inline-code">file_path</code> and method <code class="pml-inline-code">file_name</code>, so that we are able to report which file caused the error:</p>
+                                <pre class="pml-code"><code>type file_error
+
+    inherit: IO_error
+
+    att file_path file_path
+
+    // Get the name of the file, without it&apos;s directory
+    fn file_name -&gt; file_name
+        return file_path.name
+    .
+.</code></pre>
+                                <p class="pml-paragraph">Types <code class="pml-inline-code">file_not_found_error</code>, <code class="pml-inline-code">file_read_error</code> and <code class="pml-inline-code">file_write_error</code> simply inherit from <code class="pml-inline-code">file_error</code>:</p>
+                                <pre class="pml-code"><code>type file_not_found_error
+    inherit file_error
+.
+
+type file_read_error
+    inherit file_error
+.
+
+type file_write_error
+    inherit file_error
+.</code></pre>
+
+                            </section>
+                            <section id="user_defined_error_children" class="pml-chapter">
+                                <h4 class="pml-chapter-title">User-Defined Child-Types of <code class="pml-inline-code">error</code></h4>
+                                <p class="pml-paragraph">Most applications, libraries, and frameworks will define customized descendants of <code class="pml-inline-code">anticipated_error</code> — specific error types related to the project domain.</p>
+                                <p class="pml-paragraph">For example, the API of a stock trading application might return a dedicated <code class="pml-inline-code">unsupported_currency_error</code> for currencies not supported in the trading system.</p>
+                                <p class="pml-paragraph">PTS also allows to define customized descendants of <code class="pml-inline-code">unanticipated_error</code>. However, these are rarely needed — only in special error-handling situations, as exemplified later in this article.</p>
+
+                            </section>
+
+                        </section>
+                        <section id="anticipated_errors" class="pml-chapter">
+                            <h3 class="pml-chapter-title">Anticipated Errors</h3>
+                            <blockquote class="pml-quote">
+                                <div class="pml-quote-text-block">
+                                    <div class="pml-quote-text-prefix"></div>
+                                    <div class="pml-quote-text">
+                                        <p class="pml-paragraph">If a function be advertised to return an error code in the event of difficulties, thou shalt check for that code, yea, even though the checks triple the size of thy code and produce aches in thy typing fingers, for if thou thinkest &quot;it cannot happen to me&quot;, the gods shall surely punish thee for thy arrogance.</p>
+                                    </div>
+                                    <div class="pml-quote-text-suffix"></div>
+                                </div>
+                                <div class="pml-quote-source">
+                                    <p class="pml-paragraph">— Henry Spencer, <a class="pml-link" href="https://www.lysator.liu.se/c/ten-commandments.html"><span class="pml-span" style="font-style: normal;">The Ten Commandments for C Programmers</span></a></p>
+
+                                </div>
+                            </blockquote>
+                            <p class="pml-paragraph">In this section we&apos;ll explore <i class="pml-italic">anticipated</i> errors — i.e. errors that are expected to <i class="pml-italic">possibly</i> occur at run-time (e.g. <code class="pml-inline-code">file_not_found_error</code>, <code class="pml-inline-code">user_input_error</code>, etc.).</p>
+                            <p class="pml-paragraph">Section <a class="pml-xref" href="#principles"><i class="pml-italic">Fundamental Principles</i></a> stated:</p>
+                            <ul class="pml-list">
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">Functions that might fail at run-time must state in their signature that an anticipated error might be returned.</p>
+
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">Errors returned by functions cannot be silently ignored: They must be handled in the calling code, or ignored <i class="pml-italic">explicitly</i>.</p>
+
+                                </li>
+
+                            </ul>
+                            <p class="pml-paragraph">The following sections explain how PTS ensures these conditions.</p>
+                            <section id="function_signature" class="pml-chapter">
+                                <h4 class="pml-chapter-title">Function Signature</h4>
+                                <p class="pml-paragraph">Consider a function that reads text stored in a file. In an ideal world, where such a function would never fail, the code could look like this:</p>
+                                <pre class="pml-code"><code>fn read_text_file ( file_path ) -&gt; string
+    // body
+.</code></pre>
+                                <p class="pml-paragraph">This function takes a <code class="pml-inline-code">file_path</code> as input, and returns a <code class="pml-inline-code">string</code> representing the text stored in the file.</p>
+                                <p class="pml-paragraph">But in the real world, resource input/output operations are never guaranteed to succeed — failures must be anticipated. Therefore, this function must return an error if the file can&apos;t be read for whatever reason (e.g. it doesn&apos;t exist, it&apos;s locked, it&apos;s denied read access, etc.). As explained in the article <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/union-types/index.html"><i class="pml-italic">Union Types in the Practical Type System (PTS)</i></a>, functions that might fail return a union type containing a member of type <code class="pml-inline-code">anticipated_error</code>. In our example, a <code class="pml-inline-code">file_read_error</code> is returned in case of failure. Hence, the function signature must be changed to:</p>
+                                <pre class="pml-code"><code>fn read_text_file ( file_path ) -&gt; string <b class="pml-bold">or file_read_error</b>
+    // body
+.</code></pre>
+                                <p class="pml-paragraph">Now the function returns a <code class="pml-inline-code">string</code> in case of success, or a <code class="pml-inline-code">file_read_error</code> in case of failure.</p>
+                                <p class="pml-paragraph">What should the function return if the file is empty? For reasons explained in a subsequent article, the function doesn&apos;t return an empty string — it returns <code class="pml-inline-code">null</code>. The final function signature becomes:</p>
+                                <pre class="pml-code"><code>fn read_text_file ( file_path ) -&gt; <b class="pml-bold">string or null or file_read_error</b>
+    // body
+.</code></pre>
+
+                            </section>
+                            <section id="returning_errors" class="pml-chapter">
+                                <h4 class="pml-chapter-title">Returning Errors from Functions</h4>
+                                <p class="pml-paragraph">Errors are returned from functions like any other value: via a <code class="pml-inline-code">return</code> statement.</p>
+                                <p class="pml-paragraph">Below is an example of a function that asks the user to enter a title. If the user fails to do so, a <code class="pml-inline-code">user_input_error</code> is returned.</p>
+                                <pre class="pml-code"><code>fn ask_title -&gt; string <b class="pml-bold">or user_input_error</b>
+
+    case type of GUI_dialogs.ask_string ( prompt = &quot;Please enter a title&quot; )
+        is string as title
+            return title
+        is null
+            <b class="pml-bold">return user_input_error.create (
+                message = &quot;A title is required.&quot;
+                id = &quot;INVALID_TITLE&quot; )</b>
+    .
+.</code></pre>
+
+                            </section>
+                            <section id="operators" class="pml-chapter">
+                                <h4 class="pml-chapter-title">Helpful Operators, Statements, and Compiler Features</h4>
+                                <p class="pml-paragraph">In the previous articles <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/union-types/index.html"><i class="pml-italic">Union Types in the Practical Type System (PTS)</i></a> and <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/null-safety/index.html"><i class="pml-italic">Null-Safety in the Practical Type System (PTS)</i></a> the following operators and statements were introduced:</p>
+                                <ul class="pml-list">
+                                    <li class="pml-list-element">
+                                        <p class="pml-paragraph">operators: <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/union-types/index.html#operator_is"><code class="pml-inline-code">is</code></a>, <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/null-safety/index.html#safe_navigation_operator"><code class="pml-inline-code">?</code></a> (safe navigation operator), and <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/null-safety/index.html#operator_if_is"><code class="pml-inline-code">if_is</code></a></p>
+
+                                    </li>
+                                    <li class="pml-list-element">
+                                        <p class="pml-paragraph">statements: <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/union-types/index.html#case_type_of_statement"><code class="pml-inline-code">case type of</code></a> (also available as an expression), <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/null-safety/index.html#assert_statement"><code class="pml-inline-code">assert</code></a>, and clause <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/null-safety/index.html#clause_on"><code class="pml-inline-code">on</code></a></p>
+
+                                    </li>
+
+                                </ul>
+                                <p class="pml-paragraph">We also peeked at some useful compiler features, such as <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/null-safety/index.html#flow_typing"><i class="pml-italic">Flow-Sensitive Typing</i></a>, which reduces the number of type checks needed in the code.</p>
+                                <p class="pml-paragraph">In PTS, null-handling and error-handling share many similarities, and both rely heavily on union types. Therefore, the above mentioned operators and statements are also useful for error-handling — they facilitate our task and enable us to write succinct code. They are available for other types too (not just for <code class="pml-inline-code">null</code> and <code class="pml-inline-code">error</code>), but this article focuses on how to use them in the context of error-handling.</p>
+                                <p class="pml-paragraph">Here is a reiteration of some examples explained in the previous articles:</p>
+                                <p class="pml-paragraph"><a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/union-types/index.html#case_type_of_statement"><code class="pml-inline-code">case type of</code> statement</a>:</p>
+                                <pre class="pml-code"><code><b class="pml-bold">case type of</b> read_text_file ( file_path.create ( &quot;example.txt&quot; ) )
+    is string as text // the string is stored in constant &apos;text&apos;
+        write_line ( &quot;Content of file:&quot; )
+        write_line ( text ) // the previously defined constant &apos;text&apos; is now used
+    is null
+        write_line ( &quot;The file is empty.&quot; )
+    <b class="pml-bold">is file_error as error</b>
+        write_line ( &quot;&quot;&quot;The following error occurred: {{error.message}}&quot;&quot;&quot; )
+.</code></pre>
+                                <p class="pml-paragraph"><a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/union-types/index.html#case_type_of_expression"><code class="pml-inline-code">case type of</code> expression</a>:</p>
+                                <pre class="pml-code"><code>const message = <b class="pml-bold">case type of</b> read_text_file ( file_path.create ( &quot;example.txt&quot; ) )
+    is string: &quot;a string&quot;
+    is null: &quot;null&quot;
+    <b class="pml-bold">is error:</b> &quot;an error&quot;
+write_line ( &quot;The result is &quot; + message )        </code></pre>
+                                <p class="pml-paragraph"><a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/null-safety/index.html#safe_navigation_operator">Operator <code class="pml-inline-code">?</code></a> (safe navigation operator):</p>
+                                <pre class="pml-code"><code>const phone_number = get_employee()?null<b class="pml-bold">?error</b> \
+    .get_department()?null<b class="pml-bold">?error</b> \
+    .get_manager()?null<b class="pml-bold">?error</b> \
+    .get_phone_number()</code></pre>
+                                <p class="pml-paragraph"><a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/null-safety/index.html#assert_statement"><code class="pml-inline-code">assert</code> statement</a> with <code class="pml-inline-code">is</code> operator:</p>
+                                <pre class="pml-code"><code>assert result <b class="pml-bold">is not error</b></code></pre>
+                                <p class="pml-paragraph"><a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/null-safety/index.html#clause_on">Clause <code class="pml-inline-code">on</code></a>:</p>
+                                <pre class="pml-code"><code>const value = get_value_or_null_or_error() \
+    on null : return null \
+    <b class="pml-bold">on error as e : return e</b></code></pre>
+                                <p class="pml-paragraph">The above code can be shortened to:</p>
+                                <pre class="pml-code"><code>const value = get_value_or_null_or_error() ^null <b class="pml-bold">^error</b></code></pre>
+
+                            </section>
+                            <section id="handling" class="pml-chapter">
+                                <h4 class="pml-chapter-title">Error Handling Approaches</h4>
+                                <p class="pml-paragraph">As stated, anticipated errors returned by functions cannot be silently ignored — we can&apos;t accidentally forget to handle them. This (compiler-enforced) rule contributes to more reliable software.</p>
+                                <p class="pml-paragraph">We&apos;re now going to explore the following common error-handling approaches:</p>
+                                <ul class="pml-list">
+                                    <li class="pml-list-element">
+                                        <p class="pml-paragraph">handle the error</p>
+
+                                    </li>
+                                    <li class="pml-list-element">
+                                        <p class="pml-paragraph">return (propagate) the error</p>
+
+                                    </li>
+                                    <li class="pml-list-element">
+                                        <p class="pml-paragraph">return a wrapper error</p>
+
+                                    </li>
+                                    <li class="pml-list-element">
+                                        <p class="pml-paragraph">throw an unanticipated error</p>
+
+                                    </li>
+                                    <li class="pml-list-element">
+                                        <p class="pml-paragraph">abort program execution</p>
+
+                                    </li>
+                                    <li class="pml-list-element">
+                                        <p class="pml-paragraph">explicitly ignore the error</p>
+
+                                    </li>
+
+                                </ul>
+                                <div class="pml-admonition">
+                                    <div class="pml-admonition-label">
+                                        <p class="pml-paragraph">Note</p>
+
+                                    </div>
+                                    <div class="pml-admonition-content">
+                                        <p class="pml-paragraph">You can <a class="pml-xref" href="#unanticipated_errors">skip</a> this (rather long) section and read it later if you wish.</p>
+                                    </div>
+                                </div>
+                                <p class="pml-paragraph">To illustrate each approach, we&apos;ll call a function that takes a customer identifier as input, and returns the name of the customer. If the customer doesn&apos;t exist, an error is returned. Here&apos;s the function signature:</p>
+                                <pre class="pml-code"><code>fn customer_name_by_id ( id string ) -&gt; string or inexistant_customer_error</code></pre>
+                                <p class="pml-paragraph">Type <code class="pml-inline-code">inexistant_customer_error</code> is an application-specific error defined as follows:</p>
+                                <pre class="pml-code"><code>type inexistant_customer_error
+    
+    inherit invalid_data_error
+
+    att customer_id string
+.</code></pre>
+                                <p class="pml-paragraph">A dummy implementation of function <code class="pml-inline-code">customer_name_by_id</code> for test purposes could look like this:</p>
+                                <pre class="pml-code"><code>fn customer_name_by_id ( id string ) -&gt; string or inexistant_customer_error
+
+    // dummy implementation
+    if id =v &quot;100&quot;
+        return &quot;Foo&quot;
+    else
+        return inexistant_customer_error.create (
+            message = &quot;&quot;&quot;Customer &apos;{{id}}&apos; doesn&apos;t exist.&quot;&quot;&quot;
+            customer_id = id )
+    .
+.</code></pre>
+                                <p class="pml-paragraph">In the next sections you&apos;ll see examples of error-handling approaches applied after calling <code class="pml-inline-code">customer_name_by_id</code>. To illustrate each approach we&apos;ll write the body of a very simple function that takes a customer identifier as input, and writes the customer name to the standard OS <code class="pml-inline-code">out</code> device. The function signature looks like this:</p>
+                                <pre class="pml-code"><code>fn write_customer_name ( customer_id string )</code></pre>
+                                <p class="pml-paragraph">Before looking at error-handling approaches, let&apos;s first imagine the following implementation of <code class="pml-inline-code">write_customer_name</code>:</p>
+                                <pre class="pml-code"><code>fn write_customer_name ( customer_id string )
+    
+    <b class="pml-bold">const name = customer_name_by_id ( customer_id )
+    write_line ( name )</b>
+.</code></pre>
+                                <p class="pml-paragraph">Would this code compile?</p>
+                                <p class="pml-paragraph">No, it wouldn&apos;t.</p>
+                                <p class="pml-paragraph">The type of constant <code class="pml-inline-code">name</code> is inferred to be the union type <code class="pml-inline-code">string or inexistant_customer_error</code> (the return type of function <code class="pml-inline-code">customer_name_by_id</code>). Function <code class="pml-inline-code">write_line</code> requires a <code class="pml-inline-code">string</code> as input. But <code class="pml-inline-code">string or inexistant_customer_error</code> isn&apos;t compatible with <code class="pml-inline-code">string</code> — therefore the code doesn&apos;t compile.</p>
+                                <p class="pml-paragraph">The above code violates an essential rule introduced in section <a class="pml-xref" href="#principles"><i class="pml-italic">Fundamental Principles</i></a>:</p>
+                                <div class="pml-division" style="margin-left:2em">
+                                    <p class="pml-paragraph">Errors returned by functions cannot be silently ignored.</p>
+
+                                </div>
+                                <p class="pml-paragraph">We can&apos;t ignore the fact that a call to <code class="pml-inline-code">customer_name_by_id</code> might fail. The compiler requires us to handle <code class="pml-inline-code">inexistant_customer_error</code> in one way or another. Let&apos;s see how to do that.</p>
+                                <section id="handling_handle" class="pml-chapter">
+                                    <h5 class="pml-chapter-title">Handling the Error</h5>
+                                    <p class="pml-paragraph">Suppose you simply want to write &quot;Unknown customer&quot; in case of an <code class="pml-inline-code">inexistant_customer_error</code>. This can be done with a <code class="pml-inline-code">case type of</code> statement:</p>
+                                    <pre class="pml-code"><code>fn write_customer_name ( customer_id string )
+
+    case type of customer_name_by_id ( customer_id )
+        is string as name
+            write_line ( name )
+        <b class="pml-bold">is inexistant_customer_error
+            write_line ( &quot;Unknown customer&quot; )</b>
+    .
+.</code></pre>
+                                    <p class="pml-paragraph">Alternatively you could write:</p>
+                                    <pre class="pml-code"><code>fn write_customer_name ( customer_id string )
+
+    const result = customer_name_by_id ( customer_id )
+    if result is string then
+        write_line ( result )
+    else
+        write_line ( &quot;Unknown customer&quot; )
+    .
+.</code></pre>
+                                    <p class="pml-paragraph">You can use operator <code class="pml-inline-code">if_is</code> to shorten the code:</p>
+                                    <pre class="pml-code"><code>fn write_customer_name ( customer_id string )
+
+    const name = customer_name_by_id ( customer_id ) <b class="pml-bold">if_is error: &quot;Unknown customer&quot;</b>
+    write_line ( name )
+.</code></pre>
+                                    <p class="pml-paragraph">Or you can simply write:</p>
+                                    <pre class="pml-code"><code>fn write_customer_name ( customer_id string )
+
+    write_line ( customer_name_by_id ( customer_id ) if_is error: &quot;Unknown customer&quot; )
+.</code></pre>
+
+                                </section>
+                                <section id="handling_return" class="pml-chapter">
+                                    <h5 class="pml-chapter-title">Returning the Error</h5>
+                                    <p class="pml-paragraph">Quite often a function should simply propagate an error to its parent function in the call stack. In such cases, the error must be declared in its signature.</p>
+                                    <p class="pml-paragraph">The code looks like this:</p>
+                                    <pre class="pml-code"><code>fn write_customer_name ( customer_id string ) -&gt; <b class="pml-bold">inexistant_customer_error or null</b>
+
+    case type of customer_name_by_id ( customer_id )
+        is string as name
+            write_line ( name )
+            <b class="pml-bold">return null
+        is inexistant_customer_error as error
+            return error</b>
+    .
+.</code></pre>
+                                    <p class="pml-paragraph">This code works as follows:</p>
+                                    <ul class="pml-list">
+                                        <li class="pml-list-element">
+                                            <p class="pml-paragraph">If <code class="pml-inline-code">customer_name_by_id</code> returns a string, then this string is written to STDOUT, and <code class="pml-inline-code">null</code> is returned.</p>
+
+                                        </li>
+                                        <li class="pml-list-element">
+                                            <p class="pml-paragraph">If <code class="pml-inline-code">customer_name_by_id</code> returns an error, then this error is returned by <code class="pml-inline-code">write_customer_name</code>. In other words, the error propagates up the call stack.</p>
+
+                                        </li>
+
+                                    </ul>
+                                    <p class="pml-paragraph">The <code class="pml-inline-code">on</code> clause allows us to achieve the same with less code:</p>
+                                    <pre class="pml-code"><code>fn write_customer_name ( customer_id string ) -&gt; inexistant_customer_error or null
+
+    const name = customer_name_by_id ( customer_id ) <b class="pml-bold">on error as e: return e</b>
+    write_line ( name )
+.</code></pre>
+                                    <p class="pml-paragraph">Note that the type of constant <code class="pml-inline-code">name</code> in the above code is inferred to be <code class="pml-inline-code">string</code>.</p>
+                                    <p class="pml-paragraph">Since <code class="pml-inline-code">on error as e: return e</code> is used frequently, PTS provides the <code class="pml-inline-code">^error</code> shorthand:</p>
+                                    <pre class="pml-code"><code>fn write_customer_name ( customer_id string ) -&gt; inexistant_customer_error or null
+
+    const name = customer_name_by_id ( customer_id ) <b class="pml-bold">^error</b>
+    write_line ( name )
+.</code></pre>
+
+                                </section>
+                                <section id="handling_wrap" class="pml-chapter">
+                                    <h5 class="pml-chapter-title">Returning a Wrapper Error</h5>
+                                    <p class="pml-paragraph">Sometimes a function should return a different error than the one obtained from a function call in its body. This is useful, for example, if you want to return a different error message, add additional context useful for the caller, or if you don&apos;t want to reveal the cause of the problem for security reasons (since detailed error messages can provide attackers with information they might exploit).</p>
+                                    <p class="pml-paragraph">The following code illustrates how to return a higher-level error:</p>
+                                    <pre class="pml-code"><code>fn write_customer_name ( customer_id string ) -&gt; <b class="pml-bold">runtime_error or null</b>
+
+    case type of customer_name_by_id ( customer_id )
+        is string as name
+            write_line ( name )
+            return null
+        <b class="pml-bold">is inexistant_customer_error as error
+            return runtime_error.create (
+                message = &quot;An error occurred.&quot;
+                cause = error // can be left off for security reasons
+            )</b>
+    .
+.</code></pre>
+                                    <div class="pml-admonition">
+                                        <div class="pml-admonition-label">
+                                            <p class="pml-paragraph">Note</p>
+
+                                        </div>
+                                        <div class="pml-admonition-content">
+                                            <p class="pml-paragraph">Here, we&apos;re assuming that <code class="pml-inline-code">runtime_error</code> is a high level error defined in the standard library — a common parent for all types of anticipated errors that can occur at run-time.</p>
+                                        </div>
+                                    </div>
+                                    <p class="pml-paragraph">Again, the <code class="pml-inline-code">on</code> clause can be used to shorten the code:</p>
+                                    <pre class="pml-code"><code>fn write_customer_name ( customer_id string ) -&gt; runtime_error or null
+
+    const name = customer_name_by_id ( customer_id ) \
+        <b class="pml-bold">on error as e: return runtime_error.create (
+            &quot;An error occurred.&quot;
+            cause = e )</b>
+
+    write_line ( name )
+.</code></pre>
+
+                                </section>
+                                <section id="handling_throw" class="pml-chapter">
+                                    <h5 class="pml-chapter-title">Throwing an Unanticipated Error</h5>
+                                    <blockquote class="pml-quote">
+                                        <div class="pml-quote-text-block">
+                                            <div class="pml-quote-text-prefix"></div>
+                                            <div class="pml-quote-text">
+                                                <p class="pml-paragraph">it is better to crash early and suddenly than to slowly corrupt data on a long-term basis.</p>
+                                            </div>
+                                            <div class="pml-quote-text-suffix"></div>
+                                        </div>
+                                        <div class="pml-quote-source">
+                                            <p class="pml-paragraph">— Fred Hebert, <a class="pml-link" href="https://ferd.ca/the-zen-of-erlang.html"><span class="pml-span" style="font-style:normal;">The Zen of Erlang</span></a> (<a class="pml-link" href="https://www.youtube.com/watch?v=4ZIPijEqrNI">video</a>)</p>
+
+                                        </div>
+                                    </blockquote>
+                                    <p class="pml-paragraph">Sometimes, none of the parent functions in the call stack is able to handle an anticipated error in a meaningful way. Therefore, it doesn&apos;t make sense to let the error propagate. In such cases it is often better to fail fast. This can be done by throwing an unanticipated error, which is similar to throwing an (unchecked) exception in other languages.</p>
+                                    <p class="pml-paragraph">Here&apos;s an example:</p>
+                                    <pre class="pml-code"><code>fn write_customer_name_or_throw ( customer_id string )
+
+    case type of customer_name_by_id ( customer_id )
+        is string as name
+            write_line ( name )
+        <b class="pml-bold">is inexistant_customer_error as e
+            throw program_error.create (
+                message = e.message
+                cause = e )</b>
+    .
+.</code></pre>
+                                    <p class="pml-paragraph">Note the <code class="pml-inline-code">_or_throw</code> suffix in the function name. By convention, this suffix is used for functions that might explicitly throw an unanticipated error.</p>
+                                    <div class="pml-admonition">
+                                        <div class="pml-admonition-label">
+                                            <p class="pml-paragraph">Note</p>
+
+                                        </div>
+                                        <div class="pml-admonition-content">
+                                            <p class="pml-paragraph"><code class="pml-inline-code">throw</code> will be explained later in section <a class="pml-xref" href="#throw_statement">throw Statement</a>.</p>
+                                            <p class="pml-paragraph">Instead of throwing a <code class="pml-inline-code">program_error</code>, we could throw a customized error that inherits from <code class="pml-inline-code">unanticipated_error</code>.</p>
+                                        </div>
+                                    </div>
+                                    <p class="pml-paragraph">The <code class="pml-inline-code">on</code> clause shortens the code:</p>
+                                    <pre class="pml-code"><code>fn write_customer_name_or_throw ( customer_id string )
+
+    const name = customer_name_by_id ( customer_id ) \
+        <b class="pml-bold">on error as e: throw program_error.create (
+            message = e.message
+            cause = e )</b>
+
+    write_line ( name )
+.</code></pre>
+                                    <p class="pml-paragraph">The same effect can be achieved as follows:</p>
+                                    <pre class="pml-code"><code>fn write_customer_name_or_throw ( customer_id string )
+
+    const name = customer_name_by_id ( customer_id ) \
+        <b class="pml-bold">on error: throw</b>
+
+    write_line ( name )
+.</code></pre>
+                                    <p class="pml-paragraph">A similar effect can be achieved with an <code class="pml-inline-code">assert</code> statement:</p>
+                                    <pre class="pml-code"><code>fn write_customer_name ( customer_id string )
+
+    const result = customer_name_by_id ( customer_id )
+    <b class="pml-bold">assert result is not error</b>
+    write_line ( result ) // result is guaranteed to be a string
+.</code></pre>
+
+                                </section>
+                                <section id="handling_abort" class="pml-chapter">
+                                    <h5 class="pml-chapter-title">Aborting Program Execution</h5>
+                                    <p class="pml-paragraph">If you just want to quickly abort program execution in case of an anticipated error, you can do this:</p>
+                                    <pre class="pml-code"><code>fn write_customer_name ( customer_id string )
+
+    case type of customer_name_by_id ( customer_id )
+        is string as name
+            write_line ( name )
+        <b class="pml-bold">is inexistant_customer_error
+            write_line ( &quot;Error: invalid customer id.&quot; )
+            OS_process.exit ( 1 )</b>
+    .
+.</code></pre>
+                                    <div class="pml-admonition">
+                                        <div class="pml-admonition-label">
+                                            <p class="pml-paragraph">Note</p>
+
+                                        </div>
+                                        <div class="pml-admonition-content">
+                                            <p class="pml-paragraph">Aborting program execution after encountering an anticipated error (as shown above) is often inacceptable in fault-tolerant applications — just imagine an operating system that shuts down at each error encountered, or a browser that aborts whenever an error occurs in a page.</p>
+                                            <p class="pml-paragraph">In fault-tolerant systems, only a part of the application (e.g. the current operation, process, or thread) should be aborted in case of an unrecoverable error, and then be restarted. For a great insight into fault-tolerant systems, read <a class="pml-link" href="https://ferd.ca/the-zen-of-erlang.html"><i class="pml-italic">The Zen of Erlang</i></a> (or watch the <a class="pml-link" href="https://www.youtube.com/watch?v=4ZIPijEqrNI">video</a>).</p>
+                                        </div>
+                                    </div>
+
+                                </section>
+                                <section id="handling_ignore" class="pml-chapter">
+                                    <h5 class="pml-chapter-title">Explicitly Ignoring the Error</h5>
+                                    <p class="pml-paragraph">If you have a good reason to ignore an error, you can do so, but you need to be explicit, as shown below:</p>
+                                    <pre class="pml-code"><code>fn write_customer_name ( customer_id string )
+
+    case type of customer_name_by_id ( customer_id )
+        is string as name
+            write_line ( name )
+        <b class="pml-bold">is inexistant_customer_error
+            do nothing</b>
+    .
+.</code></pre>
+                                    <p class="pml-paragraph">Note that the <code class="pml-inline-code">do nothing</code> statement in the above code is required, because an <code class="pml-inline-code">is</code> branch can&apos;t be empty. <code class="pml-inline-code">do nothing</code> does exactly what it states: <i class="pml-italic">nothing</i>. This statement clearly expresses the programmer&apos;s intent to ignore the error.</p>
+
+                                </section>
+                                <section id="try_statement_1" class="pml-chapter">
+                                    <h5 class="pml-chapter-title">The <code class="pml-inline-code">try</code> Statement</h5>
+                                    <p class="pml-paragraph">So far, we&apos;ve seen different ways to handle a <i class="pml-italic">single</i> error. If a function needs to handle <i class="pml-italic">several</i> errors, then handling each error individually can lead to boilerplate, as shown below:</p>
+                                    <pre class="pml-code"><code>fn do_stuff -&gt; stuff_error or null
+
+    task_1() <b class="pml-bold">on task_error as e: return stuff_error.create (
+        message = &quot;An error occurred&quot;,
+        cause = e )</b>
+    task_2()
+    task_3() <b class="pml-bold">on task_error as e: return stuff_error.create (
+        message = &quot;An error occurred&quot;,
+        cause = e )</b>
+    task_4() <b class="pml-bold">on task_error as e: return stuff_error.create (
+        message = &quot;An error occurred&quot;,
+        cause = e )</b>
+.</code></pre>
+                                    <p class="pml-paragraph">The above function suffers from code duplication, since the same code is repeated to handle errors returned by <code class="pml-inline-code">task_1</code>, <code class="pml-inline-code">task_3</code>, and <code class="pml-inline-code">task_4</code>.</p>
+                                    <p class="pml-paragraph">The <code class="pml-inline-code">try</code> statement (borrowed from other languages) enables us to shorten the code, render it more maintainable, and separate the normal execution code (aka &quot;the happy path&quot;) from the code that handles errors:</p>
+                                    <pre class="pml-code"><code>fn do_stuff -&gt; stuff_error or null
+
+    <b class="pml-bold">try</b>
+        <b class="pml-bold">try!</b> task_1()
+        task_2()
+        <b class="pml-bold">try!</b> task_3()
+        <b class="pml-bold">try!</b> task_4()
+    
+    <b class="pml-bold">on task_error as e
+        return stuff_error.create (
+            message = &quot;An error occurred&quot;,
+            cause = e )
+    .</b>
+.</code></pre>
+                                    <p class="pml-paragraph">Note the <code class="pml-inline-code">try!</code> keyword in front of the statements that might fail. Without this keyword, you wouldn&apos;t be able to quickly track where errors can occur (and the IDE would no longer be able to help you spot these statements via syntax highlighting).</p>
+
+                                </section>
+
+                            </section>
+
+                        </section>
+                        <section id="unanticipated_errors" class="pml-chapter">
+                            <h3 class="pml-chapter-title">Unanticipated Errors</h3>
+                            <p class="pml-paragraph">An <i class="pml-italic">unanticipated error</i> is an error that is <i class="pml-italic">not expected</i> to occur at run-time. Unanticipated errors occur if a serious problem arises during program execution — a problem that&apos;s not supposed to occur under normal conditions: e.g. a hardware malfunction, a problem in the OS, a configuration issue (e.g. missing library), a bug in the code. These errors can potentially occur at any time during program execution, and at any location in the source code.</p>
+                            <p class="pml-paragraph">They often occur due to a bug in the software. For example:</p>
+                            <ul class="pml-list">
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">too deeply nested recursive function calls (or infinite recursions not detected by the compiler) lead to a <code class="pml-inline-code">stack_overflow_error</code></p>
+
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">an infinite loop creating new in-memory objects results in an <code class="pml-inline-code">out_of_memory_error</code></p>
+
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">violating the condition specified in an <code class="pml-inline-code">assert</code> statement leads to an <code class="pml-inline-code">assert_violation_error</code> (a child-type of <code class="pml-inline-code">program_error</code>)</p>
+
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">violating the pre-condition of a function input parameter leads to a <code class="pml-inline-code">pre_condition_violation_error</code> (also a child-type of <code class="pml-inline-code">program_error</code>)</p>
+
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">a bug in a function can lead to a <code class="pml-inline-code">post_condition_violation_error</code> (again, a child-type of <code class="pml-inline-code">program_error</code>)</p>
+
+                                </li>
+
+                            </ul>
+                            <section id="unanticipated_error_handling" class="pml-chapter">
+                                <h4 class="pml-chapter-title">Handling Unanticipated Errors</h4>
+                                <p class="pml-paragraph">In PTS, unanticipated errors are handled similarly to unchecked exceptions in Java (i.e. child-types of <code class="pml-inline-code">RuntimeException</code>), or exceptions in C#, Kotlin, and other languages.</p>
+                                <p class="pml-paragraph">Whenever an unanticipated error occurs, the error propagates upwards in the function call stack, until a function explicitly <i class="pml-italic">catches</i> the error. If no function catches it, then a message is written to STDERR, and the application is aborted.</p>
+                                <section id="global_error_handler" class="pml-chapter">
+                                    <h5 class="pml-chapter-title">Global Error Handlers</h5>
+                                    <p class="pml-paragraph">By default, unanticipated errors are handled by one or more <i class="pml-italic">global unanticipated error handlers</i>. A PTS implementation typically provides a single default handler which:</p>
+                                    <ul class="pml-list">
+                                        <li class="pml-list-element">
+                                            <p class="pml-paragraph">writes an error message and a trace of the function calls to the standard OS <code class="pml-inline-code">err</code> device (<code class="pml-inline-code">STDERR</code>)</p>
+
+                                        </li>
+                                        <li class="pml-list-element">
+                                            <p class="pml-paragraph">aborts program execution with exit code <code class="pml-inline-code">1</code></p>
+
+                                        </li>
+
+                                    </ul>
+                                    <p class="pml-paragraph">In an object-oriented implementation of PTS, the global error handler could be defined as a <i class="pml-italic">functional type</i> (i.e. a type with one method):</p>
+                                    <pre class="pml-code"><code>type unanticipated_error_handler
+
+    fn handle_error ( error unanticipated_error )
+.</code></pre>
+                                    <p class="pml-paragraph">To customize global error handling, an application can register/unregister global error handlers. For example, an application could unregister the default error handler, register a handler that appends entries to a log file, and register another handler to send an email to the software developers, depending on the type of error encountered.</p>
+
+                                </section>
+                                <section id="try_statement_2" class="pml-chapter">
+                                    <h5 class="pml-chapter-title"><code class="pml-inline-code">try</code> Statement</h5>
+                                    <p class="pml-paragraph">Sometimes unanticipated errors need to be explicitly caught at strategically important locations in the source code, instead of letting them be handled by the global error handler(s).</p>
+                                    <p class="pml-paragraph">Consider, for example, the development of a text editor. Suppose that an unanticipated error occurs after the user has typed a lot of unsaved text. The default error handler would simply write an unhelpful error message to the console, and then exit the application, which means that the user&apos;s work is lost. To avoid such frustrating situations, the text editor should at least save the current text to a temporary file, display a helpful error message to the user, and then exit gracefully.</p>
+                                    <p class="pml-paragraph">There are many other situations requiring specific error handling for unanticipated errors, especially in fault-tolerant applications where random application shutdowns are unacceptable, since they could cause high damages.</p>
+                                    <p class="pml-paragraph">To cover these situations, the <code class="pml-inline-code">try-catch-finally</code> statement can be used to handle unanticipated errors in a customized way. This statement is similar to the <code class="pml-inline-code">try-catch-finally</code> statement in other programming languages, where it&apos;s used to handle exceptions.</p>
+                                    <p class="pml-paragraph">In section <a class="pml-xref" href="#try_statement_1"><i class="pml-italic">The try statement</i></a> we already saw how this statement can be used to handle <i class="pml-italic">anticipated</i> errors. Here&apos;s a reiteration of code from that section:</p>
+                                    <pre class="pml-code"><code>fn do_stuff -&gt; stuff_error or null
+
+    <b class="pml-bold">try</b>
+        <b class="pml-bold">try!</b> task_1()
+        task_2()
+        <b class="pml-bold">try!</b> task_3()
+        <b class="pml-bold">try!</b> task_4()
+    
+    <b class="pml-bold">on task_error as e
+        return stuff_error.create (
+            message = &quot;An error occurred&quot;,
+            cause = e )
+    .</b>
+.</code></pre>
+                                    <p class="pml-paragraph">And here&apos;s our new example, also using a <code class="pml-inline-code">try</code> statement, but this time handling an <i class="pml-italic">un</i>anticipated error:</p>
+                                    <pre class="pml-code"><code><b class="pml-bold">try</b>
+    do_this()
+    do_that()
+<b class="pml-bold">catch</b> unanticipated_error as e
+    // handle the error stored in constant &apos;e&apos;
+<b class="pml-bold">finally</b>
+    // clean up (e.g. close resources)
+.</code></pre>
+                                    <p class="pml-paragraph">If you compare the latter code with the former, you can see that the <code class="pml-inline-code">on</code> branch is used to handle anticipated errors, while the <code class="pml-inline-code">catch</code> branch handles unanticipated errors.</p>
+                                    <p class="pml-paragraph">The <code class="pml-inline-code">try-catch-finally</code> statement works as follows:</p>
+                                    <ul class="pml-list">
+                                        <li class="pml-list-element">
+                                            <p class="pml-paragraph">If an unanticipated error occurs while executing the statements in the <code class="pml-inline-code">try</code> branch, then the program immediately stops executing the remaining code in this branch, and jumps to the code inside the <code class="pml-inline-code">catch</code> branch where the error is handled.</p>
+
+                                        </li>
+                                        <li class="pml-list-element">
+                                            <p class="pml-paragraph">The code in the <code class="pml-inline-code">finally</code> branch is always executed. If no error occurs in the <code class="pml-inline-code">try</code> branch, then the <code class="pml-inline-code">finally</code> branch is executed immediately after, otherwise it&apos;s executed after the <code class="pml-inline-code">catch</code> branch. The <code class="pml-inline-code">finally</code> branch is optional — it can be omitted if appropriate.</p>
+
+                                        </li>
+
+                                    </ul>
+                                    <p class="pml-paragraph">Both types of errors (anticipated and unanticipated) can be handled within a single <code class="pml-inline-code">try</code> statement, using an <code class="pml-inline-code">on</code> branch for anticipated errors, and a <code class="pml-inline-code">catch</code> branch for unanticipated errors:</p>
+                                    <pre class="pml-code"><code>try
+    do_this()
+    do_that()
+    try! task_1()
+    task_2()
+    try! task_3()
+    try! task_4()
+<b class="pml-bold">on anticipated_error</b> as e
+    // handle anticipated errors
+<b class="pml-bold">catch unanticipated_error</b> as e
+    // handle unanticipated errors
+finally
+    // clean up
+.</code></pre>
+
+                                </section>
+                                <section id="throw_statement" class="pml-chapter">
+                                    <h5 class="pml-chapter-title"><code class="pml-inline-code">throw</code> Statement</h5>
+                                    <p class="pml-paragraph">Most unanticipated errors are thrown <i class="pml-italic">implicitly</i>, whenever a serious problem arises. For example, an <code class="pml-inline-code">out_of_memory_error</code> is thrown implicitly when the memory on the host system is exhausted.</p>
+                                    <p class="pml-paragraph">Sometimes it&apos;s useful to <i class="pml-italic">explicitly</i> throw an unanticipated error. This is usually done whenever a function detects a serious problem that can&apos;t be handled, neither by the function itself, nor by any parent function in the call stack. The current operation, thread, process, or application must be aborted.</p>
+                                    <p class="pml-paragraph">For example, consider an application that depends on some libraries being installed on the host. If the application discovers (at run-time) that a library is missing, it must abort execution.</p>
+                                    <p class="pml-paragraph">Unanticipated errors can be thrown explicitly with a <code class="pml-inline-code">throw</code> statement (also borrowed from other languages that support exceptions). The syntax of <code class="pml-inline-code">throw</code> is as follows:</p>
+                                    <pre class="pml-code"><code>&quot;throw&quot; &lt;expression&gt;</code></pre>
+                                    <p class="pml-paragraph"><code class="pml-inline-code">&lt;expression&gt;</code> must be of type <code class="pml-inline-code">unanticipated_error</code>.</p>
+                                    <p class="pml-paragraph">Here&apos;s a snippet illustrating the <code class="pml-inline-code">throw</code> statement:</p>
+                                    <pre class="pml-code"><code>if third_party_libraries_missing then
+    <b class="pml-bold">throw program_error.create (
+        message = &quot;Third-party libraries must be installed before using this application.&quot; )</b>
+.</code></pre>
+                                    <p class="pml-paragraph">Explicitly thrown errors are handled exactly like their implicit counterparts: the error propagates up the call stack, and is either caught in a <code class="pml-inline-code">try-catch</code> statement, or handled by the global error handler(s).</p>
+
+                                </section>
+
+                            </section>
+
+                        </section>
+
+                    </section>
+                    <section id="tips" class="pml-chapter">
+                        <h2 class="pml-chapter-title">Practical Considerations</h2>
+                        <p class="pml-paragraph">Error-handling is a vast topic — too vast to be fully covered in this article.</p>
+                        <p class="pml-paragraph">The best strategy for handling errors largely depends on the application domain and the potential damages in a worst-case error scenario.</p>
+                        <p class="pml-paragraph">Simply aborting program execution as soon as an error occurs might be an acceptable approach in a stamp-inventory application for personal use, but applying the same approach in mission-critical enterprise software would be irresponsible.</p>
+                        <p class="pml-paragraph">PTS is designed to always be on the safe side by default, because this helps to write reliable, robust, and fault-tolerant software. For example, anticipated errors returned by functions can&apos;t be ignored. However, this strict approach also means that code might end up being overly verbose and complex in applications that don&apos;t require the highest level of reliability, robustness, and fault-tolerance.</p>
+                        <p class="pml-paragraph">Obviously, it&apos;s impossible to provide one-size-fits-all &quot;rules&quot; for error-handling. However, in the following sections I&apos;ll provide some <i class="pml-italic">general guidelines</i> (not rules set in stone) that might be useful.</p>
+                        <section id="tips_many" class="pml-chapter">
+                            <h3 class="pml-chapter-title">Avoid Returning Many Types of Anticipated Errors!</h3>
+                            <p class="pml-paragraph">Consider a high-level function named <code class="pml-inline-code">do_stuff</code> that calls lower-level functions executing various read/write operations on files and directories. These low-level functions in the call tree return anticipated errors such as <code class="pml-inline-code">file_not_found_error</code>, <code class="pml-inline-code">file_read_error</code>, <code class="pml-inline-code">file_write_error</code>, <code class="pml-inline-code">directory_read_error</code>, <code class="pml-inline-code">directory_access_error</code>. If each function in the tree propagates errors to its parent functions, then <code class="pml-inline-code">do_stuff</code> might end up with a horrible signature like this:</p>
+                            <pre class="pml-code"><code>fn do_stuff -&gt; string or \
+    file_not_found_error or file_read_error or file_write_error or \
+    directory_read_error or directory_access_error</code></pre>
+                            <p class="pml-paragraph">Worse, each time a signature in a lower-level function is changed later on (e.g. an error type is added or removed), the signatures of all parent functions (including <code class="pml-inline-code">do_stuff</code>) need to be adapted accordingly.</p>
+                            <p class="pml-paragraph">While there are different solutions to avoid maintenance nightmares like this, a simple solution for higher-level functions is to just return a common parent type of all errors returned in the call tree. For example, <code class="pml-inline-code">do_stuff</code> can be simplified as follows:</p>
+                            <pre class="pml-code"><code>fn do_stuff -&gt; string or directory_or_file_error</code></pre>
+                            <p class="pml-paragraph">Here, we assume that <code class="pml-inline-code">directory_or_file_error</code> is the parent type of all errors returned in the call tree.</p>
+                            <p class="pml-paragraph">Now suppose that, later on, database and network operations are added in the code. <code class="pml-inline-code">do_stuff</code> needs to be adapted:</p>
+                            <pre class="pml-code"><code>fn do_stuff -&gt; string or directory_or_file_error or database_error or network_error</code></pre>
+                            <p class="pml-paragraph">But again, we can simplify by using a common parent type:</p>
+                            <pre class="pml-code"><code>fn do_stuff -&gt; string or IO_error</code></pre>
+                            <p class="pml-paragraph">In practice, using an appropriate parent type from the onset (e.g. <code class="pml-inline-code">IO_error</code>) is often an acceptable solution, because:</p>
+                            <ul class="pml-list">
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">It facilitates code maintenance.</p>
+
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">Caller functions often don&apos;t care about <i class="pml-italic">which</i> error occurred — they only care about whether an error occurred or not.</p>
+
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">It hides implementation details which are irrelevant and might change in future versions.</p>
+
+                                </li>
+
+                            </ul>
+                            <p class="pml-paragraph">It&apos;s important to note that error information is not lost if a higher-level function in the call-tree returns a higher-level error in the type hierarchy. For example, if a low-level function returns <code class="pml-inline-code">file_not_found_error</code>, then a higher-level function declared to return <code class="pml-inline-code">IO_error</code> still returns an instance of <code class="pml-inline-code">file_not_found_error</code> (i.e. a child-type of <code class="pml-inline-code">IO_error</code>), which can be explored by parent functions, or used for debugging/diagnostic purposes.</p>
+                            <p class="pml-paragraph">As a rule of thumb (that might be ignored if there is a good reason), functions shouldn&apos;t return many error types. It is often appropriate to declare a single error type which is a common parent type of all errors returned in the call tree. This leads to simpler and more maintainable code.</p>
+
+                        </section>
+                        <section id="tips_wrapper" class="pml-chapter">
+                            <h3 class="pml-chapter-title">Use Wrappers if Appropriate!</h3>
+                            <p class="pml-paragraph">There is another solution to the problem of &quot;too many error types returned&quot; explained in the previous section: define a dedicated error type that serves as a wrapper for all low-level errors, and return this wrapper in all low-level functions.</p>
+                            <p class="pml-paragraph">In our example, we could define type <code class="pml-inline-code">stuff_error</code>, a wrapper for all errors in the call tree:</p>
+                            <pre class="pml-code"><code>type stuff_error
+    inherit: runtime_error
+.</code></pre>
+                            <p class="pml-paragraph">The signature of <code class="pml-inline-code">do_stuff</code> becomes:</p>
+                            <pre class="pml-code"><code>fn do_stuff -&gt; string <b class="pml-bold">or stuff_error</b></code></pre>
+                            <p class="pml-paragraph">Lower-level functions also return <code class="pml-inline-code">stuff_error</code>, and they store the source error (the cause) into attribute <code class="pml-inline-code">cause</code>:</p>
+                            <pre class="pml-code"><code>fn stuff_child -&gt; <b class="pml-bold">null or stuff_error</b>
+    ...
+    const text = read_text_file ( file_path ) \
+        on file_read_error as e: <b class="pml-bold">return stuff_error.create (
+            message = e.message
+            cause = e )</b>
+    ...
+.</code></pre>
+                            <p class="pml-paragraph">To shorten the code, we could define a creator/constructor <code class="pml-inline-code">create_from_cause</code> for <code class="pml-inline-code">stuff_error</code> (not shown here), and then simply write:</p>
+                            <pre class="pml-code"><code>const text = read_text_file ( file_path ) \
+    on file_read_error as e: <b class="pml-bold">return stuff_error.create_from_cause ( e )</b></code></pre>
+                            <p class="pml-paragraph">Again, the low-level error information isn&apos;t lost, since it&apos;s stored in attribute <code class="pml-inline-code">cause</code> of <code class="pml-inline-code">stuff_error</code>.</p>
+                            <p class="pml-paragraph">See also: section <a class="pml-xref" href="#handling_wrap"><i class="pml-italic">Returning a Wrapper Error</i></a>.</p>
+
+                        </section>
+                        <section id="tips_overuse" class="pml-chapter">
+                            <h3 class="pml-chapter-title">Use Unanticipated Errors if Appropriate!</h3>
+                            <p class="pml-paragraph">Sometimes we don&apos;t want to handle errors — we assume the code to be running in an environment where errors aren&apos;t supposed to occur at run-time. If an error still occurs despite our assumption, then an immediate termination is appropriate: the application writes an error message to STDERR, and then aborts with exit code 1.</p>
+                            <p class="pml-paragraph">In other words, instead of <i class="pml-italic">handling</i> an error, we opt to just <i class="pml-italic">abort</i> execution instead. This is also referred to as panicking — for example, in Rust the <a class="pml-link" href="https://doc.rust-lang.org/book/ch09-01-unrecoverable-errors-with-panic.html"><code class="pml-inline-code">panic!</code></a> macro can be used to abort the application gracefully and release resources.</p>
+                            <p class="pml-paragraph">Aborting program execution in case of an error (i.e. panicking) is justified in various situations: for example, when experimenting with code, writing a prototype, building a personal stamp-inventory application, or when we just want to write quick and dirty code. Even in applications designed to handle errors, there might be specific cases where an immediate termination is preferable, for example to avoid corrupt data on a long-term basis. Good advice related to this topic is provided in chapter <a class="pml-link" href="https://doc.rust-lang.org/book/ch09-03-to-panic-or-not-to-panic.html"><i class="pml-italic">To panic! or Not to panic!</i></a> of <a class="pml-link" href="https://doc.rust-lang.org/book/title-page.html"><i class="pml-italic">The Rust Programming Language</i></a>.</p>
+                            <p class="pml-paragraph">While PTS is clearly not designed to abort by default, it does offer support for &quot;crash early&quot; approaches. You <i class="pml-italic">can</i> abort (panic) if you have a good reason to do so — you just have to be <i class="pml-italic">explicit</i> about it.</p>
+                            <p class="pml-paragraph">The basic idea is to convert anticipated errors into unanticipated ones every time you would have to deal with an anticipated error. Thus, instead of returning an anticipated error, you throw an unanticipated one. Let&apos;s see different ways to do this.</p>
+                            <div class="pml-header"><code class="pml-inline-code">assert</code> Statement</div>
+                            <p class="pml-paragraph">A first technique is to use an <code class="pml-inline-code">assert</code> statement to declare that an anticipated error isn&apos;t supposed to occur:</p>
+                            <pre class="pml-code"><code>const result = customer_name_by_id ( customer_id )
+<b class="pml-bold">assert result is not error</b>
+// continue with a customer object stored in &apos;result&apos;</code></pre>
+                            <div class="pml-header"><code class="pml-inline-code">on error: throw</code> Clause</div>
+                            <p class="pml-paragraph">A better and less verbose technique is to use the <code class="pml-inline-code">on error: throw</code> clause, which was introduced in section <a class="pml-xref" href="#handling_throw"><i class="pml-italic">Throwing an Unanticipated Error</i></a>:</p>
+                            <pre class="pml-code"><code>const name = customer_name_by_id ( customer_id ) <b class="pml-bold">on error: throw</b></code></pre>
+                            <div class="pml-header">Utility Functions That Throw</div>
+                            <p class="pml-paragraph">Writing lots of <code class="pml-inline-code">on error: throw</code> clauses can be annoying. A better solution might therefore be to write utility functions that throw unanticipated errors, instead of returning anticipated errors.</p>
+                            <p class="pml-paragraph">For example, suppose that many functions in our quick-and-dirty throw-away prototype read non-empty text files. Under normal circumstances (i.e. where reliability matters), we would call a library function like the following:</p>
+                            <pre class="pml-code"><code>// returns &apos;null&apos; if the file is empty
+fn read_text_file ( file_path ) -&gt; string or null or file_read_error</code></pre>
+                            <p class="pml-paragraph">Using this function requires checks for <code class="pml-inline-code">null</code> and <code class="pml-inline-code">file_read_error</code> in client code. To avoid these checks, we could define the following utility function, which assumes that file read errors don&apos;t occur and text files are never empty:</p>
+                            <pre class="pml-code"><code>fn read_non_empty_text_file_or_throw ( file_path ) -&gt; string      (1)
+
+    case type of read_text_file ( file_path )
+        is string as content
+            return content
+        is null
+            throw program_error.create (                          (2)
+                &quot;&quot;&quot;File {{path.to_string}} is empty.&quot;&quot;&quot; )
+        is file_read_error as e
+            throw program_error.create (
+                &quot;&quot;&quot;Could not read file {{path.to_string}}         (3)
+                Reason: {{e.message}}&quot;&quot;&quot; )
+    .
+.</code></pre>
+                            <p class="pml-paragraph">(1) By convention, the function name suffix <code class="pml-inline-code">_or_throw</code> states that an unanticipated error might be thrown. Under normal conditions, the function returns a <code class="pml-inline-code">string</code> containing the content of the non-empty text file.</p>
+                            <p class="pml-paragraph">(2) An unanticipated error is thrown if the file is empty.</p>
+                            <p class="pml-paragraph">(3) An unanticipated error is thrown if the file can&apos;t be read.</p>
+                            <p class="pml-paragraph">A simpler version of the above function could be written as follows:</p>
+                            <pre class="pml-code"><code>fn read_non_empty_text_file_or_throw ( file_path ) -&gt; string
+
+    const result = read_text_file ( file_path )
+    assert result is not null and result is not error
+    return result
+.</code></pre>
+                            <p class="pml-paragraph">Client code is now simple and short, because null- and error-handling is no longer needed:</p>
+                            <pre class="pml-code"><code>const text = read_non_empty_text_file_or_throw ( file_path.create ( &quot;example.txt&quot; ) )</code></pre>
+                            <div class="pml-header">Using Unanticipated Errors in Private Code</div>
+                            <p class="pml-paragraph">Sometimes it makes sense to use unanticipated errors in unexposed (private) parts of an application, because this can considerably simplify code and increase maintainability.</p>
+                            <p class="pml-paragraph">Suppose we are working on a complex parser with a main function like this:</p>
+                            <pre class="pml-code"><code>fn parse ( string ) -&gt; AST or syntax_error</code></pre>
+                            <p class="pml-paragraph">Syntax errors are likely to be detected in low-level, private functions. Using anticipated errors in the whole call tree of function <code class="pml-inline-code">parse</code> can easily lead to verbose code, because all errors need to be handled (e.g. propagated to the parent function) and declared in the function signatures. Whenever error types in function signatures change, a lot of refactoring might be required. To avoid this maintenance burden, it might be better to throw unanticipated errors in the functions called by <code class="pml-inline-code">parse</code>, the root function in the call tree. Function <code class="pml-inline-code">parse</code> uses a <code class="pml-inline-code">try</code> statement to catch any unanticipated error, and converts it into an anticipated error which is then returned. The following simplified code illustrates this approach:</p>
+                            <pre class="pml-code"><code>fn parse ( string ) -&gt; AST or syntax_error
+
+    try
+        const AST = AST.create_empty
+        // parse the string and populate &apos;AST&apos;
+        return AST
+    catch unanticipated_error as ue
+        return syntax_error.create ( message = ue.message )
+    .
+.</code></pre>
+                            <div class="pml-admonition">
+                                <div class="pml-admonition-label">
+                                    <p class="pml-paragraph">Warning</p>
+
+                                </div>
+                                <div class="pml-admonition-content">
+                                    <p class="pml-paragraph">The above techniques that convert anticipated errors into unanticipated ones should usually <i class="pml-italic">not</i> be used in <i class="pml-italic">public</i> APIs (e.g. public functions in libraries, and frameworks).</p>
+                                    <p class="pml-paragraph">Public APIs must be expressive and grant reliability. Public functions should return anticipated errors providing useful error information whenever something goes wrong. Consumers, not suppliers, decide how to handle errors.</p>
+                                    <p class="pml-paragraph">However, there are rare exceptions to this rule. For example, it might be better (even in a public API) to abort instead of continuing execution with wrong/corrupted data. Such crash-early/fail-fast behavior should be clearly documented and, as suggested already, functions that might throw should have their name suffixed with <code class="pml-inline-code">_or_throw</code> (e.g. <code class="pml-inline-code">do_it_or_throw</code>). </p>
+                                </div>
+                            </div>
+
+                        </section>
+                        <section id="tips_null" class="pml-chapter">
+                            <h3 class="pml-chapter-title">Don&apos;t Use <code class="pml-inline-code">null</code> to Return Error Conditions!</h3>
+                            <p class="pml-paragraph">Suppose you&apos;re designing the <code class="pml-inline-code">map</code> type (aka <code class="pml-inline-code">dictionary</code>, <code class="pml-inline-code">associated_array</code>) in a standard library. Method <code class="pml-inline-code">get</code> takes a key as input and returns the corresponding value stored in the map. Here&apos;s an interesting question: What should the method do if the key doesn&apos;t exist?</p>
+                            <p class="pml-paragraph">It&apos;s tempting to simply return <code class="pml-inline-code">null</code>, as is done in several libraries (e.g. Java <a class="pml-link" href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html#get(java.lang.Object)"><code class="pml-inline-code">Map.get</code></a>). Using PTS syntax, <code class="pml-inline-code">map</code> could be defined as follows:</p>
+                            <pre class="pml-code"><code>type map&lt;key_type child_of:hashable, value_type&gt;
+    
+    fn get ( key key_type ) -&gt; <b class="pml-bold">value_type or null</b>
+
+    // more methods
+.</code></pre>
+                            <p class="pml-paragraph">There are two downsides to this approach:</p>
+                            <ul class="pml-list">
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">If the values in the map are allowed to be <code class="pml-inline-code">null</code> (e.g. <code class="pml-inline-code">map&lt;string, string or null&gt;</code>), an ambiguity arises.</p>
+                                    <p class="pml-paragraph">For example, if a method call like <code class="pml-inline-code">map.get ( &quot;foo&quot; )</code> returns <code class="pml-inline-code">null</code>, it can mean two things: either there is no entry with key <code class="pml-inline-code">&quot;foo&quot;</code>, or there is an entry with key <code class="pml-inline-code">&quot;foo&quot;</code> and value <code class="pml-inline-code">null</code>.</p>
+
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">If the values in the map aren&apos;t allowed to be <code class="pml-inline-code">null</code> (e.g. <code class="pml-inline-code">map&lt;string, string&gt;</code>), there&apos;s a risk of misinterpretation.</p>
+                                    <p class="pml-paragraph">For example, if a method call like <code class="pml-inline-code">map.get ( &quot;foo&quot; )</code> returns <code class="pml-inline-code">null</code>, it could erroneously be interpreted in the client code as an entry with key <code class="pml-inline-code">&quot;foo&quot;</code> and value <code class="pml-inline-code">null</code>.</p>
+                                    <p class="pml-paragraph">This risk for misinterpretation increases if a map with nullable values is later on changed to a map with non-null values (e.g. from <code class="pml-inline-code">map&lt;string, string or null&gt;</code> to <code class="pml-inline-code">map&lt;string, string&gt;</code>).</p>
+
+                                </li>
+
+                            </ul>
+                            <p class="pml-paragraph">To eliminate the first problem (ambiguity when <code class="pml-inline-code">null</code> is returned), we can add method <code class="pml-inline-code">contains_key</code> (which is needed anyway):</p>
+                            <pre class="pml-code"><code>type map&lt;key_type child_of:hashable, value_type&gt;
+    
+    <b class="pml-bold">fn contains_key ( key key_type ) -&gt; boolean</b>
+    
+    fn get ( key key_type ) -&gt; value_type or null
+
+    // more methods
+.</code></pre>
+                            <p class="pml-paragraph">This works, because we can now call <code class="pml-inline-code">contains_key</code> to eliminate the ambiguity. But it doesn&apos;t work well. Firstly, method <code class="pml-inline-code">get</code> is error-prone, because one has to read the docs, be careful, and not forget to call <code class="pml-inline-code">contains_key</code> if <code class="pml-inline-code">get</code> returns <code class="pml-inline-code">null</code>. Secondly, calling <code class="pml-inline-code">get</code> first, and <code class="pml-inline-code">contains_key</code> afterward, is verbose and can result in very nasty bugs in case of race conditions caused by sharing a mutable map in concurrent or parallel processing environments.</p>
+                            <p class="pml-paragraph">This error-proneness vanishes if <code class="pml-inline-code">get</code> returns an error (instead of <code class="pml-inline-code">null</code>) whenever a key isn&apos;t contained in the map:</p>
+                            <pre class="pml-code"><code>type map&lt;key_type child_of:hashable, value_type&gt;
+    
+    fn get ( key key_type ) -&gt; value_type <b class="pml-bold">or key_not_contained_in_map_error</b>
+
+    // more methods
+.</code></pre>
+                            <p class="pml-paragraph">Client code is now required to check for <code class="pml-inline-code">key_not_contained_in_map_error</code>, e.g.</p>
+                            <pre class="pml-code"><code>const value = map.get ( &quot;foo&quot; ) <b class="pml-bold">on error as e: return e</b></code></pre>
+                            <p class="pml-paragraph">We are protected from forgetting to check if the key actually exists in the map. Moreover, the fact that method <code class="pml-inline-code">get</code> could fail is also clearly expressed in the client code.</p>
+                            <p class="pml-paragraph">However, being forced to check for an error can be annoying, and leads to verbose code. If a key isn&apos;t contained in the map, you might want to:</p>
+                            <ul class="pml-list">
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">throw an unanticipated error, because you assume that the key ought to be contained in the map</p>
+
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">fallback to a default value</p>
+
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">get <code class="pml-inline-code">null</code>, because you don&apos;t need to differentiate between the two possible meanings of <code class="pml-inline-code">null</code></p>
+
+                                </li>
+
+                            </ul>
+                            <p class="pml-paragraph">These use cases can easily be covered by adding variations of the <code class="pml-inline-code">get</code> method:</p>
+                            <pre class="pml-code"><code>type map&lt;key_type child_of:hashable, value_type&gt;
+    
+    fn get ( key key_type ) -&gt; value_type or key_not_contained_in_map_error
+    <b class="pml-bold">fn get_or_throw ( key key_type ) -&gt; value_type
+    fn get_or_default ( key key_type, default value_type ) -&gt; value_type
+    fn get_or_null ( key key_type ) -&gt; value_type or null</b>
+
+    // more methods
+.</code></pre>
+                            <p class="pml-paragraph">Providing many choices is sometimes counterproductive, but in this case it is justified by the fact that <code class="pml-inline-code">map</code> is a fundamental data structure, defined in the standard library, and used in many different ways.</p>
+                            <p class="pml-paragraph">Besides providing a more versatile API, we benefit from the following:</p>
+                            <ul class="pml-list">
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">The behavior of the four getter methods is clearly expressed by their signatures — the programmer probably doesn&apos;t need to read the docs to know which getter method to use (although he/she must still be aware of the potentially ambiguous meaning in the case of <code class="pml-inline-code">null</code> being returned by <code class="pml-inline-code">get_or_null</code>).</p>
+
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">Client code is succinct in all cases and auto-documents the behavior in case of a non-existent <code class="pml-inline-code">key</code>. Here are a few examples:</p>
+                                    <pre class="pml-code"><code>const value_1 = map.get ( &quot;foo&quot; ) <b class="pml-bold">^error</b>
+
+const value_2 = map.get<b class="pml-bold">_or_throw</b> ( &quot;foo&quot; )
+
+const value_3 = map.get<b class="pml-bold">_or_default</b> ( key = &quot;foo&quot;, <b class="pml-bold">default = &quot;bar&quot;</b> )
+
+const value_4 = map.get<b class="pml-bold">_or_null</b> ( &quot;foo&quot; )
+<b class="pml-bold">if value_4 is null then</b>
+    // handle it
+.</code></pre>
+
+                                </li>
+
+                            </ul>
+
+                        </section>
+
+                    </section>
+                    <section id="summary" class="pml-chapter">
+                        <h2 class="pml-chapter-title">Summary</h2>
+                        <p class="pml-paragraph">Here&apos;s a brief summary of PTS error-handling rules and built-in support:</p>
+                        <ul class="pml-list">
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">There are two types of errors:</p>
+                                <ul class="pml-list">
+                                    <li class="pml-list-element">
+                                        <p class="pml-paragraph">anticipated errors (e.g. <code class="pml-inline-code">file_not_found_error</code>, <code class="pml-inline-code">invalid_data_error</code>)</p>
+
+                                    </li>
+                                    <li class="pml-list-element">
+                                        <p class="pml-paragraph">unanticipated errors (e.g. <code class="pml-inline-code">out_of_memory_error</code>, <code class="pml-inline-code">stack_overflow_error</code>)</p>
+
+                                    </li>
+
+                                </ul>
+
+                            </li>
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">Anticipated errors:</p>
+                                <ul class="pml-list">
+                                    <li class="pml-list-element">
+                                        <p class="pml-paragraph">are expected to possibly occur at run-time</p>
+
+                                    </li>
+                                    <li class="pml-list-element">
+                                        <p class="pml-paragraph">must be declared as a function return type (using union types)</p>
+
+                                    </li>
+                                    <li class="pml-list-element">
+                                        <p class="pml-paragraph">must be handled in one way or another, or explicitly ignored</p>
+
+                                    </li>
+
+                                </ul>
+
+                            </li>
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">Unanticipated errors:</p>
+                                <ul class="pml-list">
+                                    <li class="pml-list-element">
+                                        <p class="pml-paragraph">are not expected to occur at run-time</p>
+
+                                    </li>
+                                    <li class="pml-list-element">
+                                        <p class="pml-paragraph">can potentially occur at any time, and at any location in the source code</p>
+
+                                    </li>
+                                    <li class="pml-list-element">
+                                        <p class="pml-paragraph">are either handled by one or more global error handlers or caught and handled explicitly anywhere in the source code</p>
+
+                                    </li>
+                                    <li class="pml-list-element">
+                                        <p class="pml-paragraph">can be thrown implicitly or explicitly</p>
+
+                                    </li>
+
+                                </ul>
+
+                            </li>
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">A set of commonly used anticipated and unanticipated error types are defined in the standard library. Additional, domain-specific error types can be defined in a software development project, to cover specific needs.</p>
+
+                            </li>
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">PTS provides a set of dedicated operators and statements to facilitate error-handling.</p>
+
+                            </li>
+
+                        </ul>
+
+                    </section>
+                    <section id="ch__36" class="pml-chapter">
+                        <h2 class="pml-chapter-title">Acknowledgment</h2>
+                        <p class="pml-paragraph">Many thanks to Tristano Ajmone for his useful feedback to improve this article. </p>
+
+                    </section>
+                </article>
+                <aside class="pml-doc-right">
+                </aside>
+            </div>
+            <footer class="pml-doc-footer">
+            </footer>
+        </div>
+
+    </body>
+</html>
