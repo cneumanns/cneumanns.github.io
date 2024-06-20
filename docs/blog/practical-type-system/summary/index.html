@@ -323,7 +323,7 @@
                             <li class="pml-list-element">
                                 <p class="pml-paragraph">They provide a sound foundation for uniform null- and error-handling — two critical aspects of a practical type system.</p>
                                 <p class="pml-paragraph">Here&apos;s an example of a function that might return a <code class="pml-inline-code">string</code> or a <code class="pml-inline-code">file_error</code> or <code class="pml-inline-code">null</code>:</p>
-                                <pre class="pml-code"><code>fn read_text_file ( file file_path ) -&gt; [b string or null or file_error]
+                                <pre class="pml-code"><code>fn read_text_file ( file file_path ) -&gt; <b class="pml-bold">string or null or file_error</b>
     // function body
 .</code></pre>
 

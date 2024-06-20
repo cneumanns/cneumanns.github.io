@@ -150,8 +150,8 @@
                         <p class="pml-paragraph">Here&apos;s an excerpt of code that does the job, written in Java (the code would be similar in other languages):</p>
                         <pre class="pml-code"><code>for ( Customer customer : customers ) {
     String id = customer.getId();
-    [b String email = customer.getEmail();]
-    if ( [b /* TODO: no email address defined */] ) {
+    <b class="pml-bold">String email = customer.getEmail();</b>
+    if ( <b class="pml-bold">/* TODO: no email address defined */</b> ) {
         writeError ( id + &quot;: no email&quot; );
     } else {
         writeInfo ( id + &quot;: &quot; + email );
@@ -160,25 +160,25 @@
                         <p class="pml-paragraph">The interesting part in this code is the <code class="pml-inline-code">if</code> statement that checks if an email address exists for the customer.</p>
                         <p class="pml-paragraph">Practice shows that different developers are likely to check for the absence of an email address in different ways. Let&apos;s look at six possible variations.</p>
                         <p class="pml-paragraph">Developer A follows the prevalent advice that functions should never return <code class="pml-inline-code">null</code>, but empty strings (and empty collections), in order to simplify code and avoid the dreaded null pointer error. Therefore he assumes that <code class="pml-inline-code">customer.getEmail()</code> returns an empty string if there&apos;s no email address. The code looks like this:</p>
-                        <pre class="pml-code"><code>if ( [b email.isEmpty()] ) {
+                        <pre class="pml-code"><code>if ( <b class="pml-bold">email.isEmpty()</b> ) {
     writeError ( id + &quot;: no email&quot; );
 } else {
     writeInfo ( id + &quot;: &quot; + email );
 }</code></pre>
                         <p class="pml-paragraph">Developer B is a member of a growing tribe of developers who embrace <code class="pml-inline-code">null</code>. Only <code class="pml-inline-code">null</code> should be used to represent the <i class="pml-italic">absence of value</i>, and therefore she assumes that <code class="pml-inline-code">customer.getEmail()</code> returns <code class="pml-inline-code">null</code> if there&apos;s no email address:</p>
-                        <pre class="pml-code"><code>if ( [b email == null] ) {
+                        <pre class="pml-code"><code>if ( <b class="pml-bold">email == null</b> ) {
     writeError ( id + &quot;: no email&quot; );
 } else {
     writeInfo ( id + &quot;: &quot; + email );
 }</code></pre>
                         <p class="pml-paragraph">Developer C wants to be on the safe side and tests for <code class="pml-inline-code">null</code> <i class="pml-italic">or</i> an empty string:</p>
-                        <pre class="pml-code"><code>if ( [b email == null || email.isEmpty()] ) {
+                        <pre class="pml-code"><code>if ( <b class="pml-bold">email == null || email.isEmpty()</b> ) {
     writeError ( id + &quot;: no email&quot; );
 } else {
     writeInfo ( id + &quot;: &quot; + email );
 }</code></pre>
                         <p class="pml-paragraph">Developer D also wants to be on the safe side, but he&apos;s having a bad day and gets the code wrong:</p>
-                        <pre class="pml-code"><code>if ( [b email.isEmpty() || email == null] ) {
+                        <pre class="pml-code"><code>if ( <b class="pml-bold">email.isEmpty() || email == null</b> ) {
     writeError ( id + &quot;: no email&quot; );
 } else {
     writeInfo ( id + &quot;: &quot; + email );
@@ -193,7 +193,7 @@
                             </div>
                         </div>
                         <p class="pml-paragraph">Developer E also gets it wrong — not because the order of the expressions is wrong, but because she uses the non-short-circuiting or operator <code class="pml-inline-code">|</code> instead of its short-circuiting counterpart <code class="pml-inline-code">||</code>, which also means that a null pointer error is thrown if <code class="pml-inline-code">email</code> points to <code class="pml-inline-code">null</code>:</p>
-                        <pre class="pml-code"><code>if ( [b email == null | email.isEmpty()] ) {
+                        <pre class="pml-code"><code>if ( <b class="pml-bold">email == null | email.isEmpty()</b> ) {
     writeError ( id + &quot;: no email&quot; );
 } else {
     writeInfo ( id + &quot;: &quot; + email );
@@ -689,10 +689,10 @@ if ( allergies == null ) {
 }
 </code></pre>
                         <p class="pml-paragraph">In a nutshell, code like this:</p>
-                        <pre class="pml-code"><code>[b if ( collection == null ) {
+                        <pre class="pml-code"><code><b class="pml-bold">if ( collection == null ) {
     // do this
 } else if ( collection.isEmpty() ) {
-    // do something else ]
+    // do something else </b>
 } else {
     // ...
 }</code></pre>
@@ -757,13 +757,13 @@ if ( allergies == null ) {
                         <section id="simpler_code" class="pml-chapter">
                             <h3 class="pml-chapter-title">Simpler Code</h3>
                             <p class="pml-paragraph">Remember the source code examples from section <a class="pml-xref" href="#problem"><i class="pml-italic">What&apos;s the Problem?</i></a>, where six programmers wrote different code, and the only correct version was this one:</p>
-                            <pre class="pml-code"><code>if ( [b email == null || email.isEmpty()] ) {
+                            <pre class="pml-code"><code>if ( <b class="pml-bold">email == null || email.isEmpty()</b> ) {
     writeError ( id + &quot;: no email&quot; );
 } else {
     writeInfo ( id + &quot;: &quot; + email );
 }</code></pre>
                             <p class="pml-paragraph">By eliminating empty strings, the risk for wrong code in similar cases (common in many projects) has been eliminated. The correct code becomes simpler, and there&apos;s only one right way to do it. In a null-safe language, the check for <code class="pml-inline-code">null</code> is even <i class="pml-italic">required</i> by the compiler. We have to write:</p>
-                            <pre class="pml-code"><code>if ( [b email == null] ) {
+                            <pre class="pml-code"><code>if ( <b class="pml-bold">email == null</b> ) {
     writeError ( id + &quot;: no email&quot; );
 } else {
     writeInfo ( id + &quot;: &quot; + email );
@@ -964,15 +964,15 @@ boolean weHaveCheese = foodsInFridge == null ? false : foodsInFridge.contains ( 
 
                             </ul>
                             <p class="pml-paragraph">These are the types predominantly used in function signatures (i.e. immutable and non-empty). For example, the following function takes a non-empty, immutable list of non-empty, immutable strings as input, and returns a non-empty, immutable list of integers:</p>
-                            <pre class="pml-code"><code>fn foo ( [b strings list&lt;string&gt;] ) -&gt; [b list&lt;integer&gt;]
+                            <pre class="pml-code"><code>fn foo ( <b class="pml-bold">strings list&lt;string&gt;</b> ) -&gt; <b class="pml-bold">list&lt;integer&gt;</b>
     // body
 .</code></pre>
                             <p class="pml-paragraph">If input and output are allowed to be <code class="pml-inline-code">null</code> (i.e. there might be &quot;no elements&quot;), the signature will contain <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/union-types/index.html"><i class="pml-italic">union types</i></a> (<code class="pml-inline-code">t1 or t2</code>), like this:</p>
-                            <pre class="pml-code"><code>fn foo ( strings list&lt;string&gt; [b or null] ) -&gt; list&lt;integer&gt; [b or null]
+                            <pre class="pml-code"><code>fn foo ( strings list&lt;string&gt; <b class="pml-bold">or null</b> ) -&gt; list&lt;integer&gt; <b class="pml-bold">or null</b>
     // body
 .</code></pre>
                             <p class="pml-paragraph">If the input and output lists are also allowed to <i class="pml-italic">contain</i> <code class="pml-inline-code">null</code> elements, the signature is as follows:</p>
-                            <pre class="pml-code"><code>fn foo ( strings list&lt;string [b or null]&gt; or null ) -&gt; list&lt;integer [b or null]&gt; or null
+                            <pre class="pml-code"><code>fn foo ( strings list&lt;string <b class="pml-bold">or null</b>&gt; or null ) -&gt; list&lt;integer <b class="pml-bold">or null</b>&gt; or null
     // body
 .</code></pre>
 
@@ -1012,11 +1012,11 @@ const numbers list&lt;number&gt; or null = null // OK</code></pre>
                             <pre class="pml-code"><code>fn int_range ( start integer, end integer ) -&gt; list&lt;integer&gt;
     in_check: end &gt;= start
     
-    [b const builder = list_builder&lt;integer&gt;.create]
+    <b class="pml-bold">const builder = list_builder&lt;integer&gt;.create</b>
     repeat from i = start to end
-        [b builder.append ( i )]
+        <b class="pml-bold">builder.append ( i )</b>
     .
-    [b return builder.build]
+    <b class="pml-bold">return builder.build</b>
 .</code></pre>
 
                         </section>
@@ -1060,30 +1060,30 @@ const numbers list&lt;number&gt; or null = null // OK</code></pre>
 2
 3</pre>
                             <p class="pml-paragraph">In cases where there might be no elements, the compiler requires a check for <code class="pml-inline-code">null</code>:</p>
-                            <pre class="pml-code"><code>const commands list&lt;command&gt; [b or null] = get_commands()
-[b if commands is not null]
+                            <pre class="pml-code"><code>const commands list&lt;command&gt; <b class="pml-bold">or null</b> = get_commands()
+<b class="pml-bold">if commands is not null</b>
     repeat for each command in commands
         log_info ( &quot;&quot;&quot;Executing command {{command.to_string}}.&quot;&quot;&quot; )
         // code to execute command
     .
-[b else]
+<b class="pml-bold">else</b>
     log_warning ( &quot;There are no commands to execute.&quot; )
 .</code></pre>
                             <p class="pml-paragraph">The <code class="pml-inline-code">else</code> branch is optional:</p>
-                            <pre class="pml-code"><code>const commands list&lt;command&gt; [b or null] = get_commands()
-[b if commands is not null]
+                            <pre class="pml-code"><code>const commands list&lt;command&gt; <b class="pml-bold">or null</b> = get_commands()
+<b class="pml-bold">if commands is not null</b>
     repeat for each command in commands
         log_info ( &quot;&quot;&quot;Executing command {{command.to_string}}.&quot;&quot;&quot; )
         // more code
     .
 .</code></pre>
                             <p class="pml-paragraph">We can shorten the above code by using the <code class="pml-inline-code">if_null</code> clause in the <code class="pml-inline-code">repeat</code> statement:</p>
-                            <pre class="pml-code"><code>repeat for each command in get_commands() [b if_null: skip]
+                            <pre class="pml-code"><code>repeat for each command in get_commands() <b class="pml-bold">if_null: skip</b>
     log_info ( &quot;&quot;&quot;Executing command {{command.to_string}}.&quot;&quot;&quot; )
     // more code
 .</code></pre>
                             <p class="pml-paragraph">If a collection is declared to be nullable (either explicitly or via type-inference), but supposed to be non-null in a given context, we can use the <code class="pml-inline-code">if_null: throw</code> clause to abort program execution whenever the collection is <code class="pml-inline-code">null</code>, despite our assumption to the contrary:</p>
-                            <pre class="pml-code"><code>repeat for each command in get_commands() [b if_null: throw &quot;&apos;commands&apos; is not supposed to be &apos;null&apos;.&quot;]
+                            <pre class="pml-code"><code>repeat for each command in get_commands() <b class="pml-bold">if_null: throw &quot;&apos;commands&apos; is not supposed to be &apos;null&apos;.&quot;</b>
     log_info ( &quot;&quot;&quot;Executing command {{command.to_string}}.&quot;&quot;&quot; )
     // more code
 .</code></pre>
@@ -1247,7 +1247,7 @@ end java</code></pre>
                             </ul>
                             <p class="pml-paragraph">As you can see, all three problems have disappeared. The above function doesn&apos;t support the &quot;no remarks&quot; and &quot;some empty remarks&quot; cases, and the compiler ensures that nobody calls the function with invalid input. The function requires a non-null, non-empty list of remarks, and empty remarks are not allowed in the list.</p>
                             <p class="pml-paragraph">Now suppose that the function should handle empty remarks. Here&apos;s the new version:</p>
-                            <pre class="pml-code"><code>fn average_length_of_remarks ( remarks list&lt;string [b or null]&gt; ) -&gt; decimal [b or null]
+                            <pre class="pml-code"><code>fn average_length_of_remarks ( remarks list&lt;string <b class="pml-bold">or null</b>&gt; ) -&gt; decimal <b class="pml-bold">or null</b>
     
     variable sum = 0.0
     variable remarks_count = 0
@@ -1292,9 +1292,9 @@ end java</code></pre>
                             <p class="pml-paragraph">No, it doesn&apos;t, because the above code would be correct if we actually wanted empty remarks to be included in the computation of their average length.</p>
                             <p class="pml-paragraph">As said already in a previous PTS article, the slogan &quot;if it compiles, it works&quot; is just wishful thinking. We still need to write unit tests to detect <i class="pml-italic">logical</i> bugs.</p>
                             <p class="pml-paragraph">Now let&apos;s consider the &quot;there are no remarks&quot; edge case. The function doesn&apos;t currently handle this case. Therefore, the caller of the function is <i class="pml-italic">required</i> to explicitly handle this case (if it occurs). However, if we want the function itself to also handle this case, we can easily do this:</p>
-                            <pre class="pml-code"><code>fn average_length_of_remarks ( remarks list&lt;string or null&gt; [b or null] ) -&gt; decimal or null
+                            <pre class="pml-code"><code>fn average_length_of_remarks ( remarks list&lt;string or null&gt; <b class="pml-bold">or null</b> ) -&gt; decimal or null
 
-    [b if remarks is null then return null]
+    <b class="pml-bold">if remarks is null then return null</b>
 
     // rest of code
 .</code></pre>
