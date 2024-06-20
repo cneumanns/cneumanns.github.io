@@ -31,7 +31,7 @@
                                         </ul>
                                     </details>
                                 </li>
-                                <li class="pml-toc-leaf-node"><a href="#no_go_features">No-Go 'Features'</a></li>
+                                <li class="pml-toc-leaf-node"><a href="#no_go_features">No-Go &apos;Features&apos;</a></li>
                                 <li class="pml-toc-branch-node">
                                     <details>
                                         <summary><a href="#core_types">Core Types</a></summary>
@@ -69,7 +69,7 @@
                                         </ul>
                                     </details>
                                 </li>
-                                <li class="pml-toc-leaf-node"><a href="#whats_next">What's Next?</a></li>
+                                <li class="pml-toc-leaf-node"><a href="#whats_next">What&apos;s Next?</a></li>
                                 <li class="pml-toc-leaf-node"><a href="#ch__22">Acknowledgment</a></li>
                             </ul>
                         </div>
@@ -127,14 +127,14 @@
                     <p class="pml-paragraph"><br /></p>
                     <p class="pml-paragraph">This is part 2 in a series of articles titled <i class="pml-italic">How to Design a Practical Type System to Maximize Reliability, Maintainability, and Productivity in Software Development Projects</i>.</p>
                     <p class="pml-paragraph">It is recommended (but not required for experienced programmers) to read the articles in their order of publication, starting with <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/01-what-why-how/index.html"><i class="pml-italic">Part 1: What? Why? How?</i></a>.</p>
+                    <p class="pml-paragraph">For a quick summary of previous articles you can read <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/summary/index.html"><i class="pml-italic">Summary of the Practical Type System </i>(<i class="pml-italic">PTS</i>) <i class="pml-italic">Article Series</i></a>.</p>
                     <div class="pml-admonition">
                         <div class="pml-admonition-label">
                             <p class="pml-paragraph">Note</p>
 
                         </div>
                         <div class="pml-admonition-content">
-                            <p class="pml-paragraph">Please be aware that PTS is a new paradigm. As explained in section <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/essence-foundation/index.html#history"><i class="pml-italic">History</i></a> of the article <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/essence-foundation/index.html"><i class="pml-italic">Essence and Foundation of the Practical Type System (PTS)</i></a>, PTS has been implemented in a proof-of-concept project, but a public PTS implementation isn't available yet — you can't try out the PTS source code examples shown in this article.</p>
-                            <p class="pml-paragraph">For a quick summary of previous articles you can read <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/summary/index.html"><i class="pml-italic">Summary of the Practical Type System </i>(<i class="pml-italic">PTS</i>) <i class="pml-italic">Article Series</i></a>. </p>
+                            <p class="pml-paragraph">Please be aware that PTS is a new paradigm and still a work-in-progress. As explained in section <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/essence-foundation/index.html#history"><i class="pml-italic">History</i></a> of the article <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/essence-foundation/index.html"><i class="pml-italic">Essence and Foundation of the Practical Type System (PTS)</i></a>, I created a proof-of-concept implementation which is now a bit outdated — therefore you won’t be able to try out the PTS code examples shown in this article. </p>
                         </div>
                     </div>
                     <p class="pml-paragraph"><br /></p>
@@ -144,7 +144,7 @@
                     <div class="pml-caption" style="text-align:center;">PTS foundation</div>
                     <section id="introduction" class="pml-chapter">
                         <h2 class="pml-chapter-title">Introduction</h2>
-                        <p class="pml-paragraph">In this article we'll take a closer look at PTS — its goals and non-goals, its history, what to avoid, and its core types. </p>
+                        <p class="pml-paragraph">In this article we&apos;ll take a closer look at PTS — its goals and non-goals, its history, what to avoid, and its core types. </p>
 
                     </section>
                     <section id="context" class="pml-chapter">
@@ -153,11 +153,11 @@
                         <section id="goals" class="pml-chapter">
                             <h3 class="pml-chapter-title">Goals and Non-goals</h3>
                             <p class="pml-paragraph">The aim of this series is to present and discuss a partly-implemented-and-tested type system designed to maximize reliability, maintainability, and productivity in software development projects.</p>
-                            <p class="pml-paragraph">We'll assume that PTS is used in a high-level, imperative, object-oriented, compiled programming language, designed for application programming (including the development of libraries and frameworks).</p>
+                            <p class="pml-paragraph">We&apos;ll assume that PTS is used in a high-level, imperative, object-oriented, compiled programming language, designed for application programming (including the development of libraries and frameworks).</p>
                             <p class="pml-paragraph">However, PTS is not bound to a certain programming language paradigm. Most PTS concepts could be used, for example, in a procedural or functional programming language, or in a language designed for <a class="pml-link" href="https://en.wikipedia.org/wiki/Systems_programming"><i class="pml-italic">systems programming</i></a>.</p>
-                            <p class="pml-paragraph">PTS is meant to simplify life for software developers working on mid- to large-size code bases. As we'll see in subsequent articles, this can't be achieved with a <i class="pml-italic">simple</i> type system — it can only be achieved with an <i class="pml-italic">advanced</i> type system composed of a sound set of mechanisms that need to work seamlessly together. Simple type systems that are easy to learn might be appropriate in small, one-developer projects. They can be nice to use — until the project grows in size and we start spending hours upon hours fixing bugs that could have been reported immediately at compile- or edit-time by a more advanced type system. Therefore simple type systems are ill-suited in mission-critical, real-life enterprise projects, because they significantly aggravate the task of writing reliable and maintainable software in reasonable time. PTS is an advanced type system, and therefore non-trivial to implement.</p>
+                            <p class="pml-paragraph">PTS is meant to simplify life for software developers working on mid- to large-size code bases. As we&apos;ll see in subsequent articles, this can&apos;t be achieved with a <i class="pml-italic">simple</i> type system — it can only be achieved with an <i class="pml-italic">advanced</i> type system composed of a sound set of mechanisms that need to work seamlessly together. Simple type systems that are easy to learn might be appropriate in small, one-developer projects. They can be nice to use — until the project grows in size and we start spending hours upon hours fixing bugs that could have been reported immediately at compile- or edit-time by a more advanced type system. Therefore simple type systems are ill-suited in mission-critical, real-life enterprise projects, because they significantly aggravate the task of writing reliable and maintainable software in reasonable time. PTS is an advanced type system, and therefore non-trivial to implement.</p>
                             <p class="pml-paragraph">The goal is to design a type system that is easy to <i class="pml-italic">use</i> and difficult to misuse, rather than one which is easy to <i class="pml-italic">implement</i>.</p>
-                            <p class="pml-paragraph">I'll focus on showing <i class="pml-italic">why</i> some features/mechanisms should be part of a practical type system, and <i class="pml-italic">why</i> other features should be omitted. The rationale behind each concept will be illustrated by source code examples to illustrate how PTS code looks like. However, I won't provide a comprehensive specification or dig into implementation details and APIs. We'll primarily focus on the <i class="pml-italic">why</i> (the benefits), not the <i class="pml-italic">how</i>.</p>
+                            <p class="pml-paragraph">I&apos;ll focus on showing <i class="pml-italic">why</i> some features/mechanisms should be part of a practical type system, and <i class="pml-italic">why</i> other features should be omitted. The rationale behind each concept will be illustrated by source code examples to illustrate how PTS code looks like. However, I won&apos;t provide a comprehensive specification or dig into implementation details and APIs. We&apos;ll primarily focus on the <i class="pml-italic">why</i> (the benefits), not the <i class="pml-italic">how</i>.</p>
 
                         </section>
                         <section id="history" class="pml-chapter">
@@ -171,7 +171,7 @@
 
                                 </li>
                                 <li class="pml-list-element">
-                                    <p class="pml-paragraph">The first versions of the <a class="pml-link" href="https://www.pml-lang.dev/"><i class="pml-italic">Practical Markup Language</i> (<i class="pml-italic">PML</i>)</a> (which I've been using since 2019 to write all my articles, including the <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/essence-foundation/index.html"><i class="pml-italic">original version</i></a> of this one). </p>
+                                    <p class="pml-paragraph">The first versions of the <a class="pml-link" href="https://www.pml-lang.dev/"><i class="pml-italic">Practical Markup Language</i> (<i class="pml-italic">PML</i>)</a> (which I&apos;ve been using since 2019 to write all my articles, including the <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/essence-foundation/index.html"><i class="pml-italic">original version</i></a> of this one). </p>
                                     <p class="pml-paragraph">Note: PDML and PML were eventually rewritten in Java, to render them more suitable for open-source projects.</p>
 
                                 </li>
@@ -181,10 +181,10 @@
                                 </li>
 
                             </ul>
-                            <p class="pml-paragraph">Hence PPL wasn't just a toy language — it was tested and usable to a certain extent, albeit still far from being production-ready (incomplete documentation, a rudimentary standard library, no IDE support, etc.). Because of its immaturity, PPL was never open-sourced. It is now hibernating for a few years — but that might change in the future.</p>
-                            <p class="pml-paragraph">The point is, PPL helped me to learn a lot about language design and type systems, and now I want to share and discuss what I've learned.  Constructive feedback is most welcome, and the resulting knowledge will hopefully be useful to design future programming languages.</p>
-                            <p class="pml-paragraph">In a nutshell: PTS is a set of ideas which I fleshed out in PPL, and I'm now publishing them since they seem to be useful.</p>
-                            <p class="pml-paragraph">We need to differentiate between the <i class="pml-italic">PTS paradigm</i> and the <i class="pml-italic">PTS syntax</i>. Both emerged from PPL, and they'll be introduced in the next sections.</p>
+                            <p class="pml-paragraph">Hence PPL wasn&apos;t just a toy language — it was tested and usable to a certain extent, albeit still far from being production-ready (incomplete documentation, a rudimentary standard library, no IDE support, etc.). Because of its immaturity, PPL was never open-sourced. It is now hibernating for a few years — but that might change in the future.</p>
+                            <p class="pml-paragraph">The point is, PPL helped me to learn a lot about language design and type systems, and now I want to share and discuss what I&apos;ve learned. Constructive feedback is most welcome, and the resulting knowledge will hopefully be useful to design future programming languages.</p>
+                            <p class="pml-paragraph">In a nutshell: PTS is a set of ideas which I fleshed out in PPL, and I&apos;m now publishing them since they seem to be useful.</p>
+                            <p class="pml-paragraph">We need to differentiate between the <i class="pml-italic">PTS paradigm</i> and the <i class="pml-italic">PTS syntax</i>. Both emerged from PPL, and they&apos;ll be introduced in the next sections.</p>
                             <figure style="text-align: center">
                                 <img class="pml-image" src="images/PTS_history.svg" width="300">
                             </figure>
@@ -193,12 +193,12 @@
                         <section id="paradigm" class="pml-chapter">
                             <h3 class="pml-chapter-title">PTS Paradigm</h3>
                             <p class="pml-paragraph">The <i class="pml-italic">PTS paradigm</i> encompasses a set of type system features designed to maximize reliability, maintainability, and productivity. The aim is to provide a unique set of practical features that complement each other, work together seamlessly, are easy to use, and ultimately help developers to write better code in less time.</p>
-                            <p class="pml-paragraph">Some PTS features are borrowed from other programming languages (e.g. static typing and immutability by default). Other common type system features are designed differently from how other languages approach them (e.g. null-safety and error-handling). Some novel approaches will be presented too. In the upcoming articles I'll mostly focus on these non-ordinary features.</p>
+                            <p class="pml-paragraph">Some PTS features are borrowed from other programming languages (e.g. static typing and immutability by default). Other common type system features are designed differently from how other languages approach them (e.g. null-safety and error-handling). Some novel approaches will be presented too. In the upcoming articles I&apos;ll mostly focus on these non-ordinary features.</p>
 
                         </section>
                         <section id="syntax" class="pml-chapter">
                             <h3 class="pml-chapter-title">PTS Syntax</h3>
-                            <p class="pml-paragraph">Besides the <i class="pml-italic">PTS paradigm</i>, the <i class="pml-italic">PTS syntax</i> also originated in PPL. It's a new syntax which aims to be succinct, easy to understand, and well suited to write code based on the PTS paradigm. In the following articles I'll use this syntax in all PTS source code examples.</p>
+                            <p class="pml-paragraph">Besides the <i class="pml-italic">PTS paradigm</i>, the <i class="pml-italic">PTS syntax</i> also originated in PPL. It&apos;s a new syntax which aims to be succinct, easy to understand, and well suited to write code based on the PTS paradigm. In the following articles I&apos;ll use this syntax in all PTS source code examples.</p>
                             <div class="pml-admonition">
                                 <div class="pml-admonition-label">
                                     <p class="pml-paragraph">Note</p>
@@ -208,14 +208,14 @@
                                     <p class="pml-paragraph">The PTS syntax is an improved version of the original PPL syntax. Therefore, most PTS source code examples will not work if you try them out in the current PPL version.</p>
                                 </div>
                             </div>
-                            <p class="pml-paragraph">The syntax will be explained whenever needed, however it's worth mentioning right away some basic syntax rules.</p>
+                            <p class="pml-paragraph">The syntax will be explained whenever needed, however it&apos;s worth mentioning right away some basic syntax rules.</p>
                             <p class="pml-paragraph">The common C-style approach to code blocks is to enclose them within curly braces:</p>
                             <pre class="pml-code"><code>if (condition) {
     i = 1;
 } else {
     i = 2;
 }</code></pre>
-                            <p class="pml-paragraph">The PTS syntax doesn't use braces or other paired delimiters. Instead, a period (<code class="pml-inline-code">.</code>) is used to terminate a block, as shown below:</p>
+                            <p class="pml-paragraph">The PTS syntax doesn&apos;t use braces or other paired delimiters. Instead, a period (<code class="pml-inline-code">.</code>) is used to terminate a block, as shown below:</p>
                             <pre class="pml-code"><code>if condition
     i = 1
 else
@@ -228,7 +228,7 @@ else
                                 </div>
                                 <div class="pml-admonition-content">
                                     <p class="pml-paragraph">The required period at the end of the block eliminates problems and ambiguities that can occur in languages that use <i class="pml-italic">only</i> whitespace to define control flow and structure (like Python).</p>
-                                    <p class="pml-paragraph">For example, the above code <i class="pml-italic">could</i> (but shouldn't) be written as follows, and still work correctly:</p>
+                                    <p class="pml-paragraph">For example, the above code <i class="pml-italic">could</i> (but shouldn&apos;t) be written as follows, and still work correctly:</p>
                                     <pre class="pml-code"><code>if condition
 i = 1
 else
@@ -253,7 +253,7 @@ i = 2
                                 </li>
 
                             </ul>
-                            <p class="pml-paragraph">Some source code examples in the following articles assume that PTS is used in an object-oriented programming language. For example, I'll use <code class="pml-inline-code">o.m()</code>, where <code class="pml-inline-code">o</code> denotes an object, and <code class="pml-inline-code">m()</code> is a method call on that object.</p>
+                            <p class="pml-paragraph">Some source code examples in the following articles assume that PTS is used in an object-oriented programming language. For example, I&apos;ll use <code class="pml-inline-code">o.m()</code>, where <code class="pml-inline-code">o</code> denotes an object, and <code class="pml-inline-code">m()</code> is a method call on that object.</p>
                             <div class="pml-admonition">
                                 <div class="pml-admonition-label">
                                     <p class="pml-paragraph">Important!</p>
@@ -269,7 +269,7 @@ i = 2
 
                     </section>
                     <section id="no_go_features" class="pml-chapter">
-                        <h2 class="pml-chapter-title">No-Go 'Features'</h2>
+                        <h2 class="pml-chapter-title">No-Go &apos;Features&apos;</h2>
                         <blockquote class="pml-quote">
                             <div class="pml-quote-text-block">
                                 <div class="pml-quote-text-prefix"></div>
@@ -305,7 +305,7 @@ i = 2
                                 <p class="pml-paragraph">For example, in some languages integer division by zero results in undefined behavior.</p>
                                 <p class="pml-paragraph">Wikipedia states:</p>
                                 <div class="pml-division" style="margin-left:3em;">
-                                    <p class="pml-paragraph">In the C community, undefined behavior may be humorously referred to as 'nasal demons', after a comp.std.c post that explained undefined behavior as allowing the compiler to do anything it chooses, even 'to make demons fly out of your nose'.</p>
+                                    <p class="pml-paragraph">In the C community, undefined behavior may be humorously referred to as &apos;nasal demons&apos;, after a comp.std.c post that explained undefined behavior as allowing the compiler to do anything it chooses, even &apos;to make demons fly out of your nose&apos;.</p>
 
                                 </div>
                                 <p class="pml-paragraph">For practical illustrations showing what this really means I recommend delving into the following articles:</p>
@@ -347,7 +347,7 @@ i = 2
                             </li>
                             <li class="pml-list-element">
                                 <div class="pml-header">Shared mutable data</div>
-                                <p class="pml-paragraph">Shared mutable data can cause weird behavior and bugs that are extremely difficult to find and fix. This is well explained in Henrik Eichenhardt's article <a class="pml-link" href="http://henrikeichenhardt.blogspot.com/2013/06/why-shared-mutable-state-is-root-of-all.html"><i class="pml-italic">Why shared mutable state is the root of all evil</i></a>.</p>
+                                <p class="pml-paragraph">Shared mutable data can cause weird behavior and bugs that are extremely difficult to find and fix. This is well explained in Henrik Eichenhardt&apos;s article <a class="pml-link" href="http://henrikeichenhardt.blogspot.com/2013/06/why-shared-mutable-state-is-root-of-all.html"><i class="pml-italic">Why shared mutable state is the root of all evil</i></a>.</p>
 
                             </li>
                             <li class="pml-list-element">
@@ -355,7 +355,7 @@ i = 2
                                 <p class="pml-paragraph">Implicit type conversions/coercions are error-prone whenever there is a risk of silently ignored loss of information, wrong data, or other nasty bugs.</p>
                                 <p class="pml-paragraph">There are different variations of this &quot;no-go feature&quot;.</p>
                                 <p class="pml-paragraph">Probably the most prominent case is the implicit conversion/coercion between numeric types of different natures and/or different ranges, such as coercing a floating point number into an integer number, or a 32-bit integer into a 16-bit integer.</p>
-                                <p class="pml-paragraph">Another example would be a string that is implicitly coerced into a number, or zero if the string doesn't represent a valid number.</p>
+                                <p class="pml-paragraph">Another example would be a string that is implicitly coerced into a number, or zero if the string doesn&apos;t represent a valid number.</p>
 
                             </li>
                             <li class="pml-list-element">
@@ -399,7 +399,7 @@ i = 2
                             </li>
                             <li class="pml-list-element">
                                 <div class="pml-header">Excessive functionality in the root type of the type hierarchy</div>
-                                <p class="pml-paragraph">Examples: Equality, comparison, hashing, copying functions/methods, and further functionality present in the root type (well explained for C# and Java in Jon Skeet's article <a class="pml-link" href="https://codeblog.jonskeet.uk/2008/12/05/redesigning-system-object-java-lang-object/"><i class="pml-italic">Redesigning System.Object/java.lang.Object</i></a>).</p>
+                                <p class="pml-paragraph">Examples: Equality, comparison, hashing, copying functions/methods, and further functionality present in the root type (well explained for C# and Java in Jon Skeet&apos;s article <a class="pml-link" href="https://codeblog.jonskeet.uk/2008/12/05/redesigning-system-object-java-lang-object/"><i class="pml-italic">Redesigning System.Object/java.lang.Object</i></a>).</p>
 
                             </li>
                             <li class="pml-list-element">
@@ -434,11 +434,11 @@ i = 2
 
                             </div>
                             <div class="pml-admonition-content">
-                                <p class="pml-paragraph">Some features make sense in environments with performance constraints, such as in <a class="pml-link" href="https://en.wikipedia.org/wiki/Systems_programming"><i class="pml-italic">systems programming</i></a> and real-time systems. For example, not checking for buffer/arithmetic overflows/underflows, pointer arithmetics, and manual memory management can increase efficiency. Manual memory management (instead of using an automatic garbage collector) is often the only viable choice in real-time systems with hard constraints on maximum time delays, where arbitrary time lags of even just a few microseconds (typically caused by garbage collectors) can't be tolerated. However, these features should generally not be part of a high-level type system designed for application programming where maximum reliability, maintainability and productivity are more important than maximum efficiency.</p>
-                                <p class="pml-paragraph">We all want performance, but if a choice must be made between reliability and performance in PTS, then reliability wins. For example, checking for arithmetic overflow errors increases reliability, but decreases performance. We don't want to deal with difficulties like those explained in Russ Cox's article <a class="pml-link" href="https://research.swtch.com/ub"><i class="pml-italic">C and C++ Prioritize Performance over Correctness</i></a>. To cover performance-critical parts of an application, a high-level programming language should support calling code written in low-level languages optimized for performance, such as C or Rust. </p>
+                                <p class="pml-paragraph">Some features make sense in environments with performance constraints, such as in <a class="pml-link" href="https://en.wikipedia.org/wiki/Systems_programming"><i class="pml-italic">systems programming</i></a> and real-time systems. For example, not checking for buffer/arithmetic overflows/underflows, pointer arithmetics, and manual memory management can increase efficiency. Manual memory management (instead of using an automatic garbage collector) is often the only viable choice in real-time systems with hard constraints on maximum time delays, where arbitrary time lags of even just a few microseconds (typically caused by garbage collectors) can&apos;t be tolerated. However, these features should generally not be part of a high-level type system designed for application programming where maximum reliability, maintainability and productivity are more important than maximum efficiency.</p>
+                                <p class="pml-paragraph">We all want performance, but if a choice must be made between reliability and performance in PTS, then reliability wins. For example, checking for arithmetic overflow errors increases reliability, but decreases performance. We don&apos;t want to deal with difficulties like those explained in Russ Cox&apos;s article <a class="pml-link" href="https://research.swtch.com/ub"><i class="pml-italic">C and C++ Prioritize Performance over Correctness</i></a>. To cover performance-critical parts of an application, a high-level programming language should support calling code written in low-level languages optimized for performance, such as C or Rust.</p>
                             </div>
                         </div>
-                        <p class="pml-paragraph">To keep this section short, we won't elaborate on the perils of the above features. Practice shows that they have all caused numerous software application failures — some of them resulting in disasters. Just remember:</p>
+                        <p class="pml-paragraph">To keep this section short, we won&apos;t elaborate on the perils of the above features. Practice shows that they have all caused numerous software application failures — some of them resulting in disasters. Just remember:</p>
                         <ul class="pml-list">
                             <li class="pml-list-element">
                                 <p class="pml-paragraph">The Ariane 5 rocket <a class="pml-link" href="https://www.youtube.com/watch?v=PK_yguLapgA">exploded</a> due to coercing a 64-bit number into a 16-bit space.</p>
@@ -487,13 +487,13 @@ i = 2
                                 <p class="pml-paragraph">A <code class="pml-inline-code">character</code> is a single letter, digit, symbol, or other unit typically used in text processing. Characters are encoded in UTF-8. Hence, a character can represent any Unicode code point.</p>
                                 <p class="pml-paragraph">A <code class="pml-inline-code">character</code> <i class="pml-italic">literal</i> is surrounded by apostrophes, and <code class="pml-inline-code">\</code> is used as escape character (C-style syntax).</p>
                                 <p class="pml-paragraph">Examples:</p>
-                                <pre class="pml-code"><code>'a'
-'1'
-'!'
-'\n'        // &lt;line feed&gt;
-'\''        // '
-'\u2714'    // ✔
-'\U001F600' // 😀</code></pre>
+                                <pre class="pml-code"><code>&apos;a&apos;
+&apos;1&apos;
+&apos;!&apos;
+&apos;\n&apos;        // &lt;line feed&gt;
+&apos;\&apos;&apos;        // &apos;
+&apos;\u2714&apos;    // ✔
+&apos;\U001F600&apos; // 😀</code></pre>
 
                             </section>
                             <section id="type_string" class="pml-chapter">
@@ -519,7 +519,7 @@ i = 2
                                     </li>
 
                                 </ul>
-                                <p class="pml-paragraph">Here's a PTS example:</p>
+                                <p class="pml-paragraph">Here&apos;s a PTS example:</p>
                                 <pre class="pml-code"><code>write_line ( &quot;&quot;&quot;File: C:\foo\bar.txt
 SQL command: select &quot;first_name&quot;, &quot;last_name&quot; from &quot;employees&quot;
 line \3\
@@ -575,7 +575,7 @@ PETER DEUTSCH said:
 
                                     </div>
                                     <div class="pml-admonition-content">
-                                        <p class="pml-paragraph"><code class="pml-inline-code">integer</code> and <code class="pml-inline-code">decimal</code> are arbitrary-precision numbers, limited only by the available memory of the host system. There's potentially no limit to the number of digits.</p>
+                                        <p class="pml-paragraph"><code class="pml-inline-code">integer</code> and <code class="pml-inline-code">decimal</code> are arbitrary-precision numbers, limited only by the available memory of the host system. There&apos;s potentially no limit to the number of digits.</p>
                                         <p class="pml-paragraph">Signed, unsigned, and non-zero numbers, as well as number ranges (e.g. <code class="pml-inline-code">1 .. 10</code>) play an important role in PTS. This will be covered in subsequent articles.</p>
                                     </div>
                                 </div>
@@ -600,7 +600,7 @@ PETER DEUTSCH said:
                                 <p class="pml-paragraph">Whitespace and/or a comma are used to separate list elements.</p>
                                 <p class="pml-paragraph">Note that the type name of the <i class="pml-italic">collection</i> is written right after the opening bracket. Moreover, the type name of the <i class="pml-italic">elements</i> is written between angle brackets (<code class="pml-inline-code">&lt;&gt;</code>). All collections are immutable by default. Thus, the above code defines an immutable <code class="pml-inline-code">list</code> whose elements are all of type <code class="pml-inline-code">string</code>.</p>
                                 <p class="pml-paragraph">Here is an example of a mutable, heterogeneous list that can contain elements of any type:</p>
-                                <pre class="pml-code"><code>[mutable_list&lt;any&gt; &quot;abc&quot; 'd' 'd' 1+1]</code></pre>
+                                <pre class="pml-code"><code>[mutable_list&lt;any&gt; &quot;abc&quot; &apos;d&apos; &apos;d&apos; 1+1]</code></pre>
                                 <p class="pml-paragraph">If the type of the list elements is not explicitly specified, then the compiler infers it. However, this is only supported if all elements are of the same type. Hence, this code:</p>
                                 <pre class="pml-code"><code>[list&lt;boolean&gt; true false true]</code></pre>
                                 <p class="pml-paragraph">... can be shortened to:</p>
@@ -621,7 +621,7 @@ PETER DEUTSCH said:
                                 <p class="pml-paragraph">Example of a map whose keys are strings, and the values can be of any type:</p>
                                 <pre class="pml-code"><code>[map&lt;string,any&gt;
     &quot;digit&quot; : 1
-    &quot;letter&quot;: 'a'
+    &quot;letter&quot;: &apos;a&apos;
 ] </code></pre>
 
                             </section>
@@ -634,17 +634,17 @@ PETER DEUTSCH said:
                             <p class="pml-paragraph">We do the same in PTS.</p>
                             <p class="pml-paragraph">Yes, we <i class="pml-italic">do</i> use <code class="pml-inline-code">null</code> to represent the <i class="pml-italic">absence of a value</i>, even though <code class="pml-inline-code">null</code> is the reason for the infamous <i class="pml-italic">null pointer error</i> and has become a synonym with &quot;the billion dollar mistake,&quot; a term coined by Tony Hoare, the inventor of <code class="pml-inline-code">null</code>.</p>
                             <p class="pml-paragraph">No, we <i class="pml-italic">do not</i> use a <code class="pml-inline-code">Maybe</code> monad or an <code class="pml-inline-code">Option</code> type — two popular solutions used in some modern programming languages to eliminate null pointer errors.</p>
-                            <p class="pml-paragraph">However, the concept of <code class="pml-inline-code">null</code> in PTS, as well as the rules and specific operators for handling <code class="pml-inline-code">null</code>, differ from approaches used in other languages. Type <code class="pml-inline-code">null</code> will be fully covered in a subsequent, dedicated article titled <i class="pml-italic">Null-Safety in PTS</i>. We'll see why a dedicated type <code class="pml-inline-code">null</code> is used (and not <code class="pml-inline-code">Maybe</code> or <code class="pml-inline-code">Option</code>), how <code class="pml-inline-code">null</code> handling looks like in source code, and how null-safety is fully ensured by the compiler.</p>
-                            <p class="pml-paragraph">There is no need to fear <code class="pml-inline-code">null</code> anymore — <code class="pml-inline-code">null</code> is our friend, not our enemy. We need it, and it doesn't cause any harm if we use it correctly. But we also need a type system that protects us against misusing <code class="pml-inline-code">null</code>.</p>
+                            <p class="pml-paragraph">However, the concept of <code class="pml-inline-code">null</code> in PTS, as well as the rules and specific operators for handling <code class="pml-inline-code">null</code>, differ from approaches used in other languages. Type <code class="pml-inline-code">null</code> will be fully covered in a subsequent, dedicated article titled <i class="pml-italic">Null-Safety in PTS</i>. We&apos;ll see why a dedicated type <code class="pml-inline-code">null</code> is used (and not <code class="pml-inline-code">Maybe</code> or <code class="pml-inline-code">Option</code>), how <code class="pml-inline-code">null</code> handling looks like in source code, and how null-safety is fully ensured by the compiler.</p>
+                            <p class="pml-paragraph">There is no need to fear <code class="pml-inline-code">null</code> anymore — <code class="pml-inline-code">null</code> is our friend, not our enemy. We need it, and it doesn&apos;t cause any harm if we use it correctly. But we also need a type system that protects us against misusing <code class="pml-inline-code">null</code>.</p>
 
                         </section>
 
                     </section>
                     <section id="whats_next" class="pml-chapter">
-                        <h2 class="pml-chapter-title">What's Next?</h2>
-                        <p class="pml-paragraph">By now you should have a good overview of what PTS is, isn't, and aims to achieve.</p>
+                        <h2 class="pml-chapter-title">What&apos;s Next?</h2>
+                        <p class="pml-paragraph">By now you should have a good overview of what PTS is, isn&apos;t, and aims to achieve.</p>
                         <p class="pml-paragraph">We want a type system that simplifies defining reliable types, and we want bugs to be detected as early as possible in the development cycle — preferably at compile-/edit-time, or else as soon as possible at run-time.</p>
-                        <p class="pml-paragraph">In the next articles we'll progressively discover the <i class="pml-italic">features</i> required to achieve the goal of writing more reliable and maintainable code in less time. We'll talk about record and union types, null-safety, error handling, constrained scalars, eradication of the empty string, and more. </p>
+                        <p class="pml-paragraph">In the next articles we&apos;ll progressively discover the <i class="pml-italic">features</i> required to achieve the goal of writing more reliable and maintainable code in less time. We&apos;ll talk about record and union types, null-safety, error handling, constrained scalars, eradication of the empty string, and more. </p>
 
                     </section>
                     <section id="ch__22" class="pml-chapter">

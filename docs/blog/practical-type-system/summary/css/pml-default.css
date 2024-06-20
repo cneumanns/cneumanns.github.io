@@ -171,12 +171,12 @@ h4, h5, h6 {
 .pml-quote {
     margin-left: 3.0em;
     margin-right: 3.0em;
-    font-style: italic;
 }
 
 .pml-quote-text-block {
     display: flex;
     align-items: flex-start;
+    font-style: italic;
 }
 
 .pml-quote-text-prefix, .pml-quote-text-suffix {

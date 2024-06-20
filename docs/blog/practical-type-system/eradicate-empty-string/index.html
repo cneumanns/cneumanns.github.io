@@ -1,0 +1,1424 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="generator" content="PML 4.0.0 (www.pml-lang.dev)" />
+        <title>We Should Eradicate the Empty String — Here&apos;s Why</title>
+        <link rel="stylesheet" href="css/pml-default.css">
+        <link rel="stylesheet" href="css/pml-print-default.css" media="print">
+
+    </head>
+    <body>
+
+        <div class="pml-doc-wrapper">
+            <header class="pml-doc-header">
+            </header>
+            <div class="pml-doc-content">
+                <aside class="pml-doc-left">
+                    <nav class="pml-toc">
+                        <h2 class="pml-toc-title">Table of Contents</h2>
+                        <div class="pml-toc-tree" id="TOCTree">
+                            <ul>
+                                <li class="pml-toc-leaf-node"><a href="#introduction">Introduction</a></li>
+                                <li class="pml-toc-leaf-node"><a href="#problem">What&apos;s the Problem?</a></li>
+                                <li class="pml-toc-leaf-node"><a href="#solution">Is There a Solution?</a></li>
+                                <li class="pml-toc-leaf-node"><a href="#can_we">Can We Do It?</a></li>
+                                <li class="pml-toc-branch-node">
+                                    <details>
+                                        <summary><a href="#should_we">Should We Do It?</a></summary>
+                                        <ul>
+                                            <li class="pml-toc-leaf-node"><a href="#trouble_values">Potentially Troublesome Values Eliminated</a></li>
+                                            <li class="pml-toc-leaf-node"><a href="#simpler_code">Simpler Code</a></li>
+                                            <li class="pml-toc-leaf-node"><a href="#more_reliable_code">More Reliable Code</a></li>
+                                            <li class="pml-toc-leaf-node"><a href="#better_apis">Simpler and More Reliable APIs</a></li>
+                                            <li class="pml-toc-leaf-node"><a href="#efficient_code">More Efficient Code</a></li>
+                                            <li class="pml-toc-leaf-node"><a href="#code_analysis">Better Code Analysis</a></li>
+                                            <li class="pml-toc-leaf-node"><a href="#disadvantages">Disadvantages</a></li>
+                                        </ul>
+                                    </details>
+                                </li>
+                                <li class="pml-toc-leaf-node"><a href="#real_life">Collections in the Physical World</a></li>
+                                <li class="pml-toc-branch-node">
+                                    <details>
+                                        <summary><a href="#how">How Does It Work?</a></summary>
+                                        <ul>
+                                            <li class="pml-toc-leaf-node"><a href="#how_immutable">Non-empty Immutable Collections</a></li>
+                                            <li class="pml-toc-leaf-node"><a href="#how_literals">No Empty Literals</a></li>
+                                            <li class="pml-toc-leaf-node"><a href="#how_builders">Immutable Collection Builders</a></li>
+                                            <li class="pml-toc-leaf-node"><a href="#how_mutable">Mutable Collections That Can Be Empty</a></li>
+                                            <li class="pml-toc-leaf-node"><a href="#how_loops">Loops Syntax</a></li>
+                                            <li class="pml-toc-leaf-node"><a href="#how_non_pts_libs">Working with Non-PTS Libraries</a></li>
+                                        </ul>
+                                    </details>
+                                </li>
+                                <li class="pml-toc-branch-node">
+                                    <details>
+                                        <summary><a href="#example">Example</a></summary>
+                                        <ul>
+                                            <li class="pml-toc-leaf-node"><a href="#example_unsafe">Unsafe Paradigm</a></li>
+                                            <li class="pml-toc-leaf-node"><a href="#example_safe">Safe Paradigm</a></li>
+                                            <li class="pml-toc-leaf-node"><a href="#example_conclusion">Conclusion</a></li>
+                                        </ul>
+                                    </details>
+                                </li>
+                                <li class="pml-toc-branch-node">
+                                    <details>
+                                        <summary><a href="#other_languages">Other Languages</a></summary>
+                                        <ul>
+                                            <li class="pml-toc-leaf-node"><a href="#other_languages_non_null_safe">Non-null-Safe Languages</a></li>
+                                            <li class="pml-toc-leaf-node"><a href="#other_languages_option">Languages That Use an Optional/Maybe Type</a></li>
+                                        </ul>
+                                    </details>
+                                </li>
+                                <li class="pml-toc-leaf-node"><a href="#summary">Summary</a></li>
+                                <li class="pml-toc-leaf-node"><a href="#ch__29">Acknowledgments</a></li>
+                            </ul>
+                        </div>
+                    </nav>
+                </aside>
+                <article id="doc__" class="pml-doc-text">
+                    <h1 class="pml-doc-title">We Should Eradicate the Empty String — Here&apos;s Why</h1>
+                    <table class="pml-table">
+                        <tr class="pml-table-body-row">
+                            <td class="pml-table-body-cell">
+                                <p class="pml-paragraph"><b class="pml-bold">First Published</b></p>
+
+                            </td>
+                            <td class="pml-table-body-cell">
+                                <p class="pml-paragraph">2024-06-20</p>
+
+                            </td>
+
+                        </tr>
+                        <tr class="pml-table-body-row">
+                            <td class="pml-table-body-cell">
+                                <p class="pml-paragraph"><b class="pml-bold">Author</b></p>
+
+                            </td>
+                            <td class="pml-table-body-cell">
+                                <p class="pml-paragraph">Christian Neumanns</p>
+
+                            </td>
+
+                        </tr>
+                        <tr class="pml-table-body-row">
+                            <td class="pml-table-body-cell">
+                                <p class="pml-paragraph"><b class="pml-bold">Editor</b></p>
+
+                            </td>
+                            <td class="pml-table-body-cell">
+                                <p class="pml-paragraph">Tristano Ajmone</p>
+
+                            </td>
+
+                        </tr>
+                        <tr class="pml-table-body-row">
+                            <td class="pml-table-body-cell">
+                                <p class="pml-paragraph"><b class="pml-bold">License</b></p>
+
+                            </td>
+                            <td class="pml-table-body-cell">
+                                <p class="pml-paragraph"><a class="pml-link" href="https://creativecommons.org/licenses/by-nd/4.0/">CC BY-ND 4.0</a></p>
+
+                            </td>
+
+                        </tr>
+
+                    </table>
+                    <p class="pml-paragraph"><br /></p>
+                    <figure style="text-align: center">
+                        <img class="pml-image" src="images/empty_vs_null.jpg" width="400">
+                    </figure>
+                    <div class="pml-caption" style="text-align:center;">Empty String vs Null</div>
+                    <section id="introduction" class="pml-chapter">
+                        <h2 class="pml-chapter-title">Introduction</h2>
+                        <p class="pml-paragraph">Did you ever wonder what&apos;s the difference between an empty string and <code class="pml-inline-code">null</code>?</p>
+                        <p class="pml-paragraph">For example, what&apos;s the difference between:</p>
+                        <pre class="pml-code"><code>email = &quot;&quot;</code></pre>
+                        <p class="pml-paragraph">... and:</p>
+                        <pre class="pml-code"><code>email = null</code></pre>
+                        <p class="pml-paragraph">Do both statements <i class="pml-italic">mean</i> the same or not?</p>
+                        <p class="pml-paragraph">What are the pros and cons of using an empty string vs using <code class="pml-inline-code">null</code>?</p>
+                        <p class="pml-paragraph">Do we need both versions, or could we get rid of one to simplify things?</p>
+                        <p class="pml-paragraph">Let&apos;s see. </p>
+
+                    </section>
+                    <section id="problem" class="pml-chapter">
+                        <h2 class="pml-chapter-title">What&apos;s the Problem?</h2>
+                        <p class="pml-paragraph">Before revealing the answers to the questions raised in the previous section, it&apos;s helpful to first investigate the infamous &quot;test for empty and/or null?&quot; problem, encountered in many popular programming languages (C-family languages, Java, JavaScript, Python, etc.). Chances are you have encountered this problem firsthand, in various situations.</p>
+                        <p class="pml-paragraph">Consider a service provider company that needs to send an important email to inform all customers about an upcoming change of conditions. Before sending the email, the staff wants to check the customers&apos; email addresses, and ensure that each customer has an email address defined in the database.</p>
+                        <p class="pml-paragraph">Here&apos;s an excerpt of code that does the job, written in Java (the code would be similar in other languages):</p>
+                        <pre class="pml-code"><code>for ( Customer customer : customers ) {
+    String id = customer.getId();
+    [b String email = customer.getEmail();]
+    if ( [b /* TODO: no email address defined */] ) {
+        writeError ( id + &quot;: no email&quot; );
+    } else {
+        writeInfo ( id + &quot;: &quot; + email );
+    }
+}</code></pre>
+                        <p class="pml-paragraph">The interesting part in this code is the <code class="pml-inline-code">if</code> statement that checks if an email address exists for the customer.</p>
+                        <p class="pml-paragraph">Practice shows that different developers are likely to check for the absence of an email address in different ways. Let&apos;s look at six possible variations.</p>
+                        <p class="pml-paragraph">Developer A follows the prevalent advice that functions should never return <code class="pml-inline-code">null</code>, but empty strings (and empty collections), in order to simplify code and avoid the dreaded null pointer error. Therefore he assumes that <code class="pml-inline-code">customer.getEmail()</code> returns an empty string if there&apos;s no email address. The code looks like this:</p>
+                        <pre class="pml-code"><code>if ( [b email.isEmpty()] ) {
+    writeError ( id + &quot;: no email&quot; );
+} else {
+    writeInfo ( id + &quot;: &quot; + email );
+}</code></pre>
+                        <p class="pml-paragraph">Developer B is a member of a growing tribe of developers who embrace <code class="pml-inline-code">null</code>. Only <code class="pml-inline-code">null</code> should be used to represent the <i class="pml-italic">absence of value</i>, and therefore she assumes that <code class="pml-inline-code">customer.getEmail()</code> returns <code class="pml-inline-code">null</code> if there&apos;s no email address:</p>
+                        <pre class="pml-code"><code>if ( [b email == null] ) {
+    writeError ( id + &quot;: no email&quot; );
+} else {
+    writeInfo ( id + &quot;: &quot; + email );
+}</code></pre>
+                        <p class="pml-paragraph">Developer C wants to be on the safe side and tests for <code class="pml-inline-code">null</code> <i class="pml-italic">or</i> an empty string:</p>
+                        <pre class="pml-code"><code>if ( [b email == null || email.isEmpty()] ) {
+    writeError ( id + &quot;: no email&quot; );
+} else {
+    writeInfo ( id + &quot;: &quot; + email );
+}</code></pre>
+                        <p class="pml-paragraph">Developer D also wants to be on the safe side, but he&apos;s having a bad day and gets the code wrong:</p>
+                        <pre class="pml-code"><code>if ( [b email.isEmpty() || email == null] ) {
+    writeError ( id + &quot;: no email&quot; );
+} else {
+    writeInfo ( id + &quot;: &quot; + email );
+}</code></pre>
+                        <div class="pml-admonition">
+                            <div class="pml-admonition-label">
+                                <p class="pml-paragraph">Note</p>
+
+                            </div>
+                            <div class="pml-admonition-content">
+                                <p class="pml-paragraph">The above code is wrong because it first tests <code class="pml-inline-code">email.isEmpty()</code>, before testing for <code class="pml-inline-code">null</code>, which means that a null pointer error is thrown if <code class="pml-inline-code">email</code> points to <code class="pml-inline-code">null</code>.</p>
+                            </div>
+                        </div>
+                        <p class="pml-paragraph">Developer E also gets it wrong — not because the order of the expressions is wrong, but because she uses the non-short-circuiting or operator <code class="pml-inline-code">|</code> instead of its short-circuiting counterpart <code class="pml-inline-code">||</code>, which also means that a null pointer error is thrown if <code class="pml-inline-code">email</code> points to <code class="pml-inline-code">null</code>:</p>
+                        <pre class="pml-code"><code>if ( [b email == null | email.isEmpty()] ) {
+    writeError ( id + &quot;: no email&quot; );
+} else {
+    writeInfo ( id + &quot;: &quot; + email );
+}</code></pre>
+                        <p class="pml-paragraph">Developer F is having a very bad day and forgets to check if there&apos;s an email address:</p>
+                        <pre class="pml-code"><code>writeInfo ( id + &quot;: &quot; + email );</code></pre>
+                        <div class="pml-admonition">
+                            <div class="pml-admonition-label">
+                                <p class="pml-paragraph">Note</p>
+
+                            </div>
+                            <div class="pml-admonition-content">
+                                <p class="pml-paragraph">If <code class="pml-inline-code">email</code> points to <code class="pml-inline-code">null</code> then the outcome of the above code is language-dependant.</p>
+                                <ul class="pml-list">
+                                    <li class="pml-list-element">
+                                        <p class="pml-paragraph">In Java, appending <code class="pml-inline-code">null</code> to a string appends the string <code class="pml-inline-code">&quot;null&quot;</code> — hence a message like <code class="pml-inline-code">C123: null</code> is written.</p>
+
+                                    </li>
+                                    <li class="pml-list-element">
+                                        <p class="pml-paragraph">Other languages (e.g. C#) append nothing, which results in <code class="pml-inline-code">C123: </code>.</p>
+
+                                    </li>
+                                    <li class="pml-list-element">
+                                        <p class="pml-paragraph">Some languages might throw an exception at run-time.</p>
+
+                                    </li>
+                                    <li class="pml-list-element">
+                                        <p class="pml-paragraph">The safest approach (in a null-safe language) is this one: the compiler generates an error, requiring us to decide what to do whenever we try to append a nullable value to a string.</p>
+
+                                    </li>
+
+                                </ul>
+                            </div>
+                        </div>
+                        <p class="pml-paragraph">Now let&apos;s see what happens at run-time.</p>
+                        <p class="pml-paragraph">Besides considering the above six code variations from the consumer side of <code class="pml-inline-code">customer.getEmail()</code>, we also need to take into account the possible variations on the supplier side.</p>
+                        <p class="pml-paragraph">If there is no email address defined, then <code class="pml-inline-code">customer.getEmail()</code> might:</p>
+                        <ul class="pml-list">
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">return <code class="pml-inline-code">null</code></p>
+
+                            </li>
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">return an empty string</p>
+
+                            </li>
+
+                        </ul>
+                        <p class="pml-paragraph">As there are six variations on the consumer side, and two on the supplier side, the (surprisingly high) number of combinations is: 6 x 2 = 12.</p>
+                        <p class="pml-paragraph">The following table shows the outcome for all combinations of supplier/consumer code. You don&apos;t need to scrutinize this table — you can just skim over it, because the goal of this example is to provide an idea of the complexity and error-proneness involved in this <i class="pml-italic">simple</i> example.</p>
+                        <table class="pml-table">
+                            <thead class="pml-table-header">
+                                <tr class="pml-table-header-row">
+                                    <th class="pml-table-header-cell" rowspan="2">
+                                        <p class="pml-paragraph">Supplier<br />Returns</p>
+
+                                    </th>
+                                    <th class="pml-table-header-cell" rowspan="2">
+                                        <p class="pml-paragraph">Consumer<br />Checks</p>
+
+                                    </th>
+                                    <th class="pml-table-header-cell" colspan="3">
+                                        <p class="pml-paragraph">Output</p>
+
+                                    </th>
+
+                                </tr>
+                                <tr class="pml-table-header-row">
+                                    <th class="pml-table-header-cell">
+                                        <p class="pml-paragraph">Correct</p>
+
+                                    </th>
+                                    <th class="pml-table-header-cell">
+                                        <p class="pml-paragraph">Runtime<br />Error</p>
+
+                                    </th>
+                                    <th class="pml-table-header-cell">
+                                        <p class="pml-paragraph">Silently<br />Ignored<br />Error</p>
+
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+                            <tr class="pml-table-body-row">
+                                <td class="pml-table-body-cell" rowspan="6">
+                                    <p class="pml-paragraph">empty string</p>
+
+                                </td>
+                                <td class="pml-table-body-cell">
+                                    <p class="pml-paragraph">A: empty</p>
+
+                                </td>
+                                <td class="pml-table-body-cell" style="text-align:center; font-size: 1.2em; color: green;">
+                                    <p class="pml-paragraph">✔</p>
+
+                                </td>
+                                <td class="pml-table-body-cell">
+
+                                </td>
+                                <td class="pml-table-body-cell">
+
+                                </td>
+
+                            </tr>
+                            <tr class="pml-table-body-row">
+                                <td class="pml-table-body-cell">
+                                    <p class="pml-paragraph">B: null</p>
+
+                                </td>
+                                <td class="pml-table-body-cell">
+
+                                </td>
+                                <td class="pml-table-body-cell">
+
+                                </td>
+                                <td class="pml-table-body-cell" style="text-align:center; font-size: 1.2em; color: red; font-weight: bold;">
+                                    <p class="pml-paragraph">✗</p>
+
+                                </td>
+
+                            </tr>
+                            <tr class="pml-table-body-row">
+                                <td class="pml-table-body-cell">
+                                    <p class="pml-paragraph">C: null, then empty</p>
+
+                                </td>
+                                <td class="pml-table-body-cell" style="text-align:center; font-size: 1.2em; color: green;">
+                                    <p class="pml-paragraph">✔</p>
+
+                                </td>
+                                <td class="pml-table-body-cell">
+
+                                </td>
+                                <td class="pml-table-body-cell">
+
+                                </td>
+
+                            </tr>
+                            <tr class="pml-table-body-row">
+                                <td class="pml-table-body-cell">
+                                    <p class="pml-paragraph">D: empty, then null</p>
+
+                                </td>
+                                <td class="pml-table-body-cell" style="text-align:center; font-size: 1.2em; color: green;">
+                                    <p class="pml-paragraph">✔</p>
+
+                                </td>
+                                <td class="pml-table-body-cell">
+
+                                </td>
+                                <td class="pml-table-body-cell">
+
+                                </td>
+
+                            </tr>
+                            <tr class="pml-table-body-row">
+                                <td class="pml-table-body-cell">
+                                    <p class="pml-paragraph">E: wrong operator</p>
+
+                                </td>
+                                <td class="pml-table-body-cell" style="text-align:center; font-size: 1.2em; color: green;">
+                                    <p class="pml-paragraph">✔</p>
+
+                                </td>
+                                <td class="pml-table-body-cell">
+
+                                </td>
+                                <td class="pml-table-body-cell">
+
+                                </td>
+
+                            </tr>
+                            <tr class="pml-table-body-row">
+                                <td class="pml-table-body-cell">
+                                    <p class="pml-paragraph">F: nothing</p>
+
+                                </td>
+                                <td class="pml-table-body-cell">
+
+                                </td>
+                                <td class="pml-table-body-cell">
+
+                                </td>
+                                <td class="pml-table-body-cell" style="text-align:center; font-size: 1.2em; color: red; font-weight: bold;">
+                                    <p class="pml-paragraph">✗</p>
+
+                                </td>
+
+                            </tr>
+                            <tr class="pml-table-body-row">
+                                <td class="pml-table-body-cell" rowspan="6">
+                                    <p class="pml-paragraph">null</p>
+
+                                </td>
+                                <td class="pml-table-body-cell">
+                                    <p class="pml-paragraph">A: empty</p>
+
+                                </td>
+                                <td class="pml-table-body-cell">
+
+                                </td>
+                                <td class="pml-table-body-cell" style="text-align:center; font-size: 1.2em; color: red; font-weight: bold;">
+                                    <p class="pml-paragraph">✗</p>
+
+                                </td>
+                                <td class="pml-table-body-cell">
+
+                                </td>
+
+                            </tr>
+                            <tr class="pml-table-body-row">
+                                <td class="pml-table-body-cell">
+                                    <p class="pml-paragraph">B: null</p>
+
+                                </td>
+                                <td class="pml-table-body-cell" style="text-align:center; font-size: 1.2em; color: green;">
+                                    <p class="pml-paragraph">✔</p>
+
+                                </td>
+                                <td class="pml-table-body-cell">
+
+                                </td>
+                                <td class="pml-table-body-cell">
+
+                                </td>
+
+                            </tr>
+                            <tr class="pml-table-body-row">
+                                <td class="pml-table-body-cell">
+                                    <p class="pml-paragraph">C: null, then empty</p>
+
+                                </td>
+                                <td class="pml-table-body-cell" style="text-align:center; font-size: 1.2em; color: green;">
+                                    <p class="pml-paragraph">✔</p>
+
+                                </td>
+                                <td class="pml-table-body-cell">
+
+                                </td>
+                                <td class="pml-table-body-cell">
+
+                                </td>
+
+                            </tr>
+                            <tr class="pml-table-body-row">
+                                <td class="pml-table-body-cell">
+                                    <p class="pml-paragraph">D: empty, then null</p>
+
+                                </td>
+                                <td class="pml-table-body-cell">
+
+                                </td>
+                                <td class="pml-table-body-cell" style="text-align:center; font-size: 1.2em; color: red; font-weight: bold;">
+                                    <p class="pml-paragraph">✗</p>
+
+                                </td>
+                                <td class="pml-table-body-cell">
+
+                                </td>
+
+                            </tr>
+                            <tr class="pml-table-body-row">
+                                <td class="pml-table-body-cell">
+                                    <p class="pml-paragraph">E: wrong operator</p>
+
+                                </td>
+                                <td class="pml-table-body-cell">
+
+                                </td>
+                                <td class="pml-table-body-cell" style="text-align:center; font-size: 1.2em; color: red; font-weight: bold;">
+                                    <p class="pml-paragraph">✗</p>
+
+                                </td>
+                                <td class="pml-table-body-cell">
+
+                                </td>
+
+                            </tr>
+                            <tr class="pml-table-body-row">
+                                <td class="pml-table-body-cell">
+                                    <p class="pml-paragraph">F: nothing</p>
+
+                                </td>
+                                <td class="pml-table-body-cell">
+
+                                </td>
+                                <td class="pml-table-body-cell">
+
+                                </td>
+                                <td class="pml-table-body-cell" style="text-align:center; font-size: 1.2em; color: red; font-weight: bold;">
+                                    <p class="pml-paragraph">✗</p>
+
+                                </td>
+
+                            </tr>
+                            <tfoot class="pml-table-footer">
+                                <tr class="pml-table-footer-row" style="text-align:center;">
+                                    <td class="pml-table-footer-cell">
+
+                                    </td>
+                                    <td class="pml-table-footer-cell">
+                                        <p class="pml-paragraph">Count</p>
+
+                                    </td>
+                                    <td class="pml-table-footer-cell">
+                                        <p class="pml-paragraph">6</p>
+
+                                    </td>
+                                    <td class="pml-table-footer-cell">
+                                        <p class="pml-paragraph">3</p>
+
+                                    </td>
+                                    <td class="pml-table-footer-cell">
+                                        <p class="pml-paragraph">3</p>
+
+                                    </td>
+
+                                </tr>
+
+                            </tfoot>
+
+                        </table>
+                        <p class="pml-paragraph">Points of interest:</p>
+                        <ul class="pml-list">
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">The outcome is correct in 50% of the cases.</p>
+                                <p class="pml-paragraph">There&apos;s a 25% chance for the worst outcome: a silently ignored error.</p>
+
+                            </li>
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">Only the code of developer C, which checks for <code class="pml-inline-code">null</code>, then for an empty string, and uses the right operator (<code class="pml-inline-code">||</code>), works correctly in all cases.</p>
+
+                            </li>
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">If the code on the supplier- or consumer-side is changed later on, then the outcome might change too. Code that worked correctly might become buggy, or vice versa.</p>
+
+                            </li>
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">If <code class="pml-inline-code">customer.getEmail()</code> <i class="pml-italic">sometimes</i> returns <code class="pml-inline-code">null</code>, and <i class="pml-italic">sometimes</i> an empty string (depending on the value stored in the database), then the code might work correctly for some customers, but not for others.</p>
+
+                            </li>
+
+                        </ul>
+                        <div class="pml-admonition">
+                            <div class="pml-admonition-label">
+                                <p class="pml-paragraph">Note</p>
+
+                            </div>
+                            <div class="pml-admonition-content">
+                                <p class="pml-paragraph">Some languages support additional values, besides <code class="pml-inline-code">null</code> and empty strings. For example, Javascript also has <code class="pml-inline-code">undefined</code>. VBScript has <i class="pml-italic">four</i> values: <code class="pml-inline-code">Nothing</code>, <code class="pml-inline-code">Empty</code>, <code class="pml-inline-code">Null</code>, and empty strings. When I wrote this article, I initially intended to provide an even more problematic example including <code class="pml-inline-code">undefined</code>, along with <code class="pml-inline-code">null</code> and an empty string. However, because of the exponential increase in combinations, I abandoned this idea swiftly.</p>
+                            </div>
+                        </div>
+                        <p class="pml-paragraph">The above example demonstrates what you probably knew already: Checking for <code class="pml-inline-code">null</code> <i class="pml-italic">and</i> an empty string is cumbersome and error-prone.</p>
+                        <p class="pml-paragraph">Wouldn&apos;t it be great if we could get rid of this recurring annoyance?</p>
+                        <p class="pml-paragraph">Testing for the absence of an email address should be straightforward, and there should be only one right way to do it, ideally enforced by the compiler. </p>
+
+                    </section>
+                    <section id="solution" class="pml-chapter">
+                        <h2 class="pml-chapter-title">Is There a Solution?</h2>
+                        <blockquote class="pml-quote">
+                            <div class="pml-quote-text-block">
+                                <div class="pml-quote-text-prefix"></div>
+                                <div class="pml-quote-text">
+                                    <p class="pml-paragraph">&quot;Delete,&quot; he said. &quot;Delete, delete, delete.&quot;</p>
+                                </div>
+                                <div class="pml-quote-text-suffix"></div>
+                            </div>
+                            <div class="pml-quote-source">
+                                <p class="pml-paragraph">— Isaacson, Walter. <i class="pml-italic">Elon Musk</i>, 2023, pp. 402</p>
+
+                            </div>
+                        </blockquote>
+                        <p class="pml-paragraph">Because checking for both <code class="pml-inline-code">null</code> and an empty string is a common pattern, C# provides a static <code class="pml-inline-code">String</code> method named <a class="pml-link" href="https://learn.microsoft.com/en-us/dotnet/api/system.string.isnullorempty"><code class="pml-inline-code">IsNullOrEmpty</code></a>.</p>
+                        <p class="pml-paragraph">Instead of writing:</p>
+                        <pre class="pml-code"><code>if ( email == null || email == &quot;&quot; )</code></pre>
+                        <p class="pml-paragraph">... you can simply write:</p>
+                        <pre class="pml-code"><code>if ( String.IsNullOrEmpty ( email ) )</code></pre>
+                        <p class="pml-paragraph">Java doesn&apos;t provide such a method in its standard library, but some third-party libraries do. For example, Google Guava provides <a class="pml-link" href="https://guava.dev/releases/18.0/api/docs/com/google/common/base/Strings.html#isNullOrEmpty(java.lang.String)"><code class="pml-inline-code">Strings.isNullOrEmpty()</code></a>, and Apache Commons provides <a class="pml-link" href="https://commons.apache.org/proper/commons-lang/apidocs/org/apache/commons/lang3/StringUtils.html#isEmpty-java.lang.CharSequence-"><code class="pml-inline-code">StringUtils.isEmpty()</code></a>.</p>
+                        <p class="pml-paragraph">Such utilities are useful, but no compiler in the world can force us to use them. We are not protected from writing wrong code — all variations shown in the previous section are still allowed. We need a better solution.</p>
+                        <p class="pml-paragraph">Could we eradicate <code class="pml-inline-code">null</code> and only use empty strings to represent the absence of a string value? If you read my previous articles (especially <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/union-types/index.html"><i class="pml-italic">Union Types in the Practical Type System (PTS)</i></a> and <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/null-safety/index.html"><i class="pml-italic">Null-Safety in the Practical Type System (PTS)</i></a> ), then you know already that this is not an option.</p>
+                        <p class="pml-paragraph">We need <code class="pml-inline-code">null</code>!</p>
+                        <p class="pml-paragraph">What if we eradicated the empty string?</p>
+                        <p class="pml-paragraph">Can we do that?</p>
+                        <p class="pml-paragraph">Should we do that?</p>
+                        <p class="pml-paragraph">Yes and yes!</p>
+                        <p class="pml-paragraph">What might at first look as an unforgivable, barbaric act of destruction will turn out to be a wonderful simplification that increases reliability and makes us sleep better at night!</p>
+                        <p class="pml-paragraph">We can even go a step further.</p>
+                        <p class="pml-paragraph">A string is a sequence/collection of characters or Unicode code points (e.g. <code class="pml-inline-code">&quot;foo&quot;</code> is a collection of the characters <code class="pml-inline-code">&apos;f&apos;</code>, <code class="pml-inline-code">&apos;o&apos;</code>, and <code class="pml-inline-code">&apos;o&apos;</code>). Hence, if we decide to eradicate the empty string, it&apos;s reasonable to ask: Does that mean that we should also eradicate empty collections (<code class="pml-inline-code">list</code>, <code class="pml-inline-code">set</code>, <code class="pml-inline-code">map</code>, etc.)?</p>
+                        <p class="pml-paragraph">Again, the answer is a wholehearted <i class="pml-italic">yes</i>, we can and should!</p>
+                        <p class="pml-paragraph">However, as we&apos;ll see later, we need to do it properly and keep everything practical.</p>
+                        <div class="pml-admonition">
+                            <div class="pml-admonition-label">
+                                <p class="pml-paragraph">Important<br />Remark</p>
+
+                            </div>
+                            <div class="pml-admonition-content">
+                                <p class="pml-paragraph">This article is part of the <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/01-what-why-how/index.html"><i class="pml-italic">How to Design a Practical Type System to Maximize Reliability, Maintainability, and Productivity in Software Development Projects</i></a> series. My suggestion to eradicate empty strings and empty collections concerns only new languages that implement the <i class="pml-italic">Practical Type System</i> (<i class="pml-italic">PTS</i>) or a similar paradigm designed for reliability.</p>
+                                <p class="pml-paragraph">I do <b class="pml-bold">NOT</b> suggest to remove empty strings/collections in existing mainstream languages such as C, C++, C#, Java, JavaScript, Python, and Rust.</p>
+                            </div>
+                        </div>
+                        <p class="pml-paragraph">In the next section you&apos;ll see why we <i class="pml-italic">can</i> remove empty strings and empty collections, even though this contradicts established practices and guidelines. After evaluating the pros and cons, it will become clear why we <i class="pml-italic">should</i> also remove them. Finally you&apos;ll see how it all works in PTS, and a practical example will demonstrate the benefits. </p>
+
+                    </section>
+                    <section id="can_we" class="pml-chapter">
+                        <h2 class="pml-chapter-title">Can We Do It?</h2>
+                        <p class="pml-paragraph">If you think that eliminating empty strings and collections is a bad idea, know that you&apos;re not alone. We&apos;re so used to them that we take them for granted and can&apos;t imagine living without them. In this section we&apos;ll have a look at some counter-arguments to my suggestion.</p>
+                        <div class="pml-admonition">
+                            <div class="pml-admonition-label">
+                                <p class="pml-paragraph">Note</p>
+
+                            </div>
+                            <div class="pml-admonition-content">
+                                <p class="pml-paragraph">Source code examples in this section and the next one are shown in Java, but the concepts discussed are applicable to other programming languages as well.</p>
+                            </div>
+                        </div>
+                        <p class="pml-paragraph"><br /> <b class="pml-bold">Argument #1: Empty strings and empty collections are supported in all popular languages and they are used in pretty much all kinds of applications. There must be a good reason for this. We can&apos;t eliminate them.</b></p>
+                        <p class="pml-paragraph">Arguments like &quot;Everybody does it, so it must be right&quot; or &quot;It has always been done like this, so we should do the same&quot; can be flawed.</p>
+                        <p class="pml-paragraph">Staying open-minded for novel ideas, and daring to challenge entrenched concepts (including those that may appear unassailable), is crucial to drive progress.</p>
+                        <div class="pml-admonition">
+                            <div class="pml-admonition-label">
+                                <p class="pml-paragraph">Note</p>
+
+                            </div>
+                            <div class="pml-admonition-content">
+                                <p class="pml-paragraph">When I decided to eliminate empty strings and collections in <a class="pml-link" href="https://www.ppl-lang.dev">PPL</a> (a proof-of-concept implementation of PTS, now hibernating), I anticipated that I would later regret my idea, after encountering cases that would show me clearly why empty strings and collections are needed (in addition to <code class="pml-inline-code">null</code>). Nevertheless, I decided to just try it out and see what would happen. What did happen was that I never regretted the decision. In the following sections, I&apos;ll explain why this turned out to be a beneficial idea (unlike several other ideas that I ultimately had to discard after experimenting with them).</p>
+                            </div>
+                        </div>
+                        <p class="pml-paragraph"><br /> <b class="pml-bold">Argument #2: Using empty strings/collections instead of <code class="pml-inline-code">null</code> simplifies code and eliminates some null pointer errors.</b></p>
+                        <p class="pml-paragraph">Common wisdom dictates that functions ought to return empty strings and collections, instead of <code class="pml-inline-code">null</code>. Lots of articles have been written about this topic, and the advice is supported by many prominent and influential voices. For example, Microsoft states (in <a class="pml-link" href="https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/guidelines-for-collections#collection-properties-and-return-values"><i class="pml-italic">Guidelines for Collections</i></a>): &quot;DO NOT return null values from collection properties or from methods returning collections. Return an empty collection or an empty array instead.&quot;</p>
+                        <p class="pml-paragraph">The rationale for this guideline is easy to understand.</p>
+                        <p class="pml-paragraph">Suppose we want to iterate over food in the fridge. If <code class="pml-inline-code">fridge.getFoods()</code> returns an empty collection to represent &quot;no food in the fridge&quot;, we can simply write:</p>
+                        <pre class="pml-code"><code>for ( Food food : fridge.getFoods() ) {
+    System.out.println ( food.toString() );
+}
+</code></pre>
+                        <p class="pml-paragraph">If there&apos;s no food in the fridge, the body of the loop won&apos;t be executed. We don&apos;t need to write:</p>
+                        <pre class="pml-code"><code>List&lt;Food&gt; foods = fridge.getFoods();
+if ( ! foods.isEmpty() ) {
+    for ( Food food : foods ) {
+        System.out.println ( food.toString() );
+    }
+}
+</code></pre>
+                        <p class="pml-paragraph">On the other hand, if <code class="pml-inline-code">fridge.getFoods()</code> returns <code class="pml-inline-code">null</code>, then a simple loop:</p>
+                        <pre class="pml-code"><code>for ( Food food : fridge.getFoods() ) {
+    System.out.println ( food.toString() );
+}
+</code></pre>
+                        <p class="pml-paragraph">... results in a null pointer error if there&apos;s no food in the fridge (i.e. whenever <code class="pml-inline-code">fridge.getFoods()</code> returns <code class="pml-inline-code">null</code>).</p>
+                        <p class="pml-paragraph">We <i class="pml-italic">have</i> to write:</p>
+                        <pre class="pml-code"><code>List&lt;Food&gt; foods = fridge.getFoods();
+if ( foods != null ) {
+    for ( Food food : foods ) {
+        System.out.println ( food.toString() );
+    }
+}
+</code></pre>
+                        <p class="pml-paragraph">Obviously, it looks like using <code class="pml-inline-code">null</code> (instead of an empty collection) does indeed add unnecessary complexity and increases error-proneness, doesn&apos;t it?</p>
+                        <p class="pml-paragraph">Yes, but ... this is not the whole story — we have to look at it from a different perspective. We must reconsider this argument in the context of more reliable software development, which is the primary goal of PTS.</p>
+                        <p class="pml-paragraph">For now, suffice to say that we <i class="pml-italic">can</i> use <code class="pml-inline-code">null</code> instead of an empty collection, even if it seems like we <i class="pml-italic">shouldn&apos;t</i>.</p>
+                        <p class="pml-paragraph">In the next section we&apos;ll come back to this essential point.</p>
+                        <p class="pml-paragraph"><br /> <b class="pml-bold">Argument #3: Sometimes, an empty string/collection has a different meaning than <code class="pml-inline-code">null</code>, and in such cases they must be handled differently in the code. Therefore we need both.</b></p>
+                        <p class="pml-paragraph">In our introductory example, the meaning of an empty string was the same as for <code class="pml-inline-code">null</code>, because we handled both cases in the same way:</p>
+                        <pre class="pml-code"><code>if ( email == null || email.isEmpty() ) {</code></pre>
+                        <p class="pml-paragraph">Whether <code class="pml-inline-code">email</code> is <code class="pml-inline-code">null</code> or empty, the same code is executed: the &quot;then&quot; branch of the <code class="pml-inline-code">if</code> statement. The meaning is the same in both cases: there is no email address defined for the customer.</p>
+                        <p class="pml-paragraph">It turns out that, in practice, the meaning of an empty string/collection and <code class="pml-inline-code">null</code> <i class="pml-italic">is</i> always the same, <i class="pml-italic">unless</i> we assign them different meanings in specific cases.</p>
+                        <p class="pml-paragraph">For example, we <i class="pml-italic">could</i> specify that an empty string means &quot;the customer doesn&apos;t have an email address&quot;, whereas <code class="pml-inline-code">null</code> means that &quot;we don&apos;t know yet whether the customer has an email address or not&quot;.</p>
+                        <p class="pml-paragraph">However, this is bad practice, therefore we shouldn&apos;t do it. Assigning different meanings to <code class="pml-inline-code">null</code> and an empty string/collection would just be a convention that must be documented and applied everywhere in the code by everybody working on the codebase. This is error-prone, and the compiler can&apos;t enforce such conventions.</p>
+                        <p class="pml-paragraph">If we need to differentiate between two (or more) cases then a safe approach is to use different types for the different cases.</p>
+                        <p class="pml-paragraph">For example, consider a function that returns the allergies of a given person. Obviously, it&apos;s crucial to differentiate between &quot;this person has no allergies&quot; and &quot;this person has not yet been tested for allergies&quot;. It could be tempting to keep it simple and specify that an empty list returned by the function means that the person has no allergies, whereas <code class="pml-inline-code">null</code> means that the person has not yet been tested for allergies. However, this would turn out to be a terrible idea, because every developer needs to be aware of this convention and apply it correctly. Client code would look like this:</p>
+                        <pre class="pml-code"><code>List&lt;Allergy&gt; allergies = person.allergies();
+if ( allergies == null ) {
+    // the person has not yet been tested for allergies
+} else if ( allergies.isEmpty() ) {
+    // the person has no allergies
+} else {
+    // the person has allergies
+}
+</code></pre>
+                        <p class="pml-paragraph">Extremely error-prone — we shouldn&apos;t do this.</p>
+                        <p class="pml-paragraph">Instead, <code class="pml-inline-code">person.allergies()</code> should return one of three types: <code class="pml-inline-code">AllergiesNotTested</code>, <code class="pml-inline-code">NoAllergies</code>, or <code class="pml-inline-code">HasAllergies</code> (a type that contains a non-empty list of allergies). Client code is now clear and type-safe, other cases could easily be added in the future (e.g. <code class="pml-inline-code">AllergyTestPending</code>), and the compiler checks for cases we might have forgotten. The code looks like this:</p>
+                        <pre class="pml-code"><code>switch ( person.allergies() ) {
+    case AllergiesNotTested notTested -&gt; {
+        // the person has not yet been tested for allergies
+    }
+    case NoAllergies noAllergies -&gt; {
+        // the person has no allergies
+    }
+    case HasAllergies hasAllergies -&gt; {
+        // the person has allergies
+    }
+}
+</code></pre>
+                        <p class="pml-paragraph">In a nutshell, code like this:</p>
+                        <pre class="pml-code"><code>[b if ( collection == null ) {
+    // do this
+} else if ( collection.isEmpty() ) {
+    // do something else ]
+} else {
+    // ...
+}</code></pre>
+                        <p class="pml-paragraph">... is a <a class="pml-link" href="https://en.wikipedia.org/wiki/Code_smell"><i class="pml-italic">code smell</i></a>. More precisely, it&apos;s a <i class="pml-italic">data design smell</i>. It means that different semantics (meanings) have been assigned to the cases &quot;the collection is null&quot; and &quot;the collection is empty,&quot; instead of using different types for these different cases.</p>
+                        <p class="pml-paragraph">We can conclude:</p>
+                        <ul class="pml-list">
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">The meaning of an empty collection (or an empty string) and <code class="pml-inline-code">null</code> is the same, unless we assign different meanings in specific cases, but we shouldn&apos;t do this.</p>
+
+                            </li>
+
+                        </ul>
+                        <p class="pml-paragraph">If we don&apos;t do what we shouldn&apos;t do, the conclusion can be simplified:</p>
+                        <ul class="pml-list">
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">The meaning of an empty collection (or an empty string) and <code class="pml-inline-code">null</code> is the same. They are handled the same way in the code.</p>
+
+                            </li>
+
+                        </ul>
+                        <p class="pml-paragraph">Microsoft puts it like this in <a class="pml-link" href="https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/guidelines-for-collections#collection-properties-and-return-values"><i class="pml-italic">Guidelines for Collections</i></a>: &quot;The general rule is that null and empty (0 item) collections or arrays should be treated the same.&quot;</p>
+                        <p class="pml-paragraph">Hence, we never need <code class="pml-inline-code">null</code> <i class="pml-italic">and</i> empty collections/strings to represent semantically different cases of the absence of a value.</p>
+                        <div class="pml-admonition">
+                            <div class="pml-admonition-label">
+                                <p class="pml-paragraph">Note</p>
+
+                            </div>
+                            <div class="pml-admonition-content">
+                                <p class="pml-paragraph">Can we hastily conclude that the integer zero and <code class="pml-inline-code">null</code> (or the boolean <code class="pml-inline-code">false</code> and <code class="pml-inline-code">null</code>) also have the same meaning, in the same sense that an empty string and <code class="pml-inline-code">null</code> mean the same? No, that would be a terrible fallacy. Zero and <code class="pml-inline-code">null</code>, as well as <code class="pml-inline-code">false</code> and <code class="pml-inline-code">null</code> have very different meanings. For example, <code class="pml-inline-code">accountBalance = 0</code> means that there&apos;s no money in the account, while <code class="pml-inline-code">accountBalance = null</code> means that we don&apos;t know how much money there&apos;s in the account.</p>
+                            </div>
+                        </div>
+                        <p class="pml-paragraph"><br /> <b class="pml-bold">Argument #4: Sometimes we need mutable collections, and they must be allowed to be empty — for example to implement stacks, queues, deques, etc.</b></p>
+                        <p class="pml-paragraph">Yes, that&apos;s a valid argument. The short answer (in PTS) is that <i class="pml-italic">immutable</i> collections cannot be empty, but the standard library also provides <i class="pml-italic">mutable</i> collections that <i class="pml-italic">can</i> be empty. This will be covered in a later section.</p>
+                        <p class="pml-paragraph"><br /> <b class="pml-bold">Argument #5: We need empty collections and <code class="pml-inline-code">null</code> whenever we work with libraries and frameworks (possibly written in different languages) that use both.</b></p>
+                        <p class="pml-paragraph">Working with third-party APIs is not a problem, because we can simply convert data between the &quot;null and empty&quot; and &quot;only null&quot; worlds. Examples will be shown later.</p>
+                        <p class="pml-paragraph"><br /> <b class="pml-bold">Conclusion</b></p>
+                        <p class="pml-paragraph">As seen in this section we <i class="pml-italic">can</i> eliminate empty strings and empty collections, and use <code class="pml-inline-code">null</code> instead.</p>
+                        <p class="pml-paragraph">However, that doesn&apos;t mean yet that we <i class="pml-italic">should</i> do it. If Bob <i class="pml-italic">can</i> write a big application using only Windows Notepad, it doesn&apos;t mean that he <i class="pml-italic">should</i> do it. </p>
+
+                    </section>
+                    <section id="should_we" class="pml-chapter">
+                        <h2 class="pml-chapter-title">Should We Do It?</h2>
+                        <p class="pml-paragraph">In this section we&apos;ll look at pros and cons of eliminating empty strings/collections, starting with the pros.</p>
+                        <section id="trouble_values" class="pml-chapter">
+                            <h3 class="pml-chapter-title">Potentially Troublesome Values Eliminated</h3>
+                            <p class="pml-paragraph">The first PTS article introduced the following <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/01-what-why-how/index.html#pts_coding_rule"><i class="pml-italic">PTS Coding Rule</i></a>: &quot;All data types in a software project should have the lowest possible cardinality.&quot;</p>
+                            <div class="pml-admonition">
+                                <div class="pml-admonition-label">
+                                    <p class="pml-paragraph">Reminder</p>
+
+                                </div>
+                                <div class="pml-admonition-content">
+                                    <p class="pml-paragraph">The cardinality of a type is the number of allowed values in the type. For example, type <code class="pml-inline-code">boolean</code> has a cardinality of two, because two values are allowed: <code class="pml-inline-code">true</code> and <code class="pml-inline-code">false</code>.</p>
+                                </div>
+                            </div>
+                            <p class="pml-paragraph">By eliminating the empty string and empty collections, the cardinality of all strings and all collections in every application has been reduced by one.</p>
+                            <p class="pml-paragraph">That&apos;s nice.</p>
+                            <p class="pml-paragraph">Even better, we&apos;ve eliminated the most troublesome values in these types.</p>
+                            <p class="pml-paragraph">As every experienced developer knows, empty strings and empty collections are often invalid values, or they must be handled differently. For example: each name has at least one character; there&apos;s at least one student in each class; every online retailer sells at least one product, etc. Eliminating empty values by design eliminates potential bugs related to these values.</p>
+
+                        </section>
+                        <section id="simpler_code" class="pml-chapter">
+                            <h3 class="pml-chapter-title">Simpler Code</h3>
+                            <p class="pml-paragraph">Remember the source code examples from section <a class="pml-xref" href="#problem"><i class="pml-italic">What&apos;s the Problem?</i></a>, where six programmers wrote different code, and the only correct version was this one:</p>
+                            <pre class="pml-code"><code>if ( [b email == null || email.isEmpty()] ) {
+    writeError ( id + &quot;: no email&quot; );
+} else {
+    writeInfo ( id + &quot;: &quot; + email );
+}</code></pre>
+                            <p class="pml-paragraph">By eliminating empty strings, the risk for wrong code in similar cases (common in many projects) has been eliminated. The correct code becomes simpler, and there&apos;s only one right way to do it. In a null-safe language, the check for <code class="pml-inline-code">null</code> is even <i class="pml-italic">required</i> by the compiler. We have to write:</p>
+                            <pre class="pml-code"><code>if ( [b email == null] ) {
+    writeError ( id + &quot;: no email&quot; );
+} else {
+    writeInfo ( id + &quot;: &quot; + email );
+}</code></pre>
+                            <p class="pml-paragraph">You don&apos;t need to wonder anymore: &quot;Should I check for empty, or <code class="pml-inline-code">null</code>, or both?&quot; We always just have to check for <code class="pml-inline-code">null</code>, and if we forget to do so (on a bad day), the compiler will remind us to do it.</p>
+
+                        </section>
+                        <section id="more_reliable_code" class="pml-chapter">
+                            <h3 class="pml-chapter-title">More Reliable Code</h3>
+                            <p class="pml-paragraph">The most important point to remember from this article is this: Using <code class="pml-inline-code">null</code> instead of empty strings/collections increases software reliability. Let&apos;s see why.</p>
+                            <p class="pml-paragraph">When working with collections, more often than not we need to distinguish between the following two semantically different cases, and we have to handle them individually:</p>
+                            <ul class="pml-list" style="list-style-type:decimal">
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">There are no elements.</p>
+
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">There are one or more elements.</p>
+
+                                </li>
+
+                            </ul>
+                            <p class="pml-paragraph">Some pseudo-code examples:</p>
+                            <pre class="pml-code"><code>if directory_is_not_empty then
+    copy_files_in_directory
+else
+    report_missing_files_error
+.
+
+if no_students_in_the_classroom then
+    close_the_windows
+    switch_off_the_lights
+else
+    if its_hot then
+        open_the_windows
+    .
+    switch_on_the_lights
+.
+
+// real-life example
+if there_are_bugs_in_the_code then
+    fix_bugs
+else
+    work_on_new_features
+.</code></pre>
+                            <p class="pml-paragraph">Sometimes, we <i class="pml-italic">forget</i> to distinguish between these two cases — typically, we forget to write specific code for the &quot;no elements&quot; edge case. This can result in bugs that remain undetected during the development and test phases, especially for edge cases that occur rarely.</p>
+                            <p class="pml-paragraph">The good news is this: If we use <code class="pml-inline-code">null</code> (in a null-safe language) to represent &quot;there are no elements&quot; then we can&apos;t ignore these edge cases anymore, because the compiler gently reminds us to handle them. In other words, we are always <i class="pml-italic">required</i> to handle both cases (i.e. &quot;there are elements&quot; and &quot;there are no elements&quot;). This eliminates many potential bugs.</p>
+                            <p class="pml-paragraph">If we use empty collections, we are allowed to write code like this:</p>
+                            <pre class="pml-code"><code>for ( Object element : collection ) {
+    // handle element
+}</code></pre>
+                            <p class="pml-paragraph">An empty collection simply results in &quot;do nothing&quot; behavior. Sometimes this <i class="pml-italic">is</i> the right thing to do, but usually it isn&apos;t. It&apos;s easy to overlook the &quot;there are no elements&quot; edge case. Moreover, if the code was written by somebody else, we don&apos;t know if the author <i class="pml-italic">intended</i> to do nothing in case of an empty collection.</p>
+                            <p class="pml-paragraph">On the other hand, in null-safe languages that enforces <code class="pml-inline-code">null</code> instead of empty collections, the above code wouldn&apos;t compile anymore. We&apos;d have to write:</p>
+                            <pre class="pml-code"><code>if ( collection != null ) {
+    for ( Object element : collection ) {
+        // handle element
+    }
+}</code></pre>
+                            <p class="pml-paragraph">... or:</p>
+                            <pre class="pml-code"><code>if ( collection != null ) {
+    for ( Object element : collection ) {
+        // handle element
+    }
+} else {
+    // handle edge case
+}</code></pre>
+                            <p class="pml-paragraph">Yes, the code is a bit more verbose if no special handling is required for the &quot;no elements&quot; case, but there are two advantages:</p>
+                            <ul class="pml-list">
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">We can&apos;t accidentally forget the &quot;there are no elements&quot; edge case.</p>
+                                    <p class="pml-paragraph">On a bad day we could still forget to add an <code class="pml-inline-code">else</code> branch (whenever needed to handle the edge case), but the risk of this bug is largely mitigated since the test for <code class="pml-inline-code">collection != null</code> is required.</p>
+
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">The programmer&apos;s intention to handle or ignore the edge case is clearly stated in the code.</p>
+
+                                </li>
+
+                            </ul>
+                            <p class="pml-paragraph">You&apos;ll later see a practical PTS example demonstrating the benefits.</p>
+                            <div class="pml-admonition">
+                                <div class="pml-admonition-label">
+                                    <p class="pml-paragraph">Note</p>
+
+                                </div>
+                                <div class="pml-admonition-content">
+                                    <p class="pml-paragraph">To see some practical Java examples, you can also read my article <a class="pml-link" href="https://www.codeproject.com/Articles/797453/Is-it-Really-Better-to-Return-an-Empty-List-Inst"><i class="pml-italic">Is it Really Better to &apos;Return an Empty List Instead of null&apos;? - Part 2</i></a>. That article illustrates wrong outcomes caused by empty collections. For example: a majestic house you can get for free, and a runner-up declared as winner in an election.</p>
+                                </div>
+                            </div>
+
+                        </section>
+                        <section id="better_apis" class="pml-chapter">
+                            <h3 class="pml-chapter-title">Simpler and More Reliable APIs</h3>
+                            <p class="pml-paragraph">If strings and collections can&apos;t be empty, their APIs becomes simpler and less error-prone.</p>
+                            <p class="pml-paragraph">For example:</p>
+                            <ul class="pml-list">
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">There&apos;s no need for an <code class="pml-inline-code">isEmpty</code> method.</p>
+
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">Method <code class="pml-inline-code">size</code> (aka <code class="pml-inline-code">length</code>, which returns the number of elements in the collection) never returns zero. This eliminates the potential risks of some bugs, such as a division by zero when computing the average value in a list of numbers.</p>
+
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">Methods <code class="pml-inline-code">first</code> and <code class="pml-inline-code">last</code> always return an element (instead of returning <code class="pml-inline-code">null</code> or throwing an exception if the collection is empty).</p>
+
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">Methods like <code class="pml-inline-code">allMatch</code>, <code class="pml-inline-code">noneMatch</code>, and <code class="pml-inline-code">anyMatch</code> can&apos;t return unexpected and debatable results that can lead to subtle bugs in edge cases.</p>
+                                    <p class="pml-paragraph">People have different opinions of what these methods should return if the collection is empty — as can be seen in the following long discussion in the CodeProject lounge: <a class="pml-link" href="https://www.codeproject.com/Lounge.aspx?msg=5990400#xx5990400xx"><i class="pml-italic">.NET&apos;s Sometimes Nonsensical Logic</i></a>.</p>
+
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">Methods that compute an aggregate value (e.g. <code class="pml-inline-code">sum</code>, <code class="pml-inline-code">average</code>, <code class="pml-inline-code">min</code>, <code class="pml-inline-code">max</code>) also become more straightforward.</p>
+                                    <p class="pml-paragraph">For example, we don&apos;t need to debate questions like &quot;What should function <code class="pml-inline-code">average</code> do if the list of numbers is empty? Return zero? Return <code class="pml-inline-code">null</code>? Throw an exception?&quot;</p>
+
+                                </li>
+
+                            </ul>
+
+                        </section>
+                        <section id="efficient_code" class="pml-chapter">
+                            <h3 class="pml-chapter-title">More Efficient Code</h3>
+                            <p class="pml-paragraph">When it comes to time- and space-efficiency, nothing beats <code class="pml-inline-code">null</code>.</p>
+                            <p class="pml-paragraph">In most languages, <code class="pml-inline-code">null</code> is super fast.</p>
+                            <p class="pml-paragraph">Assigning <code class="pml-inline-code">null</code> to an object reference is typically implemented by simply assigning zero (all bits at 0) to a pointer, and checking for <code class="pml-inline-code">null</code> is done by comparing the pointer to zero. Both are CPU operations that are extremely fast.</p>
+
+                        </section>
+                        <section id="code_analysis" class="pml-chapter">
+                            <h3 class="pml-chapter-title">Better Code Analysis</h3>
+                            <p class="pml-paragraph">If collections can&apos;t be empty then loops and iterations involving them are always <i class="pml-italic">guaranteed</i> to execute at least once. This certainty can be leveraged by advanced compilers (and complementary tools such as static code analyzers) to make assumptions that can&apos;t be made if the body of the loop <i class="pml-italic">might</i> be executed. For example, a compiler might be able to optimize target code for loops that are guaranteed to execute at least once.</p>
+
+                        </section>
+                        <section id="disadvantages" class="pml-chapter">
+                            <h3 class="pml-chapter-title">Disadvantages</h3>
+                            <p class="pml-paragraph">So far we&apos;ve talked about advantages. Are there disadvantages too?</p>
+                            <p class="pml-paragraph">The only disadvantage I can think of is the occasional added verbosity. For example, instead of writing:</p>
+                            <pre class="pml-code"><code>int elementCount = collection.size();
+boolean weHaveCheese = foodsInFridge.contains ( &quot;cheese&quot; );</code></pre>
+                            <p class="pml-paragraph">... we have to write:</p>
+                            <pre class="pml-code"><code>int elementCount = collection == null ? 0 : collection.size();
+boolean weHaveCheese = foodsInFridge == null ? false : foodsInFridge.contains ( &quot;cheese&quot; );</code></pre>
+                            <p class="pml-paragraph">Yes, sometimes the code is more verbose — but that&apos;s a small price to pay for all the benefits we&apos;ve seen so far. We can&apos;t have our cake and eat it too. On the plus side, the code is also more expressive and (in some cases) less error-prone because, again, the &quot;no elements&quot; edge case is handled explicitly in the code.</p>
+
+                        </section>
+
+                    </section>
+                    <section id="real_life" class="pml-chapter">
+                        <h2 class="pml-chapter-title">Collections in the Physical World</h2>
+                        <p class="pml-paragraph">Whenever I struggle to come up with the best way to design data or write code, I often find it useful to look at how things work in the physical world.</p>
+                        <p class="pml-paragraph">So, how do we use collections in the real world?</p>
+                        <p class="pml-paragraph">Consider Bob who collects colorful stones, stored in a box labeled &quot;Stones&quot;.</p>
+                        <p class="pml-paragraph">Alice doesn&apos;t collect stones. Does this mean she has an empty box labeled &quot;Stones&quot;? No, of course not. Alice simply doesn&apos;t have a box.</p>
+                        <p class="pml-paragraph">It&apos;s easy to translate this to the digital world: An empty box in the physical world is like an empty list in the digital world; no box at all is like <code class="pml-inline-code">null</code>.</p>
+                        <p class="pml-paragraph">We could come up with many more examples, but after pondering about them for a while we would conclude:</p>
+                        <ul class="pml-list">
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">Most collections (lists) in the physical world are <i class="pml-italic">immutable and non-empty</i>.</p>
+                                <p class="pml-paragraph">For example: the set of components in your computer model; the list of ingredients in grandma&apos;s Christmas cake; the list of the 2023 Nobel price winners, etc.</p>
+
+                            </li>
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">Sometimes we use mutable collections which are empty at their outset, get populated over time, and might finally be discarded or kept as immutable, non-empty lists.</p>
+                                <p class="pml-paragraph">For example: Bob&apos;s &quot;Stones&quot; box; the list of students enrolled so far in a language course; the applications installed on your computer, etc.</p>
+
+                            </li>
+
+                        </ul>
+                        <p class="pml-paragraph">As you&apos;ll see in the next section, PTS collections are designed to work like collections in the physical world. </p>
+
+                    </section>
+                    <section id="how" class="pml-chapter">
+                        <h2 class="pml-chapter-title">How Does It Work?</h2>
+                        <p class="pml-paragraph">In this section I&apos;m going to show briefly how the concept of no empty strings/collections works in PTS. It&apos;s important to note that the approach described here is not the only viable one — it&apos;s the one I used in my proof-of-concept implementation of PTS. To keep this section short, many implementation details are left out.</p>
+                        <p class="pml-paragraph">Source code examples in the following sections use the PTS syntax, introduced in previous PTS articles.</p>
+                        <div class="pml-admonition">
+                            <div class="pml-admonition-label">
+                                <p class="pml-paragraph">Note</p>
+
+                            </div>
+                            <div class="pml-admonition-content">
+                                <p class="pml-paragraph">Please be aware that PTS is a new paradigm and still a work-in-progress. As explained in the <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/essence-foundation/index.html#history"><i class="pml-italic">History</i></a> section of <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/essence-foundation/index.html"><i class="pml-italic">Essence and Foundation of the Practical Type System (PTS)</i></a>, I created a proof-of-concept implementation which is now a bit outdated — therefore you won’t be able to try out the PTS code examples shown in this article.</p>
+                            </div>
+                        </div>
+                        <section id="how_immutable" class="pml-chapter">
+                            <h3 class="pml-chapter-title">Non-empty Immutable Collections</h3>
+                            <p class="pml-paragraph">PTS strings and collections are <i class="pml-italic">immutable</i> and <i class="pml-italic">non-empty</i>. The following types are defined in the standard library:</p>
+                            <ul class="pml-list">
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">Type <code class="pml-inline-code">string</code>: an immutable string that cannot be empty (i.e. the string must contain at least one character).</p>
+
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">Types <code class="pml-inline-code">list</code>, <code class="pml-inline-code">set</code>, <code class="pml-inline-code">map</code>, etc.: immutable collections that cannot be empty (i.e. the collection must contain at least one element).</p>
+
+                                </li>
+
+                            </ul>
+                            <p class="pml-paragraph">These are the types predominantly used in function signatures (i.e. immutable and non-empty). For example, the following function takes a non-empty, immutable list of non-empty, immutable strings as input, and returns a non-empty, immutable list of integers:</p>
+                            <pre class="pml-code"><code>fn foo ( [b strings list&lt;string&gt;] ) -&gt; [b list&lt;integer&gt;]
+    // body
+.</code></pre>
+                            <p class="pml-paragraph">If input and output are allowed to be <code class="pml-inline-code">null</code> (i.e. there might be &quot;no elements&quot;), the signature will contain <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/union-types/index.html"><i class="pml-italic">union types</i></a> (<code class="pml-inline-code">t1 or t2</code>), like this:</p>
+                            <pre class="pml-code"><code>fn foo ( strings list&lt;string&gt; [b or null] ) -&gt; list&lt;integer&gt; [b or null]
+    // body
+.</code></pre>
+                            <p class="pml-paragraph">If the input and output lists are also allowed to <i class="pml-italic">contain</i> <code class="pml-inline-code">null</code> elements, the signature is as follows:</p>
+                            <pre class="pml-code"><code>fn foo ( strings list&lt;string [b or null]&gt; or null ) -&gt; list&lt;integer [b or null]&gt; or null
+    // body
+.</code></pre>
+
+                        </section>
+                        <section id="how_literals" class="pml-chapter">
+                            <h3 class="pml-chapter-title">No Empty Literals</h3>
+                            <p class="pml-paragraph">Because strings can&apos;t be empty, there is no empty string literal, as shown below:</p>
+                            <pre class="pml-code"><code>const name = &quot;Bob&quot;               // OK
+const name = &quot;&quot;                  // compile-time error
+const name string or null = null // OK</code></pre>
+                            <p class="pml-paragraph">There aren&apos;t any empty collection literals either:</p>
+                            <pre class="pml-code"><code>const numbers = [list 1 2 3]              // OK
+const numbers = [list ]                   // compile-time error
+const numbers list&lt;number&gt; or null = null // OK</code></pre>
+
+                        </section>
+                        <section id="how_builders" class="pml-chapter">
+                            <h3 class="pml-chapter-title">Immutable Collection Builders</h3>
+                            <p class="pml-paragraph">While literals are convenient for hard-coding predefined values, <i class="pml-italic">builder</i> types allow us to programmatically create strings and collections. For example, we use a <code class="pml-inline-code">list_builder</code> to build a <code class="pml-inline-code">list</code>.</p>
+                            <p class="pml-paragraph">Builders apply the <a class="pml-link" href="https://en.wikipedia.org/wiki/Builder_pattern"><i class="pml-italic">Builder pattern</i></a>, commonly used in object-oriented languages. Internally, a builder uses a mutable data structure (e.g. a mutable list) to build the collection. An immutable collection is built in three steps:</p>
+                            <ul class="pml-list">
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">Create a builder object (e.g. <code class="pml-inline-code">list_builder.create</code>)</p>
+
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">Add elements (e.g. <code class="pml-inline-code">builder.append ( ... )</code>)</p>
+
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">Create a non-empty, immutable collection by calling <code class="pml-inline-code">builder.build</code> (or <code class="pml-inline-code">builder.build_or_null</code> if there might be no elements)</p>
+
+                                </li>
+
+                            </ul>
+                            <p class="pml-paragraph">Here&apos;s an example of a function that creates a range of integers:</p>
+                            <pre class="pml-code"><code>fn int_range ( start integer, end integer ) -&gt; list&lt;integer&gt;
+    in_check: end &gt;= start
+    
+    [b const builder = list_builder&lt;integer&gt;.create]
+    repeat from i = start to end
+        [b builder.append ( i )]
+    .
+    [b return builder.build]
+.</code></pre>
+
+                        </section>
+                        <section id="how_mutable" class="pml-chapter">
+                            <h3 class="pml-chapter-title">Mutable Collections That Can Be Empty</h3>
+                            <p class="pml-paragraph">Sometimes we need <i class="pml-italic">mutable</i> collections that <i class="pml-italic">can</i> be empty. For example: stacks, queues, deques, collections that are populated by several functions, etc.</p>
+                            <p class="pml-paragraph">To keep these data structures efficient and practical, I opted to provide dedicated <i class="pml-italic">mutable</i> collections in PTS.</p>
+                            <p class="pml-paragraph">The name of a mutable collection type always starts with the <code class="pml-inline-code">mutable_</code> prefix, followed by the name of its immutable counterpart. Thus, the standard PTS library provides:</p>
+                            <ul class="pml-list">
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">Type <code class="pml-inline-code">mutable_string</code>: a mutable string that can be empty (i.e. its character length might be zero).</p>
+
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">Types <code class="pml-inline-code">mutable_list</code>, <code class="pml-inline-code">mutable_set</code>, <code class="pml-inline-code">mutable_map</code>, etc.: mutable collections that can be empty (i.e. their size might be zero).</p>
+
+                                </li>
+
+                            </ul>
+                            <p class="pml-paragraph">Here&apos;s a trivial example of a function that appends one or two elements to a mutable list passed as argument:</p>
+                            <pre class="pml-code"><code>fn append_elements ( strings mutable_list&lt;string&gt; )
+    
+    if strings.is_empty
+        strings.append ( &quot;first&quot; )
+    .
+    strings.append ( &quot;foo&quot; )
+.</code></pre>
+                            <p class="pml-paragraph">We can convert a mutable collection into its immutable counterpart (or <code class="pml-inline-code">null</code> if the collection is empty) by calling method <code class="pml-inline-code">to_immutable_or_null</code> (e.g. <code class="pml-inline-code">return customers_found.to_immutable_or_null</code>).</p>
+                            <p class="pml-paragraph">If the mutable collection is assumed to contain at least one element in a given context, the method <code class="pml-inline-code">to_immutable_or_throw</code> should be used: instead of returning <code class="pml-inline-code">null</code> whenever the mutable collection is empty, this method throws an error (exception).</p>
+
+                        </section>
+                        <section id="how_loops" class="pml-chapter">
+                            <h3 class="pml-chapter-title">Loops Syntax</h3>
+                            <p class="pml-paragraph">We can iterate over collections via a classical loop (imperative style), streams (functional style), or recursion. This section covers only the classical loop construct.</p>
+                            <p class="pml-paragraph">Here&apos;s a simple example of using a <code class="pml-inline-code">repeat</code> statement to iterate over a collection:</p>
+                            <pre class="pml-code"><code>repeat for each number in [list 1 2 3]
+    out.write_line ( number.to_string )
+.</code></pre>
+                            <p class="pml-paragraph">Output:</p>
+                            <pre class="pml-output">1
+2
+3</pre>
+                            <p class="pml-paragraph">In cases where there might be no elements, the compiler requires a check for <code class="pml-inline-code">null</code>:</p>
+                            <pre class="pml-code"><code>const commands list&lt;command&gt; [b or null] = get_commands()
+[b if commands is not null]
+    repeat for each command in commands
+        log_info ( &quot;&quot;&quot;Executing command {{command.to_string}}.&quot;&quot;&quot; )
+        // code to execute command
+    .
+[b else]
+    log_warning ( &quot;There are no commands to execute.&quot; )
+.</code></pre>
+                            <p class="pml-paragraph">The <code class="pml-inline-code">else</code> branch is optional:</p>
+                            <pre class="pml-code"><code>const commands list&lt;command&gt; [b or null] = get_commands()
+[b if commands is not null]
+    repeat for each command in commands
+        log_info ( &quot;&quot;&quot;Executing command {{command.to_string}}.&quot;&quot;&quot; )
+        // more code
+    .
+.</code></pre>
+                            <p class="pml-paragraph">We can shorten the above code by using the <code class="pml-inline-code">if_null</code> clause in the <code class="pml-inline-code">repeat</code> statement:</p>
+                            <pre class="pml-code"><code>repeat for each command in get_commands() [b if_null: skip]
+    log_info ( &quot;&quot;&quot;Executing command {{command.to_string}}.&quot;&quot;&quot; )
+    // more code
+.</code></pre>
+                            <p class="pml-paragraph">If a collection is declared to be nullable (either explicitly or via type-inference), but supposed to be non-null in a given context, we can use the <code class="pml-inline-code">if_null: throw</code> clause to abort program execution whenever the collection is <code class="pml-inline-code">null</code>, despite our assumption to the contrary:</p>
+                            <pre class="pml-code"><code>repeat for each command in get_commands() [b if_null: throw &quot;&apos;commands&apos; is not supposed to be &apos;null&apos;.&quot;]
+    log_info ( &quot;&quot;&quot;Executing command {{command.to_string}}.&quot;&quot;&quot; )
+    // more code
+.</code></pre>
+                            <p class="pml-paragraph">The above code is a shorthand for the following one; both throw an error if the collection is <code class="pml-inline-code">null</code>:</p>
+                            <pre class="pml-code"><code>const commands list&lt;command&gt; or null = get_commands()
+if commands is not null
+    repeat for each command in commands
+        log_info ( &quot;&quot;&quot;Executing command {{command.to_string}}.&quot;&quot;&quot; )
+        // more code
+    .
+else
+    throw null_iterator_in_loop_error.create (
+        message = &quot;&apos;commands&apos; is not supposed to be &apos;null&apos;.&quot;,
+        id = &quot;NULL_ITERATOR_IN_LOOP&quot; )
+.</code></pre>
+
+                        </section>
+                        <section id="how_non_pts_libs" class="pml-chapter">
+                            <h3 class="pml-chapter-title">Working with Non-PTS Libraries</h3>
+                            <p class="pml-paragraph">Empty strings and collections are ubiquitous in non-PTS libraries. How can we use these libraries in a language where strings and collections can&apos;t be empty?</p>
+                            <p class="pml-paragraph">This depends largely on the PTS implementation, but let&apos;s consider a PTS implementation that generates Java target code and allows Java source code to be embedded between <code class="pml-inline-code">java</code> and <code class="pml-inline-code">end java</code> statements. Then there are at least three solutions to use Java libraries from within a PTS application:</p>
+                            <ul class="pml-list">
+                                <li class="pml-list-element">
+                                    <div class="pml-header">Convert input/output arguments</div>
+                                    <p class="pml-paragraph">Before calling a Java library function that doesn&apos;t allow <code class="pml-inline-code">null</code> as input, but requires an empty collection, we need to convert <code class="pml-inline-code">null</code> into an empty collection. Here&apos;s an example of PTS code using embedded Java:</p>
+                                    <pre class="pml-code"><code>java
+    sendCommands ( commands == null ? Collections.emptyList() : commands );
+end java</code></pre>
+                                    <p class="pml-paragraph">After calling an external Java function that might return an empty collection, we need to convert the empty collection into <code class="pml-inline-code">null</code>, e.g.:</p>
+                                    <pre class="pml-code"><code>java
+    List&lt;Command&gt; commands = getCommands();
+    if ( commands.isEmpty() ) {
+        commands == null;
+    }
+end java</code></pre>
+                                    <p class="pml-paragraph">If these transformations are needed often, we can create utility functions that serve as wrappers, so that client code remains idiomatic and succinct.</p>
+
+                                </li>
+                                <li class="pml-list-element">
+                                    <div class="pml-header">Use mutable collections that can be empty</div>
+                                    <p class="pml-paragraph">Instead of converting collections, an alternative solution is to use mutable PTS collections (covered previously in section <a class="pml-xref" href="#how_mutable"><i class="pml-italic">Mutable Collections That Can Be Empty</i></a>) to work with non-PTS libraries.</p>
+                                    <p class="pml-paragraph">However, this solution is not recommended, because we lose the advantages of immutable, non-empty collections.</p>
+
+                                </li>
+                                <li class="pml-list-element">
+                                    <div class="pml-header">Use dedicated types to work with non-PTS libraries</div>
+                                    <p class="pml-paragraph">A standard PTS library can provide immutable collections that <i class="pml-italic">can</i> be empty, dedicated to be used only when working with non-PTS libraries.</p>
+                                    <p class="pml-paragraph">For example, in my proof-of-concept PTS implementation, I created type <code class="pml-inline-code">emptyable_string</code> (in addition to <code class="pml-inline-code">string</code> and <code class="pml-inline-code">mutable_string</code>). This specific type was sometimes handy — it simplified the task of working with external Java libraries, especially in rare cases where <code class="pml-inline-code">null</code> and an empty string had different meanings.</p>
+
+                                </li>
+
+                            </ul>
+
+                        </section>
+
+                    </section>
+                    <section id="example" class="pml-chapter">
+                        <h2 class="pml-chapter-title">Example</h2>
+                        <blockquote class="pml-quote">
+                            <div class="pml-quote-text-block">
+                                <div class="pml-quote-text-prefix"></div>
+                                <div class="pml-quote-text">
+                                    <p class="pml-paragraph">Mistakes are a fact of life. It is the response to the error that counts.</p>
+                                </div>
+                                <div class="pml-quote-text-suffix"></div>
+                            </div>
+                            <div class="pml-quote-source">
+                                <p class="pml-paragraph">— <i class="pml-italic">Nikki Giovanni</i></p>
+
+                            </div>
+                        </blockquote>
+                        <p class="pml-paragraph">In this section you&apos;ll see a practical example demonstrating the benefits of using a null-safe language that doesn&apos;t permit strings and collections to be empty. We&apos;ll investigate a simple function under two different paradigms: unsafe and safe.</p>
+                        <section id="example_unsafe" class="pml-chapter">
+                            <h3 class="pml-chapter-title">Unsafe Paradigm</h3>
+                            <p class="pml-paragraph">PTS is <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/null-safety/index.html"><i class="pml-italic">null-safe</i></a> and immutable strings and collections can&apos;t be empty. However, for the purpose of this exercise, let&apos;s first suppose that PTS was designed like many other languages:</p>
+                            <ul class="pml-list">
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">support for <code class="pml-inline-code">null</code>, but <i class="pml-italic">not null-safe</i></p>
+
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">strings and collections <i class="pml-italic">can be empty</i></p>
+
+                                </li>
+
+                            </ul>
+                            <p class="pml-paragraph">Now imagine we want to compute the average length of remarks entered by users in a data entry form. Consider the following PTS function to achieve this:</p>
+                            <pre class="pml-code"><code>fn average_length_of_remarks ( remarks list&lt;string&gt; ) -&gt; decimal
+    
+    variable sum = 0.0
+    repeat for each remark in remarks
+        sum = sum + remark.length
+    .
+    return sum / remarks.size
+.</code></pre>
+                            <p class="pml-paragraph">The code would look similar in many other languages. Here&apos;s an example in Java:</p>
+                            <pre class="pml-code"><code>static double averageLengthOfRemarks ( List&lt;String&gt; remarks ) {
+
+    double sum = 0.0;
+    for ( String remark : remarks ) {
+        sum+= remark.length();
+    }
+    return sum / remarks.size();
+}
+</code></pre>
+                            <div class="pml-admonition">
+                                <div class="pml-admonition-label">
+                                    <p class="pml-paragraph">Note</p>
+
+                                </div>
+                                <div class="pml-admonition-content">
+                                    <p class="pml-paragraph">We could also employ a functional style in PTS and Java. Using Java streams, for example, the code would be:</p>
+                                    <pre class="pml-code"><code>static double averageLengthOfRemarks2 ( List&lt;String&gt; remarks ) {
+
+    return (double) remarks
+        .stream()
+        .mapToInt ( String::length )
+        .sum() / remarks.size();
+}
+</code></pre>
+                                    <p class="pml-paragraph">However, whether we use an imperative or functional style is irrelevant for the topic at hand. We&apos;ll continue this exercise using a classical loop.</p>
+                                </div>
+                            </div>
+                            <p class="pml-paragraph">If we call the above PTS function with <code class="pml-inline-code">[list &quot;f&quot; &quot;fo&quot; &quot;foo&quot;]</code> as input, it returns the correct result: <code class="pml-inline-code">2.0</code>.</p>
+                            <p class="pml-paragraph">Unfortunately, although small and simple, there are three problems:</p>
+                            <ul class="pml-list" style="list-style-type:decimal">
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">If the function is called with <code class="pml-inline-code">remarks = null</code>, a null pointer runtime-error occurs in the <code class="pml-inline-code">repeat</code> statement (<code class="pml-inline-code">for</code> statement in the Java version).</p>
+
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">If the function is called with an empty list as input, a division by zero error occurs in the last statement (because <code class="pml-inline-code">remarks.size</code> is zero).</p>
+
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">Assuming that empty remarks should be ignored, the result will be wrong if input argument <code class="pml-inline-code">remarks</code> contains empty strings. For example, calling the function with <code class="pml-inline-code">[list &quot;foo&quot; &quot;&quot; &quot;foo&quot; ]</code> returns <code class="pml-inline-code">2.0 (=6/3)</code> instead of <code class="pml-inline-code">3.0 (=6/2)</code>.</p>
+                                    <p class="pml-paragraph">A silently ignored error occurs (worst-case).</p>
+
+                                </li>
+
+                            </ul>
+
+                        </section>
+                        <section id="example_safe" class="pml-chapter">
+                            <h3 class="pml-chapter-title">Safe Paradigm</h3>
+                            <p class="pml-paragraph">Now let&apos;s see what <i class="pml-italic">actually</i> happens in PTS (which is null-safe and doesn&apos;t permit empty strings and collections):</p>
+                            <ul class="pml-list" style="list-style-type:decimal">
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">A function call with <code class="pml-inline-code">remarks = null</code> is not permitted and results in a <i class="pml-italic">compile</i>-time error, because all types are non-nullable by default.</p>
+
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">We are also not permitted to call the function with an empty list as input, because collections can&apos;t be empty. Hence, a division by zero error cannot occur.</p>
+
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">Input argument <code class="pml-inline-code">remarks</code> cannot contain empty strings, because PTS strings are non-empty too. Therefore, a silently ignored error due to empty remarks cannot occur.</p>
+
+                                </li>
+
+                            </ul>
+                            <p class="pml-paragraph">As you can see, all three problems have disappeared. The above function doesn&apos;t support the &quot;no remarks&quot; and &quot;some empty remarks&quot; cases, and the compiler ensures that nobody calls the function with invalid input. The function requires a non-null, non-empty list of remarks, and empty remarks are not allowed in the list.</p>
+                            <p class="pml-paragraph">Now suppose that the function should handle empty remarks. Here&apos;s the new version:</p>
+                            <pre class="pml-code"><code>fn average_length_of_remarks ( remarks list&lt;string [b or null]&gt; ) -&gt; decimal [b or null]
+    
+    variable sum = 0.0
+    variable remarks_count = 0
+    repeat for each remark in remarks
+        if remark is not null
+            sum = sum + remark.length
+            remarks_count = remarks_count + 1
+        .
+    .
+    return if remarks_count =v 0 then null else sum / remarks_count
+.</code></pre>
+                            <p class="pml-paragraph">Note that:</p>
+                            <ul class="pml-list">
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">The type of elements contained in parameter <code class="pml-inline-code">remarks</code> changed from <code class="pml-inline-code">string</code> to the <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/union-types/index.html"><i class="pml-italic">union type</i></a> <code class="pml-inline-code">string or null</code>, which explicitly states that empty remark fields are now supported.</p>
+
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">The check <code class="pml-inline-code">if remark is not null</code> is <i class="pml-italic">required</i> by the compiler because PTS is <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/null-safety/index.html"><i class="pml-italic">null-safe</i></a>, and <code class="pml-inline-code">remark.length</code> would result in a null pointer error if <code class="pml-inline-code">remark</code> were <code class="pml-inline-code">null</code> at run-time.</p>
+
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">The expression for the return-value <code class="pml-inline-code">if remarks_count =v 0 then null else sum / remarks_count</code> is also required by the compiler. If we simply wrote <code class="pml-inline-code">return sum / remarks_count</code>, the code would not compile, because <code class="pml-inline-code">remarks_count</code> might be zero and thus cause a division by zero (note that this is an advanced compiler feature beyond the scope of this article).</p>
+                                    <p class="pml-paragraph">Because the function might return <code class="pml-inline-code">null</code>, we are also <i class="pml-italic">required</i> to change the output type from <code class="pml-inline-code">decimal</code> to <code class="pml-inline-code">decimal or null</code>.</p>
+                                    <p class="pml-paragraph">This, in turn, means that the caller of the function can&apos;t forget to handle the edge case where all remark fields are empty, and therefore an average length of remarks could not be computed. We&apos;re always safe.</p>
+
+                                </li>
+
+                            </ul>
+                            <p class="pml-paragraph">What about variable <code class="pml-inline-code">remarks_count</code>, which is needed to compute the correct result if there are empty remark fields? Suppose we incorrectly wrote:</p>
+                            <pre class="pml-code"><code>fn average_length_of_remarks ( remarks list&lt;string or null&gt; ) -&gt; decimal
+    
+    variable sum = 0.0
+    repeat for each remark in remarks
+        if remark is not null
+            sum = sum + remark.length
+        .
+    .
+    return sum / remarks.size
+.</code></pre>
+                            <p class="pml-paragraph">Does the compiler report a bug?</p>
+                            <p class="pml-paragraph">No, it doesn&apos;t, because the above code would be correct if we actually wanted empty remarks to be included in the computation of their average length.</p>
+                            <p class="pml-paragraph">As said already in a previous PTS article, the slogan &quot;if it compiles, it works&quot; is just wishful thinking. We still need to write unit tests to detect <i class="pml-italic">logical</i> bugs.</p>
+                            <p class="pml-paragraph">Now let&apos;s consider the &quot;there are no remarks&quot; edge case. The function doesn&apos;t currently handle this case. Therefore, the caller of the function is <i class="pml-italic">required</i> to explicitly handle this case (if it occurs). However, if we want the function itself to also handle this case, we can easily do this:</p>
+                            <pre class="pml-code"><code>fn average_length_of_remarks ( remarks list&lt;string or null&gt; [b or null] ) -&gt; decimal or null
+
+    [b if remarks is null then return null]
+
+    // rest of code
+.</code></pre>
+                            <p class="pml-paragraph">Now the function returns <code class="pml-inline-code">null</code> when called with <code class="pml-inline-code">remarks = null</code>.</p>
+
+                        </section>
+                        <section id="example_conclusion" class="pml-chapter">
+                            <h3 class="pml-chapter-title">Conclusion</h3>
+                            <p class="pml-paragraph">Hopefully, these simple examples demonstrate the benefits of a null-safe language that doesn&apos;t permit strings and collections to be empty.</p>
+                            <p class="pml-paragraph">Imagine a big application with hundreds or even thousands of edge cases similar to the above ones. Having a compiler that spots <i class="pml-italic">all</i> edge cases, including the most elusive ones, is like having a helpful, reliable companion, always by our side, tapping on our shoulder from time to time and telling us: &quot;Look! Here&apos;s an edge case that needs to be handled or ignored explicitly.&quot;</p>
+                            <p class="pml-paragraph">Nikki Giovanni wisely said:</p>
+                            <div class="pml-division" style="margin-left:2em;">
+                                <p class="pml-paragraph">&quot;Mistakes are a fact of life. It is the response to the error that counts.&quot;</p>
+
+                            </div>
+                            <p class="pml-paragraph">We can easily apply this insight to the field of software development:</p>
+                            <div class="pml-division" style="margin-left:2em;">
+                                <p class="pml-paragraph">&quot;Coding mistakes are a fact of life. It is the compiler response to the error that counts.&quot;</p>
+
+                            </div>
+                            <p class="pml-paragraph"><i class="pml-italic">Fail fast!</i></p>
+
+                        </section>
+
+                    </section>
+                    <section id="other_languages" class="pml-chapter">
+                        <h2 class="pml-chapter-title">Other Languages</h2>
+                        <p class="pml-paragraph">This article focuses on languages that support <code class="pml-inline-code">null</code> <i class="pml-italic">and</i> ensure null-safety. What about other programming languages? Would it still make sense to apply the ideas presented in this article?</p>
+                        <section id="other_languages_non_null_safe" class="pml-chapter">
+                            <h3 class="pml-chapter-title">Non-null-Safe Languages</h3>
+                            <p class="pml-paragraph">Many popular programming languages support <code class="pml-inline-code">null</code>, but aren&apos;t null-safe. Should new languages applying this paradigm also restrict immutable strings/collections to be non-empty?</p>
+                            <p class="pml-paragraph">Yes, if software reliability matters.</p>
+                            <p class="pml-paragraph">The difference between a null-safe and a non-null-safe language is this: In a null-safe language we get a <i class="pml-italic">compile</i>-time error if <code class="pml-inline-code">null</code> is handled incorrectly in the code; in a non-null-safe language we get a <i class="pml-italic">run</i>-time error instead — the dreaded null pointer error, whenever a pointer to <code class="pml-inline-code">null</code> is dereferenced.</p>
+                            <div class="pml-admonition">
+                                <div class="pml-admonition-label">
+                                    <p class="pml-paragraph">Note</p>
+
+                                </div>
+                                <div class="pml-admonition-content">
+                                    <p class="pml-paragraph">In some languages, dereferencing a null pointer results in undefined behavior (instead of throwing a null pointer error). In this section we&apos;ll only consider languages that throw null pointer errors.</p>
+                                </div>
+                            </div>
+                            <p class="pml-paragraph">A null-pointer-error is &quot;bad&quot;. But a silently ignored error due to an empty string or collection is &quot;very bad&quot;. &quot;Bad&quot; is better than &quot;very bad&quot;. It&apos;s generally much better for an application to immediately throw a null pointer error and abort program execution than to ignore the problem and silently continue execution with polluted or corrupted data that crawls through the system, and, sooner or later (maybe much later), risks to result in a mysterious bug that&apos;s difficult to identify and fix.</p>
+                            <p class="pml-paragraph">Many people hate null pointer errors, but these errors are in fact very useful, because:</p>
+                            <ul class="pml-list">
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">They support the <i class="pml-italic">Fail-Fast!</i> principle (at run-time) and the bug is therefore more likely to be discovered early in the development process. The program crashes immediately and noisily, instead of ignoring the problem and silently continuing execution with wrong/corrupted data.</p>
+                                    <p class="pml-paragraph">The final outcome of a null pointer error is usually less severe and more predictable.</p>
+                                    <p class="pml-paragraph">Imagine a nightmarish scenario like this one: Application A writes wrong data into a database. Later on, this data is read and handled by applications B, C, and D. Although the bug originated in application A, it manifests in applications B, C, and D.</p>
+
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">Null pointer errors are usually easy to identify and fix, because their cause and effect are short-distanced.</p>
+
+                                </li>
+                                <li class="pml-list-element">
+                                    <p class="pml-paragraph">Helpful tools capable of identifying potential null pointer errors in the codebase are available for most popular programming languages.</p>
+
+                                </li>
+
+                            </ul>
+
+                        </section>
+                        <section id="other_languages_option" class="pml-chapter">
+                            <h3 class="pml-chapter-title">Languages That Use an <code class="pml-inline-code">Optional</code>/<code class="pml-inline-code">Maybe</code> Type</h3>
+                            <p class="pml-paragraph">Some languages don&apos;t support <code class="pml-inline-code">null</code>. Instead, they provide a dedicated type for cases where a value might be absent. For example, Rust provides the <code class="pml-inline-code">Option</code> type, F# the <code class="pml-inline-code">Option</code> monad, and Haskell the <code class="pml-inline-code">Maybe</code> monad.</p>
+                            <p class="pml-paragraph">The idea of <i class="pml-italic">non-empty</i> strings and collections can also be applied in new languages using this approach. Instead of empty strings/collections, the <code class="pml-inline-code">None</code>/<code class="pml-inline-code">Nothing</code> values of the <code class="pml-inline-code">Option</code>/<code class="pml-inline-code">Maybe</code> types are used, respectively, and pattern matching ensures that we distinguish between the &quot;no elements&quot; and &quot;one or more elements&quot; cases, thereby reaping benefits akin to those demonstrated in this article.</p>
+
+                        </section>
+
+                    </section>
+                    <section id="summary" class="pml-chapter">
+                        <h2 class="pml-chapter-title">Summary</h2>
+                        <p class="pml-paragraph">Preventing immutable strings and collections from being empty provides the following advantages:</p>
+                        <ul class="pml-list">
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">More reliable code because <i class="pml-italic"><b class="pml-bold">more bugs can be found at compile-time</b></i>. The compiler reminds us to handle edge cases we might easily overlook.</p>
+
+                            </li>
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">Simpler and less error-prone code because there is no need to test for &quot;<code class="pml-inline-code">null</code> or empty&quot;.</p>
+
+                            </li>
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">Simpler and less error-prone APIs for non-empty, immutable <code class="pml-inline-code">string</code> and collection types (e.g. <code class="pml-inline-code">element_count</code> never returns zero, hence no risk of a division by zero).</p>
+
+                            </li>
+
+                        </ul>
+                        <p class="pml-paragraph">These advantages are particularly valuable when working on large codebases.</p>
+                        <p class="pml-paragraph">The following approach is used in PTS:</p>
+                        <ul class="pml-list">
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">Strings and collections are <i class="pml-italic">immutable</i> and <i class="pml-italic">can&apos;t</i> be empty.</p>
+
+                            </li>
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">Instead of empty strings/collections, <code class="pml-inline-code">null</code> is used to represent &quot;no elements&quot;.</p>
+
+                            </li>
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">Builders are used to build (create) immutable strings and collections.</p>
+
+                            </li>
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">PTS also provides <i class="pml-italic">mutable</i> strings and collections that <i class="pml-italic">can</i> be empty, but they are used rarely.</p>
+
+                            </li>
+
+                        </ul>
+
+                    </section>
+                    <section id="ch__29" class="pml-chapter">
+                        <h2 class="pml-chapter-title">Acknowledgments</h2>
+                        <p class="pml-paragraph">Many thanks to Tristano Ajmone for his useful feedback to improve this article. </p>
+
+                    </section>
+                </article>
+                <aside class="pml-doc-right">
+                </aside>
+            </div>
+            <footer class="pml-doc-footer">
+            </footer>
+        </div>
+
+    </body>
+</html>

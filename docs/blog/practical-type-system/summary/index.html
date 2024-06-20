@@ -26,6 +26,7 @@
                                 <li class="pml-toc-leaf-node"><a href="#ch__5">4. Union Types</a></li>
                                 <li class="pml-toc-leaf-node"><a href="#ch__6">5. Null-Safety</a></li>
                                 <li class="pml-toc-leaf-node"><a href="#ch__7">6. Error Handling</a></li>
+                                <li class="pml-toc-leaf-node"><a href="#ch__8">7. We Should Eradicate the Empty String — Here&apos;s Why</a></li>
                             </ul>
                         </div>
                     </nav>
@@ -322,7 +323,7 @@
                             <li class="pml-list-element">
                                 <p class="pml-paragraph">They provide a sound foundation for uniform null- and error-handling — two critical aspects of a practical type system.</p>
                                 <p class="pml-paragraph">Here&apos;s an example of a function that might return a <code class="pml-inline-code">string</code> or a <code class="pml-inline-code">file_error</code> or <code class="pml-inline-code">null</code>:</p>
-                                <pre class="pml-code"><code>fn read_text_file ( file file_path ) -&gt; <b class="pml-bold">string or null or file_error</b>
+                                <pre class="pml-code"><code>fn read_text_file ( file file_path ) -&gt; [b string or null or file_error]
     // function body
 .</code></pre>
 
@@ -419,6 +420,51 @@
                             </li>
                             <li class="pml-list-element">
                                 <p class="pml-paragraph">PTS provides a set of dedicated operators and statements to facilitate error-handling.</p>
+
+                            </li>
+
+                        </ul>
+
+                    </section>
+                    <section id="ch__8" class="pml-chapter">
+                        <h2 class="pml-chapter-title">7. <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/eradicate-empty-string/index.html">We Should Eradicate the Empty String — Here&apos;s Why</a></h2>
+                        <figure style="text-align: center">
+                            <img class="pml-image" src="images/empty_vs_null.jpg" width="300">
+                        </figure>
+                        <div class="pml-caption" style="text-align:center;">Empty String vs Null</div>
+                        <p class="pml-paragraph">Preventing immutable strings and collections from being empty provides the following advantages:</p>
+                        <ul class="pml-list">
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">More reliable code because <i class="pml-italic"><b class="pml-bold">more bugs can be found at compile-time</b></i>. The compiler reminds us to handle edge cases we might easily overlook.</p>
+
+                            </li>
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">Simpler and less error-prone code because there is no need to test for &quot;<code class="pml-inline-code">null</code> or empty&quot;.</p>
+
+                            </li>
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">Simpler and less error-prone APIs for non-empty, immutable <code class="pml-inline-code">string</code> and collection types (e.g. <code class="pml-inline-code">element_count</code> never returns zero, hence no risk of a division by zero).</p>
+
+                            </li>
+
+                        </ul>
+                        <p class="pml-paragraph">These advantages are particularly valuable when working on large codebases.</p>
+                        <p class="pml-paragraph">The following approach is used in PTS:</p>
+                        <ul class="pml-list">
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">Strings and collections are <i class="pml-italic">immutable</i> and <i class="pml-italic">can&apos;t</i> be empty.</p>
+
+                            </li>
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">Instead of empty strings/collections, <code class="pml-inline-code">null</code> is used to represent &quot;no elements&quot;.</p>
+
+                            </li>
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">Builders are used to build (create) immutable strings and collections.</p>
+
+                            </li>
+                            <li class="pml-list-element">
+                                <p class="pml-paragraph">PTS also provides <i class="pml-italic">mutable</i> strings and collections that <i class="pml-italic">can</i> be empty, but they are used rarely.</p>
 
                             </li>
 

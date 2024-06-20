@@ -82,7 +82,7 @@
                                 </li>
                                 <li class="pml-toc-leaf-node"><a href="#example">Example</a></li>
                                 <li class="pml-toc-leaf-node"><a href="#summary">Summary</a></li>
-                                <li class="pml-toc-leaf-node"><a href="#whats_next">What's Next?</a></li>
+                                <li class="pml-toc-leaf-node"><a href="#whats_next">What&apos;s Next?</a></li>
                                 <li class="pml-toc-leaf-node"><a href="#ch__35">Acknowledgment</a></li>
                             </ul>
                         </div>
@@ -138,16 +138,16 @@
 
                     </table>
                     <p class="pml-paragraph"><br /></p>
+                    <p class="pml-paragraph">This is part 3 in a series of articles titled <i class="pml-italic">How to Design a Practical Type System to Maximize Reliability, Maintainability, and Productivity in Software Development Projects</i>.</p>
+                    <p class="pml-paragraph">It is recommended (but not required for experienced programmers) to read the articles in their order of publication, starting with <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/01-what-why-how/index.html"><i class="pml-italic">Part 1: What? Why? How?</i></a>.</p>
+                    <p class="pml-paragraph">For a quick summary of previous articles you can read <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/summary/index.html"><i class="pml-italic">Summary of the Practical Type System </i>(<i class="pml-italic">PTS</i>) <i class="pml-italic">Article Series</i></a>.</p>
                     <div class="pml-admonition">
                         <div class="pml-admonition-label">
                             <p class="pml-paragraph">Note</p>
 
                         </div>
                         <div class="pml-admonition-content">
-                            <p class="pml-paragraph">This is part 3 in a series of articles titled <i class="pml-italic">How to Design a Practical Type System to Maximize Reliability, Maintainability, and Productivity in Software Development Projects</i>.</p>
-                            <p class="pml-paragraph">It is recommended (but not required for experienced programmers) to read the articles in their order of publication, starting with <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/01-what-why-how/index.html"><i class="pml-italic">Part 1: What? Why? How?</i></a>.</p>
-                            <p class="pml-paragraph">Please be aware that PTS is a new, not-yet-implemented paradigm. As explained in section <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/essence-foundation/index.html#history"><i class="pml-italic">History</i></a> of the article <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/essence-foundation/index.html"><i class="pml-italic">Essence and Foundation of the Practical Type System (PTS)</i></a>, PTS has been implemented in a proof-of-concept project, but a public PTS implementation isn't available yet — you can't try out the PTS source code examples shown in this article.</p>
-                            <p class="pml-paragraph">For a quick summary of previous articles you can read <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/summary/index.html"><i class="pml-italic">Summary of the Practical Type System </i>(<i class="pml-italic">PTS</i>) <i class="pml-italic">Article Series</i></a>. </p>
+                            <p class="pml-paragraph">Please be aware that PTS is a new paradigm and still a work-in-progress. As explained in section <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/essence-foundation/index.html#history"><i class="pml-italic">History</i></a> of the article <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/essence-foundation/index.html"><i class="pml-italic">Essence and Foundation of the Practical Type System (PTS)</i></a>, I created a proof-of-concept implementation which is now a bit outdated — therefore you won’t be able to try out the PTS code examples shown in this article. </p>
                         </div>
                     </div>
                     <p class="pml-paragraph"><br /></p>
@@ -171,14 +171,14 @@
                             </div>
                         </div>
                         <p class="pml-paragraph">Because records are omnipresent, a practical type system should provide a comprehensive set of features that are easy to use and cover all aspects of working with records.</p>
-                        <p class="pml-paragraph">This article first explains why record types need to be natively supported in a type system. Then you'll see how record types work in PTS — each feature being illustrated by simple source code examples. </p>
+                        <p class="pml-paragraph">This article first explains why record types need to be natively supported in a type system. Then you&apos;ll see how record types work in PTS — each feature being illustrated by simple source code examples. </p>
 
                     </section>
                     <section id="why" class="pml-chapter">
                         <h2 class="pml-chapter-title">Why Do We Need Record Types?</h2>
                         <p class="pml-paragraph">Suppose we need a data structure to store RGB colors.</p>
                         <p class="pml-paragraph">The structure has a <code class="pml-inline-code">name</code> field of type <code class="pml-inline-code">string</code>, to store the name of the color. Moreover, it has three integer fields: <code class="pml-inline-code">red</code>, <code class="pml-inline-code">green</code>, and <code class="pml-inline-code">blue</code>, to store the RGB values.</p>
-                        <p class="pml-paragraph">To make the data structure more reliable and practical let's add the following conditions:</p>
+                        <p class="pml-paragraph">To make the data structure more reliable and practical let&apos;s add the following conditions:</p>
                         <ul class="pml-list">
                             <li class="pml-list-element">
                                 <p class="pml-paragraph">Field <code class="pml-inline-code">name</code> can only contain letters and spaces, and its length must be between 3 and 50 characters.</p>
@@ -190,7 +190,7 @@
 
                             </li>
                             <li class="pml-list-element">
-                                <p class="pml-paragraph">Each object must be immutable — after its creation, it's impossible to change the value of a field.</p>
+                                <p class="pml-paragraph">Each object must be immutable — after its creation, it&apos;s impossible to change the value of a field.</p>
 
                             </li>
                             <li class="pml-list-element">
@@ -200,9 +200,9 @@
                             </li>
 
                         </ul>
-                        <p class="pml-paragraph">Apart from the last condition, this looks like a trivial exercise, and it should be easy to implement this in any programming language, shouldn't it?</p>
+                        <p class="pml-paragraph">Apart from the last condition, this looks like a trivial exercise, and it should be easy to implement this in any programming language, shouldn&apos;t it?</p>
                         <p class="pml-paragraph">How much code would you need to write this in your favorite programming language, and how would the code look like?</p>
-                        <p class="pml-paragraph">Let's first have a look at error-prone solutions in simple type systems, and then see code written in Java, Kotlin, and PTS.</p>
+                        <p class="pml-paragraph">Let&apos;s first have a look at error-prone solutions in simple type systems, and then see code written in Java, Kotlin, and PTS.</p>
                         <div class="pml-admonition">
                             <div class="pml-admonition-label">
                                 <p class="pml-paragraph">Note</p>
@@ -219,8 +219,8 @@
                             <pre class="pml-code"><code>red = [ &quot;red&quot;, 255, 0, 0 ];
 </code></pre>
                             <p class="pml-paragraph">Needless to say, code like this would be <i class="pml-italic">extremely error-prone</i>.</p>
-                            <p class="pml-paragraph">Using the first element to store the name, the second one to store the red value, etc., is just a convention that would need to be applied everywhere in the code. There is no protection against accidentally violating this positional convention. Moreover, if the list is mutable (as in most programming languages), there is no protection against adding, removing, or changing elements after the object has been created. Finally, if the structure is changed later on (e.g. field <code class="pml-inline-code">alpha</code> is added because we want to specify the opacity for a color and use an RGBA color model), we'll have to manually update the codebase — with the risk of forgetting to do so, or accidentally leaving out some places. </p>
-                            <p class="pml-paragraph">We won't waste time showcasing all the ugly things that could happen.</p>
+                            <p class="pml-paragraph">Using the first element to store the name, the second one to store the red value, etc., is just a convention that would need to be applied everywhere in the code. There is no protection against accidentally violating this positional convention. Moreover, if the list is mutable (as in most programming languages), there is no protection against adding, removing, or changing elements after the object has been created. Finally, if the structure is changed later on (e.g. field <code class="pml-inline-code">alpha</code> is added because we want to specify the opacity for a color and use an RGBA color model), we&apos;ll have to manually update the codebase — with the risk of forgetting to do so, or accidentally leaving out some places. </p>
+                            <p class="pml-paragraph">We won&apos;t waste time showcasing all the ugly things that could happen.</p>
 
                         </section>
                         <section id="map" class="pml-chapter">
@@ -245,7 +245,7 @@
 console.log(&quot;before:&quot; + JSON.stringify(red));
 
 red[&quot;name&quot;] = undefined;
-red[&quot;red&quot;] = &quot;I was a number, but now I'm a string.&quot;;
+red[&quot;red&quot;] = &quot;I was a number, but now I&apos;m a string.&quot;;
 red[&quot;read&quot;] = 255; // typo in field name
 delete red.green;
 delete Object.assign(red, { foo: red.blue }).blue;
@@ -254,7 +254,7 @@ console.log(&quot;after: &quot; + JSON.stringify(red));
 </code></pre>
                             <p class="pml-paragraph">Here is the output:</p>
                             <pre class="pml-output">before:{&quot;name&quot;:&quot;red&quot;,&quot;red&quot;:255,&quot;green&quot;:0,&quot;blue&quot;:0}
-after: {&quot;red&quot;:&quot;I was a number, but now I'm a string.&quot;,&quot;read&quot;:255,&quot;foo&quot;:0}</pre>
+after: {&quot;red&quot;:&quot;I was a number, but now I&apos;m a string.&quot;,&quot;read&quot;:255,&quot;foo&quot;:0}</pre>
                             <p class="pml-paragraph">Moreover, if the data structure is changed later on (e.g. a field is added, renamed, or removed), there are no safeguards in place to ensure that we update any code that accesses or creates these objects. As with lists, all could easily end up in a maintenance nightmare, especially in medium- or large-scale projects.</p>
                             <div class="pml-admonition">
                                 <div class="pml-admonition-label">
@@ -263,7 +263,7 @@ after: {&quot;red&quot;:&quot;I was a number, but now I'm a string.&quot;,&quot;
                                 </div>
                                 <div class="pml-admonition-content">
                                     <p class="pml-paragraph">ECMAScript 2015 (ES6) introduced <a class="pml-link" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes"><i class="pml-italic">classes</i></a> in JavaScript.</p>
-                                    <p class="pml-paragraph">Under the hood, however, JavaScript classes are built on prototypes, which essentially means that they are mutable, heterogeneous maps disguised as classes. Therefore, all problems mentioned above also exist for JavaScript classes. For an advanced explanation, read Justen Robertson's article <a class="pml-link" href="https://www.toptal.com/javascript/es6-class-chaos-keeps-js-developer-up"><i class="pml-italic">As a JS Developer, ES6 Classes Are What Keep Me Up at Night</i></a>.</p>
+                                    <p class="pml-paragraph">Under the hood, however, JavaScript classes are built on prototypes, which essentially means that they are mutable, heterogeneous maps disguised as classes. Therefore, all problems mentioned above also exist for JavaScript classes. For an advanced explanation, read Justen Robertson&apos;s article <a class="pml-link" href="https://www.toptal.com/javascript/es6-class-chaos-keeps-js-developer-up"><i class="pml-italic">As a JS Developer, ES6 Classes Are What Keep Me Up at Night</i></a>.</p>
                                     <p class="pml-paragraph">Hence, so-called JavaScript &quot;classes&quot; are very different and less robust than classes/records/structures in C, C++, C#, Go, Java, Python, Rust, and other languages.</p>
                                 </div>
                             </div>
@@ -318,27 +318,27 @@ after: {&quot;red&quot;:&quot;I was a number, but now I'm a string.&quot;,&quot;
 }
 </code></pre>
                                     <p class="pml-paragraph">Both Java versions are semantically equivalent (they both represent a record with immutable fields), but the new code is obviously easier to read, write, and maintain.</p>
-                                    <p class="pml-paragraph">For more information about records in Java you can read Lokesh Gupta's article <a class="pml-link" href="https://howtodoinjava.com/java/java-record-type/"><i class="pml-italic">Java Records</i></a>.</p>
+                                    <p class="pml-paragraph">For more information about records in Java you can read Lokesh Gupta&apos;s article <a class="pml-link" href="https://howtodoinjava.com/java/java-record-type/"><i class="pml-italic">Java Records</i></a>.</p>
                                 </div>
                             </div>
                             <p class="pml-paragraph">Using a <code class="pml-inline-code">record</code> type instead of a <code class="pml-inline-code">map</code> is a <i class="pml-italic">huge</i> improvement, because now each instance of <code class="pml-inline-code">RGBColor</code> is guaranteed to have the same set of fields during its whole lifetime.</p>
                             <p class="pml-paragraph">If the record type is changed later on (a field is added, removed, renamed, or its type is changed) then all code that uses the type is auto-checked by the compiler. We are protected from forgetting to refactor code if the record type changes.</p>
                             <p class="pml-paragraph">Moreover, Java record instances are always immutable, which makes them less error-prone.</p>
-                            <p class="pml-paragraph">However, the cardinality of our type is orders of magnitude higher than it should be. The initially specified conditions for valid <code class="pml-inline-code">RGBColor</code> objects are not fulfilled. We didn't yet apply the <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/01-what-why-how/index.html#pts_coding_rule"><i class="pml-italic">PTS Coding Rule</i></a>. For example, each color value (defined as a 32-bit integer) can store a value in the range <code class="pml-inline-code">-2,147,483,648 to 2,147,483,647</code>, although we specified that values must be in the range <code class="pml-inline-code">0 .. 255</code>.</p>
+                            <p class="pml-paragraph">However, the cardinality of our type is orders of magnitude higher than it should be. The initially specified conditions for valid <code class="pml-inline-code">RGBColor</code> objects are not fulfilled. We didn&apos;t yet apply the <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/01-what-why-how/index.html#pts_coding_rule"><i class="pml-italic">PTS Coding Rule</i></a>. For example, each color value (defined as a 32-bit integer) can store a value in the range <code class="pml-inline-code">-2,147,483,648 to 2,147,483,647</code>, although we specified that values must be in the range <code class="pml-inline-code">0 .. 255</code>.</p>
                             <div class="pml-admonition">
                                 <div class="pml-admonition-label">
                                     <p class="pml-paragraph">Note</p>
 
                                 </div>
                                 <div class="pml-admonition-content">
-                                    <p class="pml-paragraph">We can't use type <code class="pml-inline-code">byte</code> for RGB values, because <code class="pml-inline-code">byte</code> (in Java) is a <i class="pml-italic">signed</i> integer in the range <code class="pml-inline-code">-128 .. 127</code>.</p>
+                                    <p class="pml-paragraph">We can&apos;t use type <code class="pml-inline-code">byte</code> for RGB values, because <code class="pml-inline-code">byte</code> (in Java) is a <i class="pml-italic">signed</i> integer in the range <code class="pml-inline-code">-128 .. 127</code>.</p>
                                     <p class="pml-paragraph">We could have used type <code class="pml-inline-code">short</code> (16-bit integer) instead of <code class="pml-inline-code">int</code> (32-bit integer), but Java has no <code class="pml-inline-code">short</code> literals. Hence, we would need to write <code class="pml-inline-code">(short) 10</code>, instead of just <code class="pml-inline-code">10</code>, which is impractical.</p>
-                                    <p class="pml-paragraph">We could have used a single 32-bit integer to store all three 8-bit RGB values, and then use bit manipulation operations to extract the three values, but that wouldn't suit the purpose of this exercise (i.e. how to work with integer <i class="pml-italic">ranges</i>).</p>
+                                    <p class="pml-paragraph">We could have used a single 32-bit integer to store all three 8-bit RGB values, and then use bit manipulation operations to extract the three values, but that wouldn&apos;t suit the purpose of this exercise (i.e. how to work with integer <i class="pml-italic">ranges</i>).</p>
                                 </div>
                             </div>
                             <p class="pml-paragraph">Moreover, field <code class="pml-inline-code">name</code> lacks constraints, which means that any gibberish (e.g. <code class="pml-inline-code">$%7^</code>) — or even malicious HTML or SQL code not limited in length (e.g. <code class="pml-inline-code">&lt;script&gt;malicious ...&lt;/script&gt;</code>) — could be stored in it.</p>
                             <p class="pml-paragraph">Why should we care about this? Because practice teaches us: <b class="pml-bold">The consequences of uncaught invalid data values in software applications are often unanticipated and unpredictable, and they vary largely, from innocuous to huge disasters, depending on the domain.</b></p>
-                            <p class="pml-paragraph">For example, if <code class="pml-inline-code">RGBColor</code> isn't auto-protected against invalid values then the following message:</p>
+                            <p class="pml-paragraph">For example, if <code class="pml-inline-code">RGBColor</code> isn&apos;t auto-protected against invalid values then the following message:</p>
                             <div class="pml-html"><div style="color:red; background-color:black; padding:0.5em; border-radius: 0.5em; width:500px; height:6.5em;">
     <p>DANGER!<p>
     <p>High voltage! Do not enter!<p>
@@ -346,14 +346,14 @@ after: {&quot;red&quot;:&quot;I was a number, but now I'm a string.&quot;,&quot;
                             <p class="pml-paragraph">... might suddenly be displayed like this:</p>
                             <div class="pml-html"><div style="color:black; background-color:black; padding:0.5em; border-radius: 0.5em; width:500px; height:6.5em;">
 </div></div>
-                            <p class="pml-paragraph">How's that possible? Why did the message go away?</p>
-                            <p class="pml-paragraph">Well, it actually didn't. Suppose that instead of coding:</p>
+                            <p class="pml-paragraph">How&apos;s that possible? Why did the message go away?</p>
+                            <p class="pml-paragraph">Well, it actually didn&apos;t. Suppose that instead of coding:</p>
                             <pre class="pml-code"><code>RGBColor textColor = new RGBColor ( &quot;red&quot;, 255, 0, 0 );</code></pre>
                             <p class="pml-paragraph">... we accidentally introduce an off-by-one error (256 instead of 255):</p>
                             <pre class="pml-code"><code>RGBColor textColor = new RGBColor ( &quot;red&quot;, 256, 0, 0 );
                                              ^</code></pre>
-                            <p class="pml-paragraph">If the value for red (256) is later converted to an 8-bit value (by keeping only the right eight bits of the 32-bit value), then the 8-bit value will be <code class="pml-inline-code">00000000</code> (eight zeros), because the binary representation of <code class="pml-inline-code">256</code> is <code class="pml-inline-code">100000000</code> (a 1 followed by eight zeros). As a result, the text color will be black, instead of red. Hence, the text didn't disappear — it just became invisible because of displaying black text on a black background.</p>
-                            <p class="pml-paragraph">You can try it. If you select text in the black box below, the browser will reveal the text (works only if you don't use a browser plugin that changes colors, such as a custom color scheme, dark theme, etc.).</p>
+                            <p class="pml-paragraph">If the value for red (256) is later converted to an 8-bit value (by keeping only the right eight bits of the 32-bit value), then the 8-bit value will be <code class="pml-inline-code">00000000</code> (eight zeros), because the binary representation of <code class="pml-inline-code">256</code> is <code class="pml-inline-code">100000000</code> (a 1 followed by eight zeros). As a result, the text color will be black, instead of red. Hence, the text didn&apos;t disappear — it just became invisible because of displaying black text on a black background.</p>
+                            <p class="pml-paragraph">You can try it. If you select text in the black box below, the browser will reveal the text (works only if you don&apos;t use a browser plugin that changes colors, such as a custom color scheme, dark theme, etc.).</p>
                             <div class="pml-html"><div style="color:black; background-color:black; padding:0.5em; border-radius: 0.5em; width:500px; height:6.5em;">
     <p>DANGER!<p>
     <p>High voltage! Do not enter!<p>
@@ -365,17 +365,17 @@ after: {&quot;red&quot;:&quot;I was a number, but now I'm a string.&quot;,&quot;
 
                                 </div>
                                 <div class="pml-admonition-content">
-                                    <p class="pml-paragraph">One could argue that the same problem of black text on a black background could also occur with a statement like <code class="pml-inline-code">textColor = new RGBColor ( &quot;red&quot;, 0, 0, 0 )</code>, which is obviously wrong, but accepted by the compiler which doesn't know anything about colors.</p>
-                                    <p class="pml-paragraph">That's true. However, the <i class="pml-italic">probability</i> for this problem is orders of magnitude higher if the 32-bit integers aren't checked. All values from 256 to 2,147,483,647 whose eight right bits are zero, as well as all negative values whose eight right bits are zero, would also lead to black text.</p>
-                                    <p class="pml-paragraph">Of course, similar problems can also occur with other valid RGB values, all within the 0–255 range (e.g. <code class="pml-inline-code">(1, 1, 1)</code>), because very dark text on a black background is unreadable for humans. But again, the probability is much higher with unchecked integers. Later on we'll see how to totally eliminate the risk of bad text/background color combinations.</p>
+                                    <p class="pml-paragraph">One could argue that the same problem of black text on a black background could also occur with a statement like <code class="pml-inline-code">textColor = new RGBColor ( &quot;red&quot;, 0, 0, 0 )</code>, which is obviously wrong, but accepted by the compiler which doesn&apos;t know anything about colors.</p>
+                                    <p class="pml-paragraph">That&apos;s true. However, the <i class="pml-italic">probability</i> for this problem is orders of magnitude higher if the 32-bit integers aren&apos;t checked. All values from 256 to 2,147,483,647 whose eight right bits are zero, as well as all negative values whose eight right bits are zero, would also lead to black text.</p>
+                                    <p class="pml-paragraph">Of course, similar problems can also occur with other valid RGB values, all within the 0–255 range (e.g. <code class="pml-inline-code">(1, 1, 1)</code>), because very dark text on a black background is unreadable for humans. But again, the probability is much higher with unchecked integers. Later on we&apos;ll see how to totally eliminate the risk of bad text/background color combinations.</p>
                                 </div>
                             </div>
 
                         </section>
                         <section id="reliable_java_record" class="pml-chapter">
                             <h3 class="pml-chapter-title">A More Reliable Java Record</h3>
-                            <p class="pml-paragraph">In order to fulfill all conditions specified at the beginning of this exercise, let's improve our Java record to render it more reliable and practical. We need to protect all record fields against invalid values, and the RGB fields should have a default value of 0.</p>
-                            <p class="pml-paragraph">There are different ways to refactor our previous record example. In the code below, reusable classes are defined to store a color name and its value, and the <a class="pml-link" href="https://en.wikipedia.org/wiki/Builder_pattern"><i class="pml-italic">builder</i></a> pattern (common in Java) is used to create objects with default values. I'll skip the details, since understanding this code is irrelevant to the topic at hand. Just look at the size of the new code:</p>
+                            <p class="pml-paragraph">In order to fulfill all conditions specified at the beginning of this exercise, let&apos;s improve our Java record to render it more reliable and practical. We need to protect all record fields against invalid values, and the RGB fields should have a default value of 0.</p>
+                            <p class="pml-paragraph">There are different ways to refactor our previous record example. In the code below, reusable classes are defined to store a color name and its value, and the <a class="pml-link" href="https://en.wikipedia.org/wiki/Builder_pattern"><i class="pml-italic">builder</i></a> pattern (common in Java) is used to create objects with default values. I&apos;ll skip the details, since understanding this code is irrelevant to the topic at hand. Just look at the size of the new code:</p>
                             <pre class="pml-code"><code>public record RGBColor (
     ColorName name,
     RGBValue red,
@@ -390,7 +390,7 @@ after: {&quot;red&quot;:&quot;I was a number, but now I'm a string.&quot;,&quot;
             Objects.requireNonNull ( value );
 
             if ( !NAME_REGEX.matcher ( value ).matches () ) {
-                throw new IllegalArgumentException ( &quot;'&quot; + value + &quot;' is invalid. The name must match the regex &quot; + NAME_REGEX + &quot;.&quot; );
+                throw new IllegalArgumentException ( &quot;&apos;&quot; + value + &quot;&apos; is invalid. The name must match the regex &quot; + NAME_REGEX + &quot;.&quot; );
             }
         }
 
@@ -401,7 +401,7 @@ after: {&quot;red&quot;:&quot;I was a number, but now I'm a string.&quot;,&quot;
 
         public RGBValue {
             if ( value &lt; 0 || value &gt; 255 ) {
-                throw new IllegalArgumentException ( &quot;'&quot; + value + &quot;' is invalid. The value must be in the range 0 to 255.&quot; );
+                throw new IllegalArgumentException ( &quot;&apos;&quot; + value + &quot;&apos; is invalid. The value must be in the range 0 to 255.&quot; );
             }
         }
 
@@ -455,8 +455,8 @@ after: {&quot;red&quot;:&quot;I was a number, but now I'm a string.&quot;,&quot;
     }
 }
 </code></pre>
-                            <p class="pml-paragraph">If you think that this is <i class="pml-italic">a lot</i> of code, difficult to understand (especially for Java newbies), and that nobody wants to write and maintain code like this, then you're not alone! We had to type 196 characters (whitespace included) for our first, non-reliable version, and now our code has mutated into a mess of 1,993 characters. That's about 10 times more characters to read, write, and maintain! What's more, the code would be even larger if we provided more suitable versions of methods <code class="pml-inline-code">equals</code> and <code class="pml-inline-code">hashCode</code>, taking into account only the color values, but not the name (for more information read <a class="pml-link" href="https://www.baeldung.com/java-equals-hashcode-contracts"><i class="pml-italic">Java equals() and hashCode() Contracts</i></a>).</p>
-                            <p class="pml-paragraph">Moreover, now we're in violation of the <a class="pml-link" href="https://en.wikipedia.org/wiki/Don%27t_repeat_yourself"><i class="pml-italic">Don't repeat yourself</i></a> (DRY) principle. For example, renaming field <code class="pml-inline-code">name</code> would require us to edit code in eight different places, and the compiler wouldn't check if we have consistently replaced all occurrences.</p>
+                            <p class="pml-paragraph">If you think that this is <i class="pml-italic">a lot</i> of code, difficult to understand (especially for Java newbies), and that nobody wants to write and maintain code like this, then you&apos;re not alone! We had to type 196 characters (whitespace included) for our first, non-reliable version, and now our code has mutated into a mess of 1,993 characters. That&apos;s about 10 times more characters to read, write, and maintain! What&apos;s more, the code would be even larger if we provided more suitable versions of methods <code class="pml-inline-code">equals</code> and <code class="pml-inline-code">hashCode</code>, taking into account only the color values, but not the name (for more information read <a class="pml-link" href="https://www.baeldung.com/java-equals-hashcode-contracts"><i class="pml-italic">Java equals() and hashCode() Contracts</i></a>).</p>
+                            <p class="pml-paragraph">Moreover, now we&apos;re in violation of the <a class="pml-link" href="https://en.wikipedia.org/wiki/Don%27t_repeat_yourself"><i class="pml-italic">Don&apos;t repeat yourself</i></a> (DRY) principle. For example, renaming field <code class="pml-inline-code">name</code> would require us to edit code in eight different places, and the compiler wouldn&apos;t check if we have consistently replaced all occurrences.</p>
                             <p class="pml-paragraph">Anyway, on the positive side <code class="pml-inline-code">RGBColor</code> is now more reliable and more practical to use. Color objects can now be created like this:</p>
                             <pre class="pml-code"><code>        RGBColor black = RGBColor.builder()
             .name(&quot;black&quot;)
@@ -474,14 +474,14 @@ after: {&quot;red&quot;:&quot;I was a number, but now I'm a string.&quot;,&quot;
             .blue(50)
             .build();
 </code></pre>
-                            <p class="pml-paragraph">This code is verbose too — but at least it's more reliable. Trying to create a color with invalid values will now result in a <i class="pml-italic">run</i>-time error. The risk of displaying a black screen with <code class="pml-inline-code">red=256</code> has been eliminated — the following run-time error would be displayed:</p>
-                            <pre class="pml-output">Exception in thread &quot;main&quot; java.lang.IllegalArgumentException: Invalid value for 'red': 256. The value must be in the range 0 to 255.
+                            <p class="pml-paragraph">This code is verbose too — but at least it&apos;s more reliable. Trying to create a color with invalid values will now result in a <i class="pml-italic">run</i>-time error. The risk of displaying a black screen with <code class="pml-inline-code">red=256</code> has been eliminated — the following run-time error would be displayed:</p>
+                            <pre class="pml-output">Exception in thread &quot;main&quot; java.lang.IllegalArgumentException: Invalid value for &apos;red&apos;: 256. The value must be in the range 0 to 255.
 ...</pre>
-                            <p class="pml-paragraph">It's interesting to note that condition 1 of the <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/01-what-why-how/index.html#pts_design_rule"><i class="pml-italic">PTS Design Rule</i></a> (easy to write code) was fulfilled when we wrote the first Java version of the <code class="pml-inline-code">RGBColor</code> record type, but condition 2 (no invalid values) was violated. Now we have the exact opposite situation: condition 1 is violated, but 2 is fulfilled.</p>
-                            <p class="pml-paragraph">However, this doesn't come as a surprise, because we know that it is generally hard, and sometimes very hard, to write reliable and safe code.</p>
+                            <p class="pml-paragraph">It&apos;s interesting to note that condition 1 of the <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/01-what-why-how/index.html#pts_design_rule"><i class="pml-italic">PTS Design Rule</i></a> (easy to write code) was fulfilled when we wrote the first Java version of the <code class="pml-inline-code">RGBColor</code> record type, but condition 2 (no invalid values) was violated. Now we have the exact opposite situation: condition 1 is violated, but 2 is fulfilled.</p>
+                            <p class="pml-paragraph">However, this doesn&apos;t come as a surprise, because we know that it is generally hard, and sometimes very hard, to write reliable and safe code.</p>
                             <p class="pml-paragraph">Are we done?</p>
                             <p class="pml-paragraph">No, not yet!</p>
-                            <p class="pml-paragraph">Instead of getting a <i class="pml-italic">run</i>-time error, we'd strongly prefer to get a <i class="pml-italic">compile</i>-time error for invalid values.</p>
+                            <p class="pml-paragraph">Instead of getting a <i class="pml-italic">run</i>-time error, we&apos;d strongly prefer to get a <i class="pml-italic">compile</i>-time error for invalid values.</p>
                             <p class="pml-paragraph">Besides leading to more reliable code, errors detected at <i class="pml-italic">compile</i>-time can also be nicely reported in an IDE, as soon as the bug has been typed. Thus, if we type <code class="pml-inline-code">256</code> instead of <code class="pml-inline-code">255</code>, the illegal value would immediately be displayed as a bug, together with a human-friendly error message, a helpful tip to fix the bug, and (cherry on the cake) a clickable list of possible solutions.</p>
                             <div class="pml-admonition">
                                 <div class="pml-admonition-label">
@@ -496,8 +496,8 @@ after: {&quot;red&quot;:&quot;I was a number, but now I'm a string.&quot;,&quot;
                                     </figure>
                                 </div>
                             </div>
-                            <p class="pml-paragraph">Unfortunately, the bugs we're dealing with in this exercise (an invalid string or an integer literal out of a specified range) can't be reported at <i class="pml-italic">compile</i>-time — neither in Java nor in other popular programming languages, as far as I know.</p>
-                            <p class="pml-paragraph">Maybe there are third-party static source code analyzers able to report such bugs — after the tool has been properly configured. But even if such a tool existed, it wouldn't be an ideal solution because it would require installation, proper configuration, and learning how to use it; and it will depend on maintenance by its third party developers to ensure that it's kept up to date with new versions of the programming language. That's not what we want — we want this level of support to just work out of the box.</p>
+                            <p class="pml-paragraph">Unfortunately, the bugs we&apos;re dealing with in this exercise (an invalid string or an integer literal out of a specified range) can&apos;t be reported at <i class="pml-italic">compile</i>-time — neither in Java nor in other popular programming languages, as far as I know.</p>
+                            <p class="pml-paragraph">Maybe there are third-party static source code analyzers able to report such bugs — after the tool has been properly configured. But even if such a tool existed, it wouldn&apos;t be an ideal solution because it would require installation, proper configuration, and learning how to use it; and it will depend on maintenance by its third party developers to ensure that it&apos;s kept up to date with new versions of the programming language. That&apos;s not what we want — we want this level of support to just work out of the box.</p>
                             <div class="pml-admonition">
                                 <div class="pml-admonition-label">
                                     <p class="pml-paragraph">Note</p>
@@ -528,7 +528,7 @@ after: {&quot;red&quot;:&quot;I was a number, but now I'm a string.&quot;,&quot;
 
         init {
             require ( name.matches(NAME_REGEX))
-                { &quot;'$name' is invalid. The value must match the regular expression $NAME_REGEX.&quot; }
+                { &quot;&apos;$name&apos; is invalid. The value must match the regular expression $NAME_REGEX.&quot; }
         }
 
         override fun toString(): String = name
@@ -538,7 +538,7 @@ after: {&quot;red&quot;:&quot;I was a number, but now I'm a string.&quot;,&quot;
 
         init {
             require (value in 0..255 )
-                { &quot;'$value' is invalid. The value must be in the range 0 .. 255.&quot; }
+                { &quot;&apos;$value&apos; is invalid. The value must be in the range 0 .. 255.&quot; }
         }
 
         override fun toString(): String = value.toString()
@@ -556,11 +556,11 @@ after: {&quot;red&quot;:&quot;I was a number, but now I'm a string.&quot;,&quot;
 
                                 </div>
                                 <div class="pml-admonition-content">
-                                    <p class="pml-paragraph">Kotlin has an unsigned 8-bit integer type (values from 0 to 255) called <code class="pml-inline-code">UByte</code> that luckily fits our specific use case and could have been used instead of a <code class="pml-inline-code">Short</code> value wrapped in <code class="pml-inline-code">RGBValue</code>. But I didn't use <code class="pml-inline-code">UByte</code> in this example, because I want to show a more general solution to constrain integer values to a range (<code class="pml-inline-code">min .. max</code>) — a solution that could also be applied in other cases.</p>
-                                    <p class="pml-paragraph">I'm not a Kotlin expert. If there is a better way to write this code, then please leave a comment.</p>
+                                    <p class="pml-paragraph">Kotlin has an unsigned 8-bit integer type (values from 0 to 255) called <code class="pml-inline-code">UByte</code> that luckily fits our specific use case and could have been used instead of a <code class="pml-inline-code">Short</code> value wrapped in <code class="pml-inline-code">RGBValue</code>. But I didn&apos;t use <code class="pml-inline-code">UByte</code> in this example, because I want to show a more general solution to constrain integer values to a range (<code class="pml-inline-code">min .. max</code>) — a solution that could also be applied in other cases.</p>
+                                    <p class="pml-paragraph">I&apos;m not a Kotlin expert. If there is a better way to write this code, then please leave a comment.</p>
                                 </div>
                             </div>
-                            <p class="pml-paragraph">Unlike Java, Kotlin doesn't need a <code class="pml-inline-code">Builder</code> class, because it supports named parameter assignments and default values for record fields (whereas Java doesn't). Moreover, Kotlin types are non-nullable by default, which eliminates the need for null-checks. As a result, the size of the Kotlin code is about 50% of its Java counterpart — a significant improvement. However, the above still looks like &quot;too much code&quot;.</p>
+                            <p class="pml-paragraph">Unlike Java, Kotlin doesn&apos;t need a <code class="pml-inline-code">Builder</code> class, because it supports named parameter assignments and default values for record fields (whereas Java doesn&apos;t). Moreover, Kotlin types are non-nullable by default, which eliminates the need for null-checks. As a result, the size of the Kotlin code is about 50% of its Java counterpart — a significant improvement. However, the above still looks like &quot;too much code&quot;.</p>
                             <p class="pml-paragraph">Client code looks like this:</p>
                             <pre class="pml-code"><code>            val black = RGBColor(name = &quot;black&quot;)
 
@@ -578,7 +578,7 @@ after: {&quot;red&quot;:&quot;I was a number, but now I'm a string.&quot;,&quot;
                         </section>
                         <section id="PTS_code" class="pml-chapter">
                             <h3 class="pml-chapter-title">PTS Code</h3>
-                            <p class="pml-paragraph">Here's the code written in PTS:</p>
+                            <p class="pml-paragraph">Here&apos;s the code written in PTS:</p>
                             <pre class="pml-code"><code>type color_name = string ( pattern = &quot;[a-zA-Z ]{3,50}&quot; )
 
 type color_value = integer ( range = 0 .. 255 )
@@ -595,7 +595,7 @@ type RGB_color
 
     fn to_string = &quot;&quot;&quot;{{name}} ({{red}}, {{green}}, {{blue}})&quot;&quot;&quot;
 .</code></pre>
-                            <p class="pml-paragraph">We'll soon explore the syntax, but this code can be summarized as follows:</p>
+                            <p class="pml-paragraph">We&apos;ll soon explore the syntax, but this code can be summarized as follows:</p>
                             <ul class="pml-list">
                                 <li class="pml-list-element">
                                     <p class="pml-paragraph">First we define type <code class="pml-inline-code">color_name</code>, which is a constrained string that must match the regular expression <code class="pml-inline-code">[a-zA-Z ]{3,50}</code> (only letters and spaces; min. 3 characters, max. 50).</p>
@@ -663,7 +663,7 @@ yellowgreen (154, 205, 50)</pre>
                     <section id="how" class="pml-chapter">
                         <h2 class="pml-chapter-title">How Does It Work?</h2>
                         <p class="pml-paragraph">This section provides an <i class="pml-italic">overview</i> of PTS record types — a showcase of features, rather than a comprehensive specification and implementation details.</p>
-                        <p class="pml-paragraph">We'll have a look at numerous, simple code examples to illustrate each feature.</p>
+                        <p class="pml-paragraph">We&apos;ll have a look at numerous, simple code examples to illustrate each feature.</p>
                         <section id="basic_syntax" class="pml-chapter">
                             <h3 class="pml-chapter-title">Basic Syntax</h3>
                             <p class="pml-paragraph">A PTS <i class="pml-italic">record type</i> is composed of a name and a set of attributes. Each <i class="pml-italic">attribute</i> is defined by a set of properties: a unique name, a type, and other optional properties.</p>
@@ -776,15 +776,15 @@ show_info ( title, message, modal = true )</code></pre>
                             </ul>
                             <p class="pml-paragraph">The following code is therefore invalid, because it uses <i class="pml-italic">positional</i> assignments:</p>
                             <pre class="pml-code"><code>const red = RGB_color.create ( <b class="pml-bold">&quot;red&quot;, 255, 0, 0</b> )   // INVALID!</code></pre>
-                            <p class="pml-paragraph">To understand why this shorter syntax is not supported, let's suppose that later on the order of the color values is changed in the type definition. Instead of <code class="pml-inline-code">red</code>, <code class="pml-inline-code">green</code>, <code class="pml-inline-code">blue</code>, the order is inverted to <code class="pml-inline-code">blue</code>, <code class="pml-inline-code">green</code>, <code class="pml-inline-code">red</code> (for whatever mysterious reason). Then the expression <code class="pml-inline-code">RGB_color.create ( &quot;red&quot;, 255, 0, 0 )</code> would no longer create a red color object — it would incorrectly create a blue color, and there would neither be a compile-time nor a run-time error.</p>
+                            <p class="pml-paragraph">To understand why this shorter syntax is not supported, let&apos;s suppose that later on the order of the color values is changed in the type definition. Instead of <code class="pml-inline-code">red</code>, <code class="pml-inline-code">green</code>, <code class="pml-inline-code">blue</code>, the order is inverted to <code class="pml-inline-code">blue</code>, <code class="pml-inline-code">green</code>, <code class="pml-inline-code">red</code> (for whatever mysterious reason). Then the expression <code class="pml-inline-code">RGB_color.create ( &quot;red&quot;, 255, 0, 0 )</code> would no longer create a red color object — it would incorrectly create a blue color, and there would neither be a compile-time nor a run-time error.</p>
                             <p class="pml-paragraph">Using color blue instead of red might not be the end of the world. But imagine the following function signature:</p>
                             <pre class="pml-code"><code>fn transfer_money ( amount decimal, to_account string, from_account string )</code></pre>
                             <p class="pml-paragraph">... and the following statement (which is invalid in PTS since it uses positional assignments):</p>
                             <pre class="pml-code"><code>transfer_money ( 1_000_000.00, &quot;bob_account&quot;, &quot;alice_account&quot; )</code></pre>
-                            <p class="pml-paragraph">Note that the above statement doesn't tell us which account is being credited, unless we look at the function definition. Now imagine that later on the function signature is changed to a more intuitive order of input parameters:</p>
+                            <p class="pml-paragraph">Note that the above statement doesn&apos;t tell us which account is being credited, unless we look at the function definition. Now imagine that later on the function signature is changed to a more intuitive order of input parameters:</p>
                             <pre class="pml-code"><code>fn transfer_money ( amount integer, <b class="pml-bold">from_account string, to_account string</b> )</code></pre>
                             <p class="pml-paragraph">If we forget to adapt the function call, then one million is incorrectly transferred from Bob to Alice, instead of from Alice to Bob.</p>
-                            <p class="pml-paragraph">Bugs like this can't occur when named assignments are used, because the compiler automatically re-arranges the order, based on matching names. Named assignments also clearly tell us which account is credited:</p>
+                            <p class="pml-paragraph">Bugs like this can&apos;t occur when named assignments are used, because the compiler automatically re-arranges the order, based on matching names. Named assignments also clearly tell us which account is credited:</p>
                             <pre class="pml-code"><code>transfer_money (
     amount = 1_000_000.00
     from_account = &quot;alice_account&quot;
@@ -915,12 +915,12 @@ type RGB_color
         return null
     else
         return invalid_value_error.create (
-            message = &quot;&quot;&quot;'{{value}}' is invalid because it does not match the regular expression '{{pattern}}'.&quot;&quot;&quot;
+            message = &quot;&quot;&quot;&apos;{{value}}&apos; is invalid because it does not match the regular expression &apos;{{pattern}}&apos;.&quot;&quot;&quot;
             id = &quot;INVALID_VALUE&quot;
         )
     .
 .</code></pre>
-                                    <p class="pml-paragraph">Note that the actual body code of the <code class="pml-inline-code">check</code> function created by the compiler varies — it depends on the properties defined in the source code. For example, as we'll see soon, the error message returned by the function can be customized in the source code by means of the property <code class="pml-inline-code">error_message</code>.</p>
+                                    <p class="pml-paragraph">Note that the actual body code of the <code class="pml-inline-code">check</code> function created by the compiler varies — it depends on the properties defined in the source code. For example, as we&apos;ll see soon, the error message returned by the function can be customized in the source code by means of the property <code class="pml-inline-code">error_message</code>.</p>
                                     <p class="pml-paragraph">Function <code class="pml-inline-code">check</code> is implicitly called each time an instance of <code class="pml-inline-code">color_name</code> is created.</p>
                                     <p class="pml-paragraph">We can also call this function explicitly, for instance to check if a given value would be valid. The following example code checks if <code class="pml-inline-code">&quot;&lt;script&gt;&quot;</code> would be a valid color name:</p>
                                     <pre class="pml-code"><code>const error = color_name.check ( &quot;&lt;script&gt;&quot; )
@@ -930,7 +930,7 @@ else
     write_line ( error.message )
 .</code></pre>
                                     <p class="pml-paragraph">Output:</p>
-                                    <pre class="pml-output">'&lt;script&gt;' is invalid because it does not match the regular expression '[a-zA-Z ]{3,50}'.</pre>
+                                    <pre class="pml-output">&apos;&lt;script&gt;&apos; is invalid because it does not match the regular expression &apos;[a-zA-Z ]{3,50}&apos;.</pre>
                                     <p class="pml-paragraph">OK. Now consider the definition of attribute <code class="pml-inline-code">name</code> of type <code class="pml-inline-code">color_name</code>:</p>
                                     <pre class="pml-code"><code>att name color_name</code></pre>
                                     <p class="pml-paragraph">To check attribute <code class="pml-inline-code">name</code>, the compiler also implicitly creates a specific function for attribute <code class="pml-inline-code">name</code>. This function is defined in type <code class="pml-inline-code">RGB_color</code>, which contains the attribute. It is named <code class="pml-inline-code">check_name</code> (i.e. the prefix <code class="pml-inline-code">check_</code>, followed by the attribute identifier). The function has an input parameter <code class="pml-inline-code">name</code> of type <code class="pml-inline-code">string</code>, and returns <code class="pml-inline-code">null</code> if the value is valid, or else an object of type <code class="pml-inline-code">invalid_object_attribute_error</code> (another type defined in the standard library of a PTS implementation). The body of the function delegates the check to <code class="pml-inline-code">color_name.check</code>, and converts any <code class="pml-inline-code">invalid_value_error</code> object into an <code class="pml-inline-code">invalid_object_attribute_error</code> object. A simplified version of <code class="pml-inline-code">check_name</code> could look like this:</p>
@@ -955,13 +955,13 @@ else
     write_line ( error.message )
 .</code></pre>
                                     <p class="pml-paragraph">Output:</p>
-                                    <pre class="pml-output">'&lt;script&gt;' is invalid because it does not match the regular expression '[a-zA-Z ]{3,50}'.</pre>
+                                    <pre class="pml-output">&apos;&lt;script&gt;&apos; is invalid because it does not match the regular expression &apos;[a-zA-Z ]{3,50}&apos;.</pre>
 
                                 </section>
                                 <section id="custom_error_messages" class="pml-chapter">
                                     <h5 class="pml-chapter-title">Custom Error Messages</h5>
                                     <p class="pml-paragraph">As seen in the previous section, an invalid color name would produce an error message like this:</p>
-                                    <pre class="pml-output">'&lt;script&gt;' is invalid because it does not match the regular expression '[a-zA-Z ]{3,50}'.</pre>
+                                    <pre class="pml-output">&apos;&lt;script&gt;&apos; is invalid because it does not match the regular expression &apos;[a-zA-Z ]{3,50}&apos;.</pre>
                                     <p class="pml-paragraph">While such a generic error message can be understood by software developers, and might be acceptable during prototyping, it is of little help for end-users who are unfamiliar with regular expressions. Therefore we can provide a customized error message through the <code class="pml-inline-code">error_message</code> property. Moreover, we can provide a customized error identifier. Here is an example:</p>
                                     <pre class="pml-code"><code>type color_name = string (
     pattern: &quot;[a-zA-Z ]{3,50}&quot;
@@ -1114,11 +1114,11 @@ else
                                 <section id="record_property_check_code" class="pml-chapter">
                                     <h5 class="pml-chapter-title">Record Property <code class="pml-inline-code">check_code</code></h5>
                                     <p class="pml-paragraph">Similar to the <code class="pml-inline-code">check_code</code> property for individual <i class="pml-italic">attribute</i> validation, there is also a <code class="pml-inline-code">check_code</code> property available for finer control over <i class="pml-italic">record</i> validation. The value of <code class="pml-inline-code">check_code</code> is the body of the <code class="pml-inline-code">check</code> function that takes one input argument per attribute, and returns null if the values are valid, or else an object of type <code class="pml-inline-code">invalid_object_error</code>.</p>
-                                    <p class="pml-paragraph">Let's look at an example.</p>
-                                    <p class="pml-paragraph">At the end of section <a class="pml-xref" href="#java_record"><i class="pml-italic">Records in Java</i></a> we mentioned the risk of displaying dark text on a black background, leading to unreadable text. To eliminate this problem, we can define type <code class="pml-inline-code">light_RGB_color</code>, and use this type for the text. Type <code class="pml-inline-code">light_RGB_color</code> has the same attributes as the previously created type <code class="pml-inline-code">RGB_color</code>. Therefore, we can use <i class="pml-italic">type inheritance</i> (explained later) for type <code class="pml-inline-code">light_RGB_color</code>. Then we only need to add a <code class="pml-inline-code">check_code</code> property to ensure that the color is light: </p>
+                                    <p class="pml-paragraph">Let&apos;s look at an example.</p>
+                                    <p class="pml-paragraph">At the end of section <a class="pml-xref" href="#java_record"><i class="pml-italic">Records in Java</i></a> we mentioned the risk of displaying dark text on a black background, leading to unreadable text. To eliminate this problem, we can define type <code class="pml-inline-code">light_RGB_color</code>, and use this type for the text. Type <code class="pml-inline-code">light_RGB_color</code> has the same attributes as the previously created type <code class="pml-inline-code">RGB_color</code>. Therefore, we can use <i class="pml-italic">type inheritance</i> (explained later) for type <code class="pml-inline-code">light_RGB_color</code>. Then we only need to add a <code class="pml-inline-code">check_code</code> property to ensure that the color is light:</p>
                                     <pre class="pml-code"><code>type light_RGB_color
 
-    inherit RGB_color // inherit all attributes, and function 'to_string'
+    inherit RGB_color // inherit all attributes, and function &apos;to_string&apos;
 
     check_code:
         if color_utils.is_light_color ( red, green, blue ) then
@@ -1139,7 +1139,7 @@ else
                                             <p class="pml-paragraph">Color algorithms can be quite complex (and the topic is definitely beyond the scope of this article). Therefore, in the above code I just assumed the code has access to a third-party <code class="pml-inline-code">color_utils</code> library with function <code class="pml-inline-code">is_light_color</code>.</p>
                                         </div>
                                     </div>
-                                    <p class="pml-paragraph">So far we assumed that the background color is always black. However, if the background color is variable, then we would need to ensure that the combination of text and background colors result in text that's easy to read. For example, if the text color is (100, 100, 100), and the background color (100, 100, 110), then the contrast is too low and this pair of colors should not be allowed. This constraint can be achieved as follows:</p>
+                                    <p class="pml-paragraph">So far we assumed that the background color is always black. However, if the background color is variable, then we would need to ensure that the combination of text and background colors result in text that&apos;s easy to read. For example, if the text color is (100, 100, 100), and the background color (100, 100, 110), then the contrast is too low and this pair of colors should not be allowed. This constraint can be achieved as follows:</p>
                                     <pre class="pml-code"><code>type readable_RGB_color_pair
     
     att text_color RGB_color
@@ -1163,7 +1163,7 @@ else
                                         </div>
                                         <div class="pml-admonition-content">
                                             <p class="pml-paragraph">In this code we assume that function <code class="pml-inline-code">color_utils.is_readable_text</code> checks if there is sufficient contrast and takes into account color accessibility rules for visually impaired people.</p>
-                                            <p class="pml-paragraph">For more information you can read <a class="pml-link" href="https://webaim.org/articles/contrast/"><i class="pml-italic">Contrast and Color Accessibility</i></a> and <a class="pml-link" href="https://www.w3.org/WAI/perspective-videos/contrast/"><i class="pml-italic">Colors with Good Contrast</i></a>. You can also have a look at Tristano Ajmone's amply commented <a class="pml-link" href="https://github.com/tajmone/name-that-color/blob/master/ntc.color-funcs.pbi#L138"><i class="pml-italic">implementation of the Delta E 2000 (ΔE*00) algorithm</i></a>.</p>
+                                            <p class="pml-paragraph">For more information you can read <a class="pml-link" href="https://webaim.org/articles/contrast/"><i class="pml-italic">Contrast and Color Accessibility</i></a> and <a class="pml-link" href="https://www.w3.org/WAI/perspective-videos/contrast/"><i class="pml-italic">Colors with Good Contrast</i></a>. You can also have a look at Tristano Ajmone&apos;s amply commented <a class="pml-link" href="https://github.com/tajmone/name-that-color/blob/master/ntc.color-funcs.pbi#L138"><i class="pml-italic">implementation of the Delta E 2000 (ΔE*00) algorithm</i></a>.</p>
                                         </div>
                                     </div>
 
@@ -1191,7 +1191,7 @@ else
                                 <div class="pml-quote-text-block">
                                     <div class="pml-quote-text-prefix"></div>
                                     <div class="pml-quote-text">
-                                        <p class="pml-paragraph">If you don't think managing state is tricky, consider the fact that 80% of all problems in all complex systems are fixed by rebooting.</p>
+                                        <p class="pml-paragraph">If you don&apos;t think managing state is tricky, consider the fact that 80% of all problems in all complex systems are fixed by rebooting.</p>
                                     </div>
                                     <div class="pml-quote-text-suffix"></div>
                                 </div>
@@ -1201,7 +1201,7 @@ else
                                 </div>
                             </blockquote>
                             <p class="pml-paragraph">Here is a fundamental PTS rule: All data is <i class="pml-italic">immutable by default</i>.</p>
-                            <p class="pml-paragraph">For record types, this means that, after a record has been created/initialized with a set of fixed values, it's invalid to re-assign another value to an attribute:</p>
+                            <p class="pml-paragraph">For record types, this means that, after a record has been created/initialized with a set of fixed values, it&apos;s invalid to re-assign another value to an attribute:</p>
                             <pre class="pml-code"><code>const black = RGB_color.create ( name = &quot;Black&quot; )
 <b class="pml-bold">black.name = &quot;Red&quot;                                  &lt;&lt;&lt; INVALID!</b></code></pre>
                             <p class="pml-paragraph">Attributes can explicitly be declared to be mutable with the <code class="pml-inline-code">mutable</code> keyword preceding <code class="pml-inline-code">att</code>. In the following code, type <code class="pml-inline-code">mutable_wrapper</code> holds a mutable <code class="pml-inline-code">value</code>:</p>
@@ -1232,7 +1232,7 @@ write_object ( item.value )</code></pre>
 
                                 </div>
                                 <div class="pml-admonition-content">
-                                    <p class="pml-paragraph">The rule &quot;Records are immutable by default&quot; doesn't necessarily mean that the attribute values of an instance can't change. If an attribute holds a value of a mutable type, then the value itself can change, but the same instance in memory is still assigned to the attribute.</p>
+                                    <p class="pml-paragraph">The rule &quot;Records are immutable by default&quot; doesn&apos;t necessarily mean that the attribute values of an instance can&apos;t change. If an attribute holds a value of a mutable type, then the value itself can change, but the same instance in memory is still assigned to the attribute.</p>
                                     <p class="pml-paragraph">For example, consider an attribute holding a mutable list. If an element is added to the list, then the attribute value changes, although the attribute still points to the same mutable list.</p>
                                     <p class="pml-paragraph">Hence, by default attributes in record types are guaranteed to be <i class="pml-italic">shallowly</i> immutable, but not necessarily <i class="pml-italic">deeply</i> immutable.</p>
                                 </div>
@@ -1252,7 +1252,7 @@ write_object ( item.value )</code></pre>
     att item_2 integer
 .</code></pre>
                             <p class="pml-paragraph">This quickly becomes cumbersome if we also need pairs for other types, such as <code class="pml-inline-code">decimal</code>, <code class="pml-inline-code">boolean</code>, <code class="pml-inline-code">date</code>, <code class="pml-inline-code">time</code>, etc.</p>
-                            <p class="pml-paragraph">To avoid code duplication we <i class="pml-italic">could</i> (but shouldn't) define a <i class="pml-italic">single</i> type <code class="pml-inline-code">pair</code> that can hold items of any type:</p>
+                            <p class="pml-paragraph">To avoid code duplication we <i class="pml-italic">could</i> (but shouldn&apos;t) define a <i class="pml-italic">single</i> type <code class="pml-inline-code">pair</code> that can hold items of any type:</p>
                             <pre class="pml-code"><code>record type pair
     att item_1 <b class="pml-bold">any</b>
     att item_2 <b class="pml-bold">any</b>
@@ -1263,12 +1263,12 @@ write_object ( item.value )</code></pre>
                                     <p class="pml-paragraph">We lose type safety.</p>
                                     <p class="pml-paragraph">Consider the following code, where we accidentally mix two different types in a pair:</p>
                                     <pre class="pml-code"><code>const pair = pair.create ( item_1=&quot;foo&quot; item_2=123 )</code></pre>
-                                    <p class="pml-paragraph">No <i class="pml-italic">compile</i>-time error is generated. Worse, the code doesn't end up in a <i class="pml-italic">run</i>-time error either.</p>
+                                    <p class="pml-paragraph">No <i class="pml-italic">compile</i>-time error is generated. Worse, the code doesn&apos;t end up in a <i class="pml-italic">run</i>-time error either.</p>
                                     <p class="pml-paragraph">This is error-prone.</p>
 
                                 </li>
                                 <li class="pml-list-element">
-                                    <p class="pml-paragraph">When we access an item, we have to cast it to the correct type (because every item is of type <code class="pml-inline-code">any</code>). We'll end up writing code like this:</p>
+                                    <p class="pml-paragraph">When we access an item, we have to cast it to the correct type (because every item is of type <code class="pml-inline-code">any</code>). We&apos;ll end up writing code like this:</p>
                                     <pre class="pml-code"><code>if pair.item_1 as item_1 is string then
     write_line ( item_1 )
 else
@@ -1291,13 +1291,13 @@ const integer_pair pair&lt;integer&gt; = pair&lt;integer&gt;.create ( item_1=100
                             <pre class="pml-code"><code>const string_pair = pair.create ( item_1=&quot;foo&quot; item_2=&quot;bar&quot; )
 const integer_pair = pair.create ( item_1=100 item_2=200 )</code></pre>
                             <p class="pml-paragraph">If we accidentally use two different types for the items, a compile-time error is reported. Hence we are type-safe again.</p>
-                            <p class="pml-paragraph">Accessing items becomes straightforward too, because the compiler knows the type of the items, and produces an error if we assume the wrong type. We don't need to check the type, and can simply write code like this:</p>
+                            <p class="pml-paragraph">Accessing items becomes straightforward too, because the compiler knows the type of the items, and produces an error if we assume the wrong type. We don&apos;t need to check the type, and can simply write code like this:</p>
                             <pre class="pml-code"><code>const string_pair = pair.create ( item_1=&quot;foo&quot; item_2=&quot;bar&quot; )
 ...
 <b class="pml-bold">const item_1 string = string_pair.item_1 // type safe!</b>
 
 <b class="pml-bold">// const test integer = string_pair.item_1 // compile-time error</b></code></pre>
-                            <p class="pml-paragraph"><i class="pml-italic">Type parameters</i> (also known as <a class="pml-link" href="https://en.wikipedia.org/wiki/Generic_programming"><i class="pml-italic">generic programming</i></a>, <i class="pml-italic">generic type parameters</i>, <i class="pml-italic">generics</i>, etc.) are a very useful addition to a type system, because they allow us to write generic code that is <i class="pml-italic">type-safe</i>. However, while the basic idea is simple to grasp, <i class="pml-italic">type parameters</i> is a complex subject — in my experience, the most challenging feature to get right in a type system.  The above example merely scratches the tip of the iceberg. To keep this section short, we'll abstain from delving into details — let's just look at one more example to illustrate the benefits.</p>
+                            <p class="pml-paragraph"><i class="pml-italic">Type parameters</i> (also known as <a class="pml-link" href="https://en.wikipedia.org/wiki/Generic_programming"><i class="pml-italic">generic programming</i></a>, <i class="pml-italic">generic type parameters</i>, <i class="pml-italic">generics</i>, etc.) are a very useful addition to a type system, because they allow us to write generic code that is <i class="pml-italic">type-safe</i>. However, while the basic idea is simple to grasp, <i class="pml-italic">type parameters</i> is a complex subject — in my experience, the most challenging feature to get right in a type system. The above example merely scratches the tip of the iceberg. To keep this section short, we&apos;ll abstain from delving into details — let&apos;s just look at one more example to illustrate the benefits.</p>
                             <p class="pml-paragraph">In the previous section we defined type <code class="pml-inline-code">mutable_wrapper</code> as follows:</p>
                             <pre class="pml-code"><code>record type mutable_wrapper
     mutable att value type:any
@@ -1322,11 +1322,11 @@ any_wrapper.value = 123 // ok
 ...
 case type of any_wrapper.value
     when string
-        write_line ( &quot;It's a string.&quot; )
+        write_line ( &quot;It&apos;s a string.&quot; )
     when number
-        write_line ( &quot;It's a number.&quot; )
+        write_line ( &quot;It&apos;s a number.&quot; )
     otherwise
-        write_line ( &quot;It's something else.&quot; )
+        write_line ( &quot;It&apos;s something else.&quot; )
 .</code></pre>
 
                         </section>
@@ -1349,7 +1349,7 @@ case type of any_wrapper.value
         price decimal
     .
 .</code></pre>
-                            <p class="pml-paragraph">Suppose the shop sells laptops and printers. A laptop has three more <code class="pml-inline-code">string</code> attributes: <code class="pml-inline-code">CPU</code>, <code class="pml-inline-code">RAM</code> and <code class="pml-inline-code">hard_disk</code>. For printers, let's say we need one additional <code class="pml-inline-code">boolean</code> attribute: <code class="pml-inline-code">is_color_capable</code>. Of course, the shop sells other products too (monitor, mouse, keyboard, etc.), and some of them also require additional, specific attributes.</p>
+                            <p class="pml-paragraph">Suppose the shop sells laptops and printers. A laptop has three more <code class="pml-inline-code">string</code> attributes: <code class="pml-inline-code">CPU</code>, <code class="pml-inline-code">RAM</code> and <code class="pml-inline-code">hard_disk</code>. For printers, let&apos;s say we need one additional <code class="pml-inline-code">boolean</code> attribute: <code class="pml-inline-code">is_color_capable</code>. Of course, the shop sells other products too (monitor, mouse, keyboard, etc.), and some of them also require additional, specific attributes.</p>
                             <p class="pml-paragraph">There are several ways to code this, depending on the features supported by the type system. However, as far as I know, a type-safe and practical solution can only be coded if <i class="pml-italic">type inheritance</i> is supported. Type <code class="pml-inline-code">laptop</code> can then be defined as follows:</p>
                             <pre class="pml-code"><code>record type laptop
     
@@ -1372,14 +1372,14 @@ case type of any_wrapper.value
                             <p class="pml-paragraph">Besides providing type-safety, type inheritance also gives us <i class="pml-italic">type substitutability</i> — an important and distinctive OO feature. Objects of type <code class="pml-inline-code">laptop</code> and <code class="pml-inline-code">printer</code> are compatible to type <code class="pml-inline-code">product</code>. That is, each time a <code class="pml-inline-code">product</code> object is required, we can also provide a <code class="pml-inline-code">laptop</code> or <code class="pml-inline-code">printer</code> object. Thus, type inheritance supports the <a class="pml-link" href="https://en.wikipedia.org/wiki/Liskov_substitution_principle"><i class="pml-italic">Liskov substitution principle</i></a>.</p>
                             <p class="pml-paragraph"><i class="pml-italic">Type inheritance</i> is a vast subject — too vast to be fully covered here.</p>
                             <p class="pml-paragraph">However, there is one specific PTS feature worth mentioning here: in a child type we can redefine members inherited from a parent type, as long as the <i class="pml-italic">Liskov substitution principle</i> is preserved. In the case of record types, this allows us, for example, to reduce the type cardinality for inherited immutable attributes, resulting in additional type-safety.</p>
-                            <p class="pml-paragraph">To illustrate this, let's assume that a product identifier is composed of two uppercase letters, followed by 6 digits:</p>
+                            <p class="pml-paragraph">To illustrate this, let&apos;s assume that a product identifier is composed of two uppercase letters, followed by 6 digits:</p>
                             <pre class="pml-code"><code>record type product
     atts
         <b class="pml-bold">identifier string ( pattern: &quot;[A-Z]{2}\d{6}&quot; )</b>
         ...
     .
 .</code></pre>
-                            <p class="pml-paragraph">Let's also suppose that laptop identifiers must start with <code class="pml-inline-code">&quot;LT&quot;</code>, and printer identifiers with <code class="pml-inline-code">&quot;PR&quot;</code>. We can achieve this by <i class="pml-italic">redefining</i> attribute <code class="pml-inline-code">identifier</code> in types <code class="pml-inline-code">laptop</code> and <code class="pml-inline-code">printer</code>, and use an <code class="pml-inline-code">and_check</code> to add further constraints:</p>
+                            <p class="pml-paragraph">Let&apos;s also suppose that laptop identifiers must start with <code class="pml-inline-code">&quot;LT&quot;</code>, and printer identifiers with <code class="pml-inline-code">&quot;PR&quot;</code>. We can achieve this by <i class="pml-italic">redefining</i> attribute <code class="pml-inline-code">identifier</code> in types <code class="pml-inline-code">laptop</code> and <code class="pml-inline-code">printer</code>, and use an <code class="pml-inline-code">and_check</code> to add further constraints:</p>
                             <pre class="pml-code"><code>record type laptop
     inherit product
         <b class="pml-bold">redefine</b>
@@ -1422,7 +1422,7 @@ const location = point_3D.create ( x=100 y=200 z=300 )</code></pre>
                             <p class="pml-paragraph">Code like this is cumbersome to read, write, and maintain, especially for record types with many attributes.</p>
                             <p class="pml-paragraph">The <code class="pml-inline-code">with</code> operator simplifies the code:</p>
                             <pre class="pml-code"><code>const new_location = location <b class="pml-bold">with ( z = location.z + 100 )</b></code></pre>
-                            <p class="pml-paragraph">As you can see, noise is now eliminated. The code is shortened to what matters, and it doesn't need to be updated anymore if other attributes are added, removed, or renamed later.</p>
+                            <p class="pml-paragraph">As you can see, noise is now eliminated. The code is shortened to what matters, and it doesn&apos;t need to be updated anymore if other attributes are added, removed, or renamed later.</p>
 
                         </section>
                         <section id="documentation" class="pml-chapter">
@@ -1478,7 +1478,7 @@ const name_description = name_doc.description</code></pre>
                         <section id="serializing" class="pml-chapter">
                             <h3 class="pml-chapter-title">Serializing/Deserializing Record Objects</h3>
                             <p class="pml-paragraph">When a record object is <i class="pml-italic">serialized</i>, the data contained in memory is written to a standard (or non-standard) text or binary format.</p>
-                            <p class="pml-paragraph"><i class="pml-italic">Deserializing</i> is the inverse process — it's used to retrieve (read) objects persisted in a resource.</p>
+                            <p class="pml-paragraph"><i class="pml-italic">Deserializing</i> is the inverse process — it&apos;s used to retrieve (read) objects persisted in a resource.</p>
                             <p class="pml-paragraph">Serializing/deserializing data is useful in various projects. For example, it can be used to:</p>
                             <ul class="pml-list">
                                 <li class="pml-list-element">
@@ -1503,7 +1503,7 @@ const name_description = name_doc.description</code></pre>
                                 </li>
 
                             </ul>
-                            <p class="pml-paragraph">Unfortunately, code to serialize/deserialize data is cumbersome to write and maintain, and error-prone, especially if it's needed for many different record types. Moreover, reading/writing data is not only useful for records — it is useful for all kinds of data (scalar values, collections, etc.). Therefore a practical type system must provide the fundamental features needed to write <i class="pml-italic">generic</i> code once. Then we can use this code again and again to serialize/deserialize <i class="pml-italic">any</i> data. For example, writing <code class="pml-inline-code">RGB_color</code> objects to text formats should be as easy as this:</p>
+                            <p class="pml-paragraph">Unfortunately, code to serialize/deserialize data is cumbersome to write and maintain, and error-prone, especially if it&apos;s needed for many different record types. Moreover, reading/writing data is not only useful for records — it is useful for all kinds of data (scalar values, collections, etc.). Therefore a practical type system must provide the fundamental features needed to write <i class="pml-italic">generic</i> code once. Then we can use this code again and again to serialize/deserialize <i class="pml-italic">any</i> data. For example, writing <code class="pml-inline-code">RGB_color</code> objects to text formats should be as easy as this:</p>
                             <pre class="pml-code"><code>const red = RGB_color.create ( name=&quot;red&quot; red=255)
 
 write_line ( &quot;XML:&quot; )
@@ -1649,13 +1649,13 @@ record type book
 
                         </ul>
                         <p class="pml-paragraph">These features aim to simplify and streamline working with record types, while also increasing reliability, maintainability, and productivity.</p>
-                        <p class="pml-paragraph">In particular, the combination of easy and flexible <i class="pml-italic">data validation</i> and <i class="pml-italic">immutability by default</i> helps to define very robust record types. A record object can only be created in a valid state, and after creation the state can't change. The object remains in a valid, immutable state during its whole lifetime. This eliminates whole classes of bugs that are often difficult to find and fix, such as bugs caused by non-atomic or non-synchronized state changes, race conditions, and other nasty problems due to shared mutable state in parallel/concurrent runtime environments.</p>
+                        <p class="pml-paragraph">In particular, the combination of easy and flexible <i class="pml-italic">data validation</i> and <i class="pml-italic">immutability by default</i> helps to define very robust record types. A record object can only be created in a valid state, and after creation the state can&apos;t change. The object remains in a valid, immutable state during its whole lifetime. This eliminates whole classes of bugs that are often difficult to find and fix, such as bugs caused by non-atomic or non-synchronized state changes, race conditions, and other nasty problems due to shared mutable state in parallel/concurrent runtime environments.</p>
                         <p class="pml-paragraph">Moreover, the combination of <i class="pml-italic">named attribute assignments</i> and <i class="pml-italic">default values</i> enable us to reliably create records using different input argument combinations, without the need to define overloaded constructors, or to use the <i class="pml-italic">builder</i> pattern. </p>
 
                     </section>
                     <section id="whats_next" class="pml-chapter">
-                        <h2 class="pml-chapter-title">What's Next?</h2>
-                        <p class="pml-paragraph">In the next article we'll have a look at <i class="pml-italic">Union Types</i>, a surprisingly useful feature in a practical type system. </p>
+                        <h2 class="pml-chapter-title">What&apos;s Next?</h2>
+                        <p class="pml-paragraph">In the next article we&apos;ll have a look at <i class="pml-italic">Union Types</i>, a surprisingly useful feature in a practical type system. </p>
 
                     </section>
                     <section id="ch__35" class="pml-chapter">
