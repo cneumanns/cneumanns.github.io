@@ -192,7 +192,7 @@
                                 <p class="pml-paragraph">The above code is wrong because it first tests <code class="pml-inline-code">email.isEmpty()</code>, before testing for <code class="pml-inline-code">null</code>, which means that a null pointer error is thrown if <code class="pml-inline-code">email</code> points to <code class="pml-inline-code">null</code>.</p>
                             </div>
                         </div>
-                        <p class="pml-paragraph">Developer E also gets it wrong, but not because the order of the expressions is wrong. Instead of using the short-circuiting <i class="pml-italic">logical OR</i> operator <code class="pml-inline-code">||</code>, she uses the <i class="pml-italic">bitwise inclusive OR</i> operator <code class="pml-inline-code">|</code>, which has the effect of a non-short-circuiting logical OR operator if both operands are of type <code class="pml-inline-code">boolean</code>. Therefore a null pointer error is thrown if <code class="pml-inline-code">email</code> points to <code class="pml-inline-code">null</code>:</p>
+                        <p class="pml-paragraph">Developer E also gets it wrong, but not because the order of the operands is wrong. Instead of using the short-circuiting <i class="pml-italic">logical OR</i> operator <code class="pml-inline-code">||</code>, she uses the <i class="pml-italic">bitwise inclusive OR</i> operator <code class="pml-inline-code">|</code>, which has the effect of a non-short-circuiting logical OR operator if both operands are of type <code class="pml-inline-code">boolean</code>. Therefore a null pointer error is thrown if <code class="pml-inline-code">email</code> points to <code class="pml-inline-code">null</code>:</p>
                         <pre class="pml-code"><code>if ( <b class="pml-bold">email == null | email.isEmpty()</b> ) {
     writeError ( id + &quot;: no email&quot; );
 } else {
@@ -217,7 +217,7 @@
 
                                     </li>
                                     <li class="pml-list-element">
-                                        <p class="pml-paragraph">Some languages might throw an exception at run-time.</p>
+                                        <p class="pml-paragraph">Some languages might throw an exception at run-time, or the behavior might be undefined or unspecified.</p>
 
                                     </li>
                                     <li class="pml-list-element">
