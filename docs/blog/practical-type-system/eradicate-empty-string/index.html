@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <meta name="generator" content="PML 4.0.0 (www.pml-lang.dev)" />
+        <meta name="generator" content="PML 5.0.0 (www.pml-lang.dev)" />
         <title>We Should Eradicate the Empty String — Here&apos;s Why</title>
         <link rel="stylesheet" href="css/pml-default.css">
         <link rel="stylesheet" href="css/pml-print-default.css" media="print">
@@ -66,7 +66,7 @@
                                         <summary><a href="#other_languages">Other Languages</a></summary>
                                         <ul>
                                             <li class="pml-toc-leaf-node"><a href="#other_languages_non_null_safe">Non-null-Safe Languages</a></li>
-                                            <li class="pml-toc-leaf-node"><a href="#other_languages_option">Languages That Use an Optional/Maybe Type</a></li>
+                                            <li class="pml-toc-leaf-node"><a href="#other_languages_option">Languages That Use an / Type</a></li>
                                         </ul>
                                     </details>
                                 </li>
@@ -192,7 +192,7 @@
                                 <p class="pml-paragraph">The above code is wrong because it first tests <code class="pml-inline-code">email.isEmpty()</code>, before testing for <code class="pml-inline-code">null</code>, which means that a null pointer error is thrown if <code class="pml-inline-code">email</code> points to <code class="pml-inline-code">null</code>.</p>
                             </div>
                         </div>
-                        <p class="pml-paragraph">Developer E also gets it wrong — not because the order of the expressions is wrong, but because she uses the non-short-circuiting or operator <code class="pml-inline-code">|</code> instead of its short-circuiting counterpart <code class="pml-inline-code">||</code>, which also means that a null pointer error is thrown if <code class="pml-inline-code">email</code> points to <code class="pml-inline-code">null</code>:</p>
+                        <p class="pml-paragraph">Developer E also gets it wrong, but not because the order of the expressions is wrong. Instead of using the short-circuiting <i class="pml-italic">logical OR</i> operator <code class="pml-inline-code">||</code>, she uses the <i class="pml-italic">bitwise inclusive OR</i> operator <code class="pml-inline-code">|</code>, which has the effect of a non-short-circuiting logical OR operator if both operands are of type <code class="pml-inline-code">boolean</code>. Therefore a null pointer error is thrown if <code class="pml-inline-code">email</code> points to <code class="pml-inline-code">null</code>:</p>
                         <pre class="pml-code"><code>if ( <b class="pml-bold">email == null | email.isEmpty()</b> ) {
     writeError ( id + &quot;: no email&quot; );
 } else {
@@ -591,7 +591,7 @@
 
                             </div>
                             <div class="pml-admonition-content">
-                                <p class="pml-paragraph">This article is part of the <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/01-what-why-how/index.html"><i class="pml-italic">How to Design a Practical Type System to Maximize Reliability, Maintainability, and Productivity in Software Development Projects</i></a> series. My suggestion to eradicate empty strings and empty collections concerns only new languages that implement the <i class="pml-italic">Practical Type System</i> (<i class="pml-italic">PTS</i>) or a similar paradigm designed for reliability.</p>
+                                <p class="pml-paragraph">This is article #7 in the <a class="pml-link" href="https://www.cnpp.dev/blog/practical-type-system/01-what-why-how/index.html"><i class="pml-italic">How to Design a Practical Type System to Maximize Reliability, Maintainability, and Productivity in Software Development Projects</i></a> series. My suggestion to eradicate empty strings and empty collections concerns only new languages that implement the <i class="pml-italic">Practical Type System</i> (<i class="pml-italic">PTS</i>) or a similar paradigm designed for reliability.</p>
                                 <p class="pml-paragraph">I do <b class="pml-bold">NOT</b> suggest to remove empty strings/collections in existing mainstream languages such as C, C++, C#, Java, JavaScript, Python, and Rust.</p>
                             </div>
                         </div>
